@@ -1,0 +1,16 @@
+{
+    "name": "misfist/jacobin-core-functionality",
+    "description": "Core functionality plugin for Jacobin Magazine WordPress CMS.",
+    "type": "wordpress-plugin",
+    "require-dev": {
+        "phpunit/phpunit": "^5.4"
+    },
+    "license": "GPL-3.0",
+    "authors": [
+        {
+            "name": "Pea",
+            "email": "pea@misfist.com"
+        }
+    ],
+    "require": {}
+}
