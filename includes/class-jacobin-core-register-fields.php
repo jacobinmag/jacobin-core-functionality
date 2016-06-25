@@ -1,8 +1,9 @@
 <?php
 /**
- * Jacobin Core Functionality Plugin
+ * Jacobin Core Register Fields with REST API
  * 
- * @package    Core_Functionality
+ * @package    Jacobin_Core
+ * @subpackage Jacobin_Core\Includes
  * @since      0.1.0
  * @license    GPL-2.0+
  */
