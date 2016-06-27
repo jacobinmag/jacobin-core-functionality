@@ -22,7 +22,11 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.0
      */
-    function __construct() {}
+    function __construct() {
+
+        add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
+
+    }
 
     /**
      * Register the custom fields
@@ -30,6 +34,17 @@ class Jacobin_Rest_API_Fields {
      * @since 0.1.0
      */
     function register() {}
+
+    /**
+     * Remove standard WordPress metaboxes for custom taxonomies.
+     *
+     * @since  0.1.0
+     */
+    function remove_meta_boxes() {
+        remove_meta_box( 'formatdiv', 'post', 'normal' );
+        remove_meta_box( 'departmentdiv', 'post', 'normal' );
+        remove_meta_box( 'locationdiv', 'post', 'normal' );
+    }
     
 }
 

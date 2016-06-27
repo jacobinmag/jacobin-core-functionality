@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.1.0
+ * Version:         0.1.1
  *
  * @package         Core_Functionality
  */
@@ -20,6 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
 require_once( 'includes/class-jacobin-core-settings.php' );
+require_once( 'includes/class-jacobin-core-register-fields.php' );
 
 // Load plugin libraries
 require_once( 'includes/lib/class-jacobin-core-admin-api.php' );
@@ -29,11 +30,11 @@ require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
 /**
  * Returns the main instance of Jacobin_Core to prevent the need to use globals.
  *
- * @since  1.0.0
+ * @since  0.1.0
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '1.0.0' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.1.1' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Jacobin_Core_Settings::instance( $instance );
@@ -48,7 +49,7 @@ Jacobin_Core();
 /**
  * Register Custom Post types
  *
- * @since  1.0.0
+ * @since  0.1.0
  */
 Jacobin_Core()->register_post_type( 
     'issue', 
@@ -59,7 +60,7 @@ Jacobin_Core()->register_post_type(
 /**
  * Register Custom Taxonomy
  *
- * @since  1.0.0
+ * @since  0.1.0
  */
 Jacobin_Core()->register_taxonomy(
     'department',
