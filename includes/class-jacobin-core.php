@@ -104,13 +104,11 @@ class Jacobin_Core {
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
-		// Load frontend JS & CSS
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
-
 		// Load admin JS & CSS
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
+
+		// wp_enqueue_script ( string $handle, string $src = false, array $deps = array(), string|bool|null $ver = false, bool $in_footer = false )
 
 		// Load API for generic admin functions
 		if ( is_admin() ) {
@@ -265,12 +263,12 @@ class Jacobin_Core {
 	 * Modify 
 	 * @access  public
 	 * @since   0.1.0
-	 * @return  void
+	 * @return  $args array
 	 */
 	public function modify_issue_args( $args ) {
 
 	    $args['menu_icon'] = 'dashicons-book';
-
+	    
 	    return $args;
 
 	} // End modify_issue_args 

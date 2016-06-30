@@ -10,16 +10,24 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.1.1
+ * Version:         0.1.2
  *
  * @package         Core_Functionality
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Plugin Directory
+ *
+ * @since 0.1.0
+ */
+define( 'JACOBIN_CORE_DIR', dirname( __FILE__ ) );
+
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
 require_once( 'includes/class-jacobin-core-settings.php' );
+require_once( 'includes/class-jacobin-core-field-settings.php' );
 require_once( 'includes/class-jacobin-core-register-fields.php' );
 
 // Load plugin libraries

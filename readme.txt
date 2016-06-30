@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.5
 Tested up to: 4.5.3
-Stable tag: 0.1.1
+Stable tag: 0.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,8 +26,17 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.1.2 [WIP] =
+* Register subhead field with REST API
+* Added test options page
+* Removed unneeded front-end CSS and JS
+* Added custom post type class
+* Added custom taxonomy class
+* Added field settings class
+* Added options controller class
+
 = 0.1.1 =
-Removed standard WordPress metaboxes for custom taxonomies.
+* Removed standard WordPress metaboxes for custom taxonomies.
 
 = 0.1.0 =
 Initial.

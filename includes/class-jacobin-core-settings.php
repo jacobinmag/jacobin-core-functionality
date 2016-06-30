@@ -75,7 +75,13 @@ class Jacobin_Core_Settings {
 	 * @return void
 	 */
 	public function add_menu_item () {
-		$page = add_options_page( __( 'Plugin Settings', 'jacobin-core' ) , __( 'Plugin Settings', 'jacobin-core' ) , 'manage_options' , $this->parent->_token . '_settings' ,  array( $this, 'settings_page' ) );
+		$page = add_options_page( 
+			__( 'Jacobin Settings', 'jacobin-core' ), 
+			__( 'Jacobin Settings', 'jacobin-core' ), 
+			'manage_options', 
+			$this->parent->_token . '_settings' ,  
+			array( $this, 'settings_page' ) );
+
 		add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
 	}
 
