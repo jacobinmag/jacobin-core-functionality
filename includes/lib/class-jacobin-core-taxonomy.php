@@ -108,14 +108,14 @@ class Jacobin_Core_Taxonomy {
             'show_admin_column'     => true,
             'update_count_callback' => '',
             'show_in_rest'          => true,
-            'rest_base'             => $this->taxonomy,
+            'rest_base'             => strtolower( $this->plural ),
             'rest_controller_class' => 'WP_REST_Terms_Controller',
             'query_var'             => $this->taxonomy,
             'rewrite'               => true,
             'sort'                  => '',
         );
 
-        $args = array_merge($args, $this->taxonomy_args);
+        $args = array_merge( $args, $this->taxonomy_args );
 
         register_taxonomy( $this->taxonomy, $this->post_types, apply_filters( $this->taxonomy . '_register_args', $args, $this->taxonomy, $this->post_types ) );
     }
