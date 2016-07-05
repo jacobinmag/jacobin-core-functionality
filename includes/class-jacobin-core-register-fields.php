@@ -40,17 +40,7 @@ class Jacobin_Rest_API_Fields {
 
         add_filter( 'rest_prepare_department', array( $this, 'rest_prepare_department' ), 10, 2 );
 
-        add_action( 'rest_api_init', function() {
-            register_api_field( 'post',
-                'subhead',
-                array(
-                'get_callback'    => array( $this, 'slug_get_post_meta_cb' ),
-                'update_callback' => null,
-                'schema'          => null,
-                )
-            );
-
-        });
+        add_action( 'rest_api_init', array( $this, 'register_fields' ) );
 
         add_action( 'init', array( $this, 'register_custom_taxonomy' ), 25 );
 
@@ -61,7 +51,23 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.0
      */
-    function register () {}
+    function register_fields () {
+        register_api_field( 'post',
+            'subhead',
+            array(
+            'get_callback'    => array( $this, 'slug_get_post_meta_cb' ),
+            'update_callback' => null,
+            'schema'          => null,
+            )
+        );
+    }
+
+    /**
+     * Register the custom taxonomy
+     *
+     * @since 0.1.0
+     */
+    function register_taxonomy () {}
 
     /**
      * Get post meta
@@ -120,26 +126,17 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
-     * Add REST API support to an already registered taxonomy.
+     * Change response field to `custom_fields`.
      *
      * @since 0.1.0
      *
+     * @param $response
+     * @param $object
+     * @return modified $response
+     *
      * @link http://v2.wp-api.org/extending/custom-content-types/
      */
-    function my_custom_taxonomy_rest_support() {
-        global $wp_taxonomies;
-
-        //be sure to set this to the name of your taxonomy!
-        $taxonomy_name = 'planet_class';
-
-        if ( isset( $wp_taxonomies[ $taxonomy_name ] ) ) {
-        $wp_taxonomies[ $taxonomy_name ]->show_in_rest = true;
-        $wp_taxonomies[ $taxonomy_name ]->rest_base = $taxonomy_name;
-        $wp_taxonomies[ $taxonomy_name ]->rest_controller_class = 'WP_REST_Terms_Controller';
-        }
-    }
-
-    function rest_prepare_department( $response, $object ) {
+    function rest_prepare_department ( $response, $object ) {
         if ( $object instanceof WP_Term ) {
             if ( isset( $data['acf'] ) ) {
                 $data['custom_fields'] = $data['acf'];
@@ -150,8 +147,6 @@ class Jacobin_Rest_API_Fields {
 
         return $response;
     }
-
-
     
 }
 
