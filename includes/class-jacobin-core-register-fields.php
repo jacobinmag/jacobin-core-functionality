@@ -23,9 +23,22 @@ class Jacobin_Rest_API_Fields {
      * @since 0.1.0
      */
     function __construct () {
+        /**
+         * Filters to have fields returned in `custom_fields` instead of `acf`. For v2
+         */
         add_filter( 'acf/rest_api/post/get_fields', array( $this, 'set_custom_field_base' ) );
-
         add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'set_custom_field_base' ) );
+        add_filter( 'acf/rest_api/term/get_fields', array( $this, 'set_custom_field_base' ) );
+
+        /**
+         * Filters to have fields returned in `custom_fields` instead of `acf`. For v1.
+         */
+        add_filter( 'acf_to_wp_rest_api_post_data', array( $this, 'set_custom_field_base_v1' ), 10 );
+        add_filter( 'acf_to_wp_rest_api_issue_data', array( $this, 'set_custom_field_base_v1' ), 10 );
+        add_filter( 'acf_to_wp_rest_api_term_data', array( $this, 'set_custom_field_base_v1' ), 10 );
+
+
+        add_filter( 'rest_prepare_department', array( $this, 'rest_prepare_department' ), 10, 2 );
 
         add_action( 'rest_api_init', function() {
             register_api_field( 'post',
@@ -86,27 +99,59 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
+     * Change Base Label of Custom Fields
+     *
+     * Advanced Custom Fields fields are displayed within `acf` for v1.
+     *
+     * @link https://github.com/airesvsg/acf-to-wp-rest-api/issues/11#issuecomment-230176396
+     *
+     * @param array $data
+     * @return modified array $data
+     *
+     * @since 0.1.0
+     */
+    function set_custom_field_base_v1 ( $data ) {
+        if ( isset( $data['acf'] ) ) {
+          $data['custom_fields'] = $data['acf'];
+          unset( $data['acf'] );
+        }
+
+        return $data;
+    }
+
+    /**
      * Add REST API support to an already registered taxonomy.
      *
      * @since 0.1.0
      *
      * @link http://v2.wp-api.org/extending/custom-content-types/
      */
-    
     function my_custom_taxonomy_rest_support() {
-    global $wp_taxonomies;
+        global $wp_taxonomies;
 
-    //be sure to set this to the name of your taxonomy!
-    $taxonomy_name = 'planet_class';
+        //be sure to set this to the name of your taxonomy!
+        $taxonomy_name = 'planet_class';
 
-    if ( isset( $wp_taxonomies[ $taxonomy_name ] ) ) {
-    $wp_taxonomies[ $taxonomy_name ]->show_in_rest = true;
-    $wp_taxonomies[ $taxonomy_name ]->rest_base = $taxonomy_name;
-    $wp_taxonomies[ $taxonomy_name ]->rest_controller_class = 'WP_REST_Terms_Controller';
+        if ( isset( $wp_taxonomies[ $taxonomy_name ] ) ) {
+        $wp_taxonomies[ $taxonomy_name ]->show_in_rest = true;
+        $wp_taxonomies[ $taxonomy_name ]->rest_base = $taxonomy_name;
+        $wp_taxonomies[ $taxonomy_name ]->rest_controller_class = 'WP_REST_Terms_Controller';
+        }
+    }
+
+    function rest_prepare_department( $response, $object ) {
+        if ( $object instanceof WP_Term ) {
+            if ( isset( $data['acf'] ) ) {
+                $data['custom_fields'] = $data['acf'];
+                unset( $data['acf'] );
+            }
+            $response->data['custom_fields'] = get_fields( $object->taxonomy . '_' . $object->term_id );
+        }
+
+        return $response;
     }
 
 
-    }
     
 }
 
