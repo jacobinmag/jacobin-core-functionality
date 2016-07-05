@@ -90,3 +90,10 @@ Jacobin_Core()->register_taxonomy(
     __( 'Location', 'jacobin-core' ),
     'post'
 );
+
+Jacobin_Core()->register_taxonomy(
+    'series',
+    __( 'Series', 'jacobin-core' ),
+    __( 'Series', 'jacobin-core' ),
+    'post'
+);
