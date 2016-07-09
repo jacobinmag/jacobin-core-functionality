@@ -164,11 +164,13 @@ class Jacobin_Rest_API_Fields {
 
         $featured_image_secondary['id'] = $post_data->ID;
         $featured_image_secondary['title'] = $post_data->post_title;
-        $featured_image_secondary['alt_tag'] = get_post_meta( $image_id  , '_wp_attachment_image_alt', true );
+        $featured_image_secondary['alt_text'] = get_post_meta( $image_id  , '_wp_attachment_image_alt', true );
         $featured_image_secondary['description'] = $post_data->post_content;
         $featured_image_secondary['caption'] = $post_data->post_excerpt;
-        $featured_image_secondary['link'] = wp_get_attachment_url(  $image_id );
-
+        $featured_image_secondary['link'] = wp_get_attachment_url( $image_id );
+        $featured_image_secondary['author'] = $post_data->post_author;
+        $featured_image_secondary['media_details'] = 'media details coming soon.';
+        
         return $featured_image_secondary;
     }
 
@@ -199,8 +201,8 @@ class Jacobin_Rest_API_Fields {
                 $authors[$count]['first_name'] = $user_meta->first_name;
                 $authors[$count]['last_name'] = $user_meta->last_name ;
                 $authors[$count]['name'] = $user_meta->display_name;
-                $authors[$count]['description'] = $user_meta->desciption;
-                $authors[$count]['link'] = $user_meta->desciption;
+                $authors[$count]['description'] = $user_meta->description;
+                $authors[$count]['link'] = get_author_posts_url( $user_id );
 
                 $count++;
 
