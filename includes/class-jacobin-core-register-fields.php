@@ -223,7 +223,7 @@ class Jacobin_Rest_API_Fields {
                 $articles[$count]['title'] = $post->post_title;
                 $articles[$count]['slug'] = $post->post_name;
                 $articles[$count]['content'] = $post->post_content;
-                $articles[$count]['excerpt'] = $post->post_content;
+                $articles[$count]['excerpt'] = $post->post_excerpt;
                 
                 if ( function_exists( 'get_coauthors' ) ) {
                     $coauthors = get_coauthors ( $post->ID );
@@ -247,9 +247,6 @@ class Jacobin_Rest_API_Fields {
                     }
 
                 }
-
-
-
 
                 $count++;
             } 
