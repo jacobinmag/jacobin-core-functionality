@@ -87,6 +87,15 @@ class Jacobin_Rest_API_Fields {
                 )
             );
 
+            register_api_field( 'issue',
+                'articles',
+                array(
+                'get_callback'    => array( $this, 'get_issue_articles' ),
+                'update_callback' => null,
+                'schema'          => null,
+                )
+            );
+
         } elseif ( function_exists( 'register_rest_field' ) ) {
 
             register_rest_field( 'post',
@@ -111,6 +120,15 @@ class Jacobin_Rest_API_Fields {
                 'featured_image_secondary',
                 array(
                 'get_callback'    => array( $this, 'get_featured_image_secondary' ),
+                'update_callback' => null,
+                'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'issue',
+                'articles',
+                array(
+                'get_callback'    => array( $this, 'get_issue_articles' ),
                 'update_callback' => null,
                 'schema'          => null,
                 )
@@ -155,7 +173,7 @@ class Jacobin_Rest_API_Fields {
      * @return array $authors
      *
      */
-    function get_featured_image_secondary ( $object, $field_name, $request ) {
+    public function get_featured_image_secondary ( $object, $field_name, $request ) {
 
         $post_id = $object['id'];
         $image_id = get_post_thumbnail_id( $post_id );
@@ -175,6 +193,73 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
+     * Get issue articles
+     *
+     * @since 0.1.0
+     *
+     * @uses  get_post_thumbnail_id()
+     * @uses  get_post()
+     * @uses  get_post_meta()
+     * @param object $object
+     * @param string $field_name
+     * @param string $request
+     * @return array $authors
+     *
+     */
+    public function get_issue_articles ( $object, $field_name, $request ) {
+        $meta = get_post_meta( $object['id'], 'article_issue_relationship', true );
+        $articles = [];
+        $count = 0;
+
+        $args = array(
+            'post__in' => $meta
+        );
+
+        $posts = get_posts( $args );
+
+        if( !empty( $posts ) ) {
+            foreach( $posts as $post ) {
+                $articles[$count]['id'] = (int) $post->ID;
+                $articles[$count]['title'] = $post->post_title;
+                $articles[$count]['slug'] = $post->post_name;
+                $articles[$count]['content'] = $post->post_content;
+                $articles[$count]['excerpt'] = $post->post_content;
+                
+                if ( function_exists( 'get_coauthors' ) ) {
+                    $coauthors = get_coauthors ( $post->ID );
+
+                    $count_authors = 0;
+
+                    foreach( $coauthors as $coauthor ) {
+
+                        $user_id = $coauthor->data->ID;
+                        $user_meta = get_userdata( $user_id );
+
+                        $articles[$count]['authors'][$count_authors]['id'] = (int) $user_id;
+                        $articles[$count]['authors'][$count_authors]['first_name'] = $user_meta->first_name;
+                        $articles[$count]['authors'][$count_authors]['last_name'] = $user_meta->last_name ;
+                        $articles[$count]['authors'][$count_authors]['name'] = $user_meta->display_name;
+                        $articles[$count]['authors'][$count_authors]['description'] = $user_meta->description;
+                        $articles[$count]['authors'][$count_authors]['link'] = get_author_posts_url( $user_id );
+
+                        $count_authors++;
+
+                    }
+
+                }
+
+
+
+
+                $count++;
+            } 
+        }
+
+        return $articles;
+        
+    }
+
+    /**
      * Get coauthors
      *
      * @since 0.1.0
@@ -185,10 +270,24 @@ class Jacobin_Rest_API_Fields {
      * @return array $authors
      *
      */
-    function get_authors ( $object, $field_name, $request ) {
+    public function get_authors ( $object, $field_name, $request ) {
+
+        return $this->get_authors_array ( $object['id'] );
+    }
+
+    /**
+     * Create array of authors
+     *
+     * @since 0.1.0
+     *
+     * @param object $object->ID
+     * @return array $authors
+     *
+     */
+    public function get_authors_array ( $object_id ) {
 
         if ( function_exists( 'get_coauthors' ) ) {
-            $coauthors = get_coauthors ( $object['id'] );
+            $coauthors = get_coauthors ( $object_id );
             $authors = [];
             $count = 0;
 
@@ -213,6 +312,7 @@ class Jacobin_Rest_API_Fields {
 
     }
 
+
     /**
      * Get size information for all currently-registered image sizes.
      *
@@ -220,7 +320,7 @@ class Jacobin_Rest_API_Fields {
      * @uses   get_intermediate_image_sizes()
      * @return array $sizes Data for all currently-registered image sizes.
      */
-    function get_image_sizes() {
+    public function get_image_sizes() {
         global $_wp_additional_image_sizes;
 
         $sizes = array();
@@ -249,7 +349,7 @@ class Jacobin_Rest_API_Fields {
      * @param  string $size The image size for which to retrieve data.
      * @return bool|array $size Size data about an image size or false if the size doesn't exist.
      */
-    function get_image_size( $size ) {
+    public function get_image_size( $size ) {
         $sizes = get_image_sizes();
 
         if ( isset( $sizes[ $size ] ) ) {
@@ -266,8 +366,8 @@ class Jacobin_Rest_API_Fields {
      * @param  string $size The image size for which to retrieve data.
      * @return bool|string $size Width of an image size or false if the size doesn't exist.
      */
-    function get_image_width( $size ) {
-        if ( ! $size = get_image_size( $size ) ) {
+    public function get_image_width( $size ) {
+        if ( ! $size = $this->get_image_size( $size ) ) {
             return false;
         }
 
@@ -285,8 +385,8 @@ class Jacobin_Rest_API_Fields {
      * @param  string $size The image size for which to retrieve data.
      * @return bool|string $size Height of an image size or false if the size doesn't exist.
      */
-    function get_image_height( $size ) {
-        if ( ! $size = get_image_size( $size ) ) {
+    public function get_image_height( $size ) {
+        if ( ! $size = $this->get_image_size( $size ) ) {
             return false;
         }
 
@@ -309,7 +409,7 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.0
      */
-    function set_custom_field_base ( $data ) {
+    public function set_custom_field_base ( $data ) {
         if ( method_exists( $data, 'get_data' ) ) {
             $data = $data->get_data();
         } else {
@@ -335,7 +435,7 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.0
      */
-    function set_custom_field_base_v1 ( $data ) {
+    public function set_custom_field_base_v1 ( $data ) {
         if ( isset( $data['acf'] ) ) {
           $data['custom_fields'] = $data['acf'];
           unset( $data['acf'] );
@@ -355,7 +455,7 @@ class Jacobin_Rest_API_Fields {
      *
      * @link http://v2.wp-api.org/extending/custom-content-types/
      */
-    function rest_prepare_term ( $response, $object ) {
+    public function rest_prepare_term ( $response, $object ) {
         if ( $object instanceof WP_Term ) {
             if ( isset( $data['acf'] ) ) {
                 $data['custom_fields'] = $data['acf'];
