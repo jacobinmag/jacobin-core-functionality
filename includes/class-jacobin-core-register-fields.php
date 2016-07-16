@@ -63,36 +63,36 @@ class Jacobin_Rest_API_Fields {
             register_api_field( 'post',
                 'subhead',
                 array(
-                'get_callback'    => array( $this, 'get_post_meta_cb' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_field' ),
+                    'update_callback' => null,
+                    'schema'          => null
                 )
             );
 
             register_api_field( 'post',
                 'authors',
                 array(
-                'get_callback'    => array( $this, 'get_authors' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_authors' ),
+                    'update_callback' => null,
+                    'schema'          => null
                 )
             );
 
             register_api_field( 'post',
                 'featured_image_secondary',
                 array(
-                'get_callback'    => array( $this, 'get_featured_image_secondary' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_featured_image_secondary' ),
+                    'update_callback' => null,
+                    'schema'          => null,
                 )
             );
 
             register_api_field( 'issue',
                 'articles',
                 array(
-                'get_callback'    => array( $this, 'get_issue_articles' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_issue_articles' ),
+                    'update_callback' => null,
+                    'schema'          => null,
                 )
             );
 
@@ -101,36 +101,36 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'post',
                 'authors',
                 array(
-                'get_callback'    => array( $this, 'get_post_meta_cb' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_field' ),
+                    'update_callback' => null,
+                    'schema'          => null,
                 )
             );
 
             register_rest_field( 'post',
                 'subhead',
                 array(
-                'get_callback'    => array( $this, 'get_authors' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_authors' ),
+                    'update_callback' => null,
+                    'schema'          => null,
                 )
             );
 
             register_rest_field( 'post',
                 'featured_image_secondary',
                 array(
-                'get_callback'    => array( $this, 'get_featured_image_secondary' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_featured_image_secondary' ),
+                    'update_callback' => null,
+                    'schema'          => null,
                 )
             );
 
             register_rest_field( 'issue',
                 'articles',
                 array(
-                'get_callback'    => array( $this, 'get_issue_articles' ),
-                'update_callback' => null,
-                'schema'          => null,
+                    'get_callback'    => array( $this, 'get_issue_articles' ),
+                    'update_callback' => null,
+                    'schema'          => null,
                 )
             );
 
@@ -155,8 +155,8 @@ class Jacobin_Rest_API_Fields {
      * @return string meta
      *
      */
-    function get_post_meta_cb ( $object, $field_name, $request ) {
-        return get_post_meta( $object[ 'id' ], $field_name );
+    function get_field ( $object, $field_name, $request ) {
+        return get_post_meta( $object[ 'id' ], $field_name, true );
     }
 
     /**
@@ -177,17 +177,20 @@ class Jacobin_Rest_API_Fields {
 
         $post_id = $object['id'];
         $image_id = get_post_thumbnail_id( $post_id );
-
         $post_data = get_post( $image_id );
 
-        $featured_image_secondary['id'] = $post_data->ID;
-        $featured_image_secondary['title'] = $post_data->post_title;
-        $featured_image_secondary['alt_text'] = get_post_meta( $image_id  , '_wp_attachment_image_alt', true );
-        $featured_image_secondary['description'] = $post_data->post_content;
-        $featured_image_secondary['caption'] = $post_data->post_excerpt;
-        $featured_image_secondary['link'] = wp_get_attachment_url( $image_id );
-        $featured_image_secondary['author'] = $post_data->post_author;
-        $featured_image_secondary['media_details'] = 'media details coming soon.';
+        $featured_image_secondary = array(
+            'id'            => $post_data->ID,
+            'title'         => array(
+                'rendered'  => $post_data->post_title
+            ),
+            'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
+            'description'   => $post_data->post_content,
+            'caption'       => $post_data->post_excerpt,
+            'link'          => wp_get_attachment_url( $image_id ),
+            'author'        => (int) $post_data->post_author,
+            'media_details' => wp_get_attachment_metadata( $image_id ),
+        );
         
         return $featured_image_secondary;
     }
@@ -220,10 +223,10 @@ class Jacobin_Rest_API_Fields {
         if( !empty( $posts ) ) {
             foreach( $posts as $post ) {
                 $articles[$count]['id'] = (int) $post->ID;
-                $articles[$count]['title'] = $post->post_title;
+                $articles[$count]['title']['rendered'] = $post->post_title;
                 $articles[$count]['slug'] = $post->post_name;
                 $articles[$count]['content'] = $post->post_content;
-                $articles[$count]['excerpt'] = $post->post_excerpt;
+                $articles[$count]['excerpt']['rendered'] = jacobin_the_excerpt( $post->ID );
                 
                 if ( function_exists( 'get_coauthors' ) ) {
                     $coauthors = get_coauthors ( $post->ID );
@@ -307,91 +310,6 @@ class Jacobin_Rest_API_Fields {
             return $authors;
         }
 
-    }
-
-
-    /**
-     * Get size information for all currently-registered image sizes.
-     *
-     * @global $_wp_additional_image_sizes
-     * @uses   get_intermediate_image_sizes()
-     * @return array $sizes Data for all currently-registered image sizes.
-     */
-    public function get_image_sizes() {
-        global $_wp_additional_image_sizes;
-
-        $sizes = array();
-
-        foreach ( get_intermediate_image_sizes() as $_size ) {
-            if ( in_array( $_size, array('thumbnail', 'medium', 'medium_large', 'large') ) ) {
-                $sizes[ $_size ]['width']  = get_option( "{$_size}_size_w" );
-                $sizes[ $_size ]['height'] = get_option( "{$_size}_size_h" );
-                $sizes[ $_size ]['crop']   = (bool) get_option( "{$_size}_crop" );
-            } elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
-                $sizes[ $_size ] = array(
-                    'width'  => $_wp_additional_image_sizes[ $_size ]['width'],
-                    'height' => $_wp_additional_image_sizes[ $_size ]['height'],
-                    'crop'   => $_wp_additional_image_sizes[ $_size ]['crop'],
-                );
-            }
-        }
-
-        return $sizes;
-    }
-
-    /**
-     * Get size information for a specific image size.
-     *
-     * @uses   get_image_sizes()
-     * @param  string $size The image size for which to retrieve data.
-     * @return bool|array $size Size data about an image size or false if the size doesn't exist.
-     */
-    public function get_image_size( $size ) {
-        $sizes = get_image_sizes();
-
-        if ( isset( $sizes[ $size ] ) ) {
-            return $sizes[ $size ];
-        }
-
-        return false;
-    }
-
-    /**
-     * Get the width of a specific image size.
-     *
-     * @uses   get_image_size()
-     * @param  string $size The image size for which to retrieve data.
-     * @return bool|string $size Width of an image size or false if the size doesn't exist.
-     */
-    public function get_image_width( $size ) {
-        if ( ! $size = $this->get_image_size( $size ) ) {
-            return false;
-        }
-
-        if ( isset( $size['width'] ) ) {
-            return $size['width'];
-        }
-
-        return false;
-    }
-
-    /**
-     * Get the height of a specific image size.
-     *
-     * @uses   get_image_size()
-     * @param  string $size The image size for which to retrieve data.
-     * @return bool|string $size Height of an image size or false if the size doesn't exist.
-     */
-    public function get_image_height( $size ) {
-        if ( ! $size = $this->get_image_size( $size ) ) {
-            return false;
-        }
-
-        if ( isset( $size['height'] ) ) {
-            return $size['height'];
-        }
-
-        return false;
     }
 
     /**
