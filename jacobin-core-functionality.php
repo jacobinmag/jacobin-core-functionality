@@ -24,6 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 define( 'JACOBIN_CORE_DIR', dirname( __FILE__ ) );
 
+require_once( 'includes/helpers.php' );
+
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
 require_once( 'includes/class-jacobin-core-settings.php' );
