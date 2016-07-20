@@ -33,9 +33,9 @@ class Jacobin_Rest_API_Fields {
         /**
          * Filters to have fields returned in `custom_fields` instead of `acf`. For v1.
          */
-        add_filter( 'acf_to_wp_rest_api_post_data', array( $this, 'set_custom_field_base_v1' ), 10 );
-        add_filter( 'acf_to_wp_rest_api_issue_data', array( $this, 'set_custom_field_base_v1' ), 10 );
-        add_filter( 'acf_to_wp_rest_api_term_data', array( $this, 'set_custom_field_base_v1' ), 10 );
+        // add_filter( 'acf_to_wp_rest_api_post_data', array( $this, 'set_custom_field_base_v1' ), 10 );
+        // add_filter( 'acf_to_wp_rest_api_issue_data', array( $this, 'set_custom_field_base_v1' ), 10 );
+        // add_filter( 'acf_to_wp_rest_api_term_data', array( $this, 'set_custom_field_base_v1' ), 10 );
 
 
         add_filter( 'rest_prepare_department', array( $this, 'rest_prepare_term' ), 10, 2 );
