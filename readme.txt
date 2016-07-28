@@ -31,6 +31,7 @@ This section describes how to install the plugin and get it working.
 * Created shortcode for embedding timeline
 * Registered shortcode with Shortcode UI to create easy interface
 * Added view for shortcode based on requested markup
+* Renamed the timeline custom field key to `custom_fields`
 
 = 0.1.2 [WIP] =
 * Register subhead field with REST API
