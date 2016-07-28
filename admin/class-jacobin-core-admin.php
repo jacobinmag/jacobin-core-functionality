@@ -5,7 +5,7 @@
  * 
  * @package    Jacobin_Core
  * @subpackage Jacobin_Core\Admin
- * @since       0.1.7
+ * @since       0.1.4
  * @license    GPL-2.0+
  */
 
@@ -26,7 +26,7 @@ class Jacobin_Core_Admin {
 	/**
 	 * The ID of this plugin.
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 * @access   private
 	 * @var      string    $plugin_name    The ID of this plugin.
 	 */
@@ -35,7 +35,7 @@ class Jacobin_Core_Admin {
 	/**
 	 * The version of this plugin.
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 * @access   private
 	 * @var      string    $version    The current version of this plugin.
 	 */
@@ -44,7 +44,7 @@ class Jacobin_Core_Admin {
 	/**
 	 * The setting
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 * @access   private
 	 * @var      string    $setting    The setting that will be registered.
 	 */
@@ -53,7 +53,7 @@ class Jacobin_Core_Admin {
 	/**
 	 * Initialize the class and set its properties.
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 * @param      string    $plugin_name       The name of this plugin.
 	 * @param      string    $version    The version of this plugin.
 	 */
@@ -74,7 +74,7 @@ class Jacobin_Core_Admin {
 	 * Create Settings Page Menu Item
 	 * `add_options_page` puts a menu item in the “Settings” menu
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 *
 	 * @param string $page_title 	The text to be displayed in the title tags of the page when the menu is selected
 	 * @param string $menu_title 	The text to be used for the menu 
@@ -89,7 +89,7 @@ class Jacobin_Core_Admin {
 	/**
 	 * Add Settings Sections
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 *
 	 * @uses add_settings_section()
 	 *
@@ -106,7 +106,7 @@ class Jacobin_Core_Admin {
 	/**
 	 * Add Setting Fields
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 *
 	 * @param string $id 	String for use in the 'id' attribute of tags. 
 	 * @param string $title 	Title of the field. 
@@ -129,7 +129,7 @@ class Jacobin_Core_Admin {
 	/**
 	 * Register settings
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 *
 	 * @uses register_settings()
 	 *
@@ -146,7 +146,7 @@ class Jacobin_Core_Admin {
 	 * Slug field
 	 * Called by `add_settings_field` to render field
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 *
 	 * @link https://codex.wordpress.org/Function_Reference/add_settings_field
 	 */
@@ -156,7 +156,7 @@ class Jacobin_Core_Admin {
 	 * Tax rewrite field
 	 * Called by `add_settings_field` to render field
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 *
 	 * @link https://codex.wordpress.org/Function_Reference/add_settings_field
 	 */
@@ -166,7 +166,7 @@ class Jacobin_Core_Admin {
 	 * Settings callback
 	 * Called by `add_options_page` to output the content for the page.
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 */
 	public function settings_section_callback() {}
 
@@ -174,7 +174,7 @@ class Jacobin_Core_Admin {
 	 * Create menu item
 	 * Called by `add_options_page` to output the content for the page.
 	 *
-	 * @since    0.1.7
+	 * @since    0.1.4
 	 */
 	public function settings_page_callback() {
 		include( 'views/jacobin-core-admin-display.php' );
