@@ -32,8 +32,6 @@ require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
 
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
-require_once( 'includes/class-jacobin-core-settings.php' );
-require_once( 'includes/class-jacobin-core-field-settings.php' );
 require_once( 'includes/class-jacobin-core-register-fields.php' );
 require_once( 'includes/class-jacobin-core-shortcodes.php' );
 
@@ -48,10 +46,6 @@ require_once( 'admin/class-jacobin-core-admin.php' );
  */
 function Jacobin_Core () {
 	$instance = Jacobin_Core::instance( __FILE__, '0.1.4' );
-
-	if ( is_null( $instance->settings ) ) {
-		$instance->settings = Jacobin_Core_Settings::instance( $instance );
-	}
 
 	return $instance;
 }
