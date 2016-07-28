@@ -65,7 +65,7 @@ class Jacobin_Core_Admin {
 		// Modify custom post args
 		add_filter( 'issue_register_args', array( $this, 'modify_issue_args' ), 'issue' );
 		add_filter( 'timeline_register_args', array( $this, 'modify_timeline_args' ), 'timeline' );
-		add_filter( 'charts_register_args', array( $this, 'modify_chart_args' ), 'chart' );
+		add_filter( 'chart_register_args', array( $this, 'modify_chart_args' ), 'chart' );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 	}
