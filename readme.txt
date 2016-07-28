@@ -32,6 +32,7 @@ This section describes how to install the plugin and get it working.
 * Registered shortcode with Shortcode UI to create easy interface
 * Added view for shortcode based on requested markup
 * Renamed the timeline custom field key to `custom_fields`
+* [bugfix] Fixed `Trying to get property of non-object in class-jacobin-core-register-fields.php`
 
 = 0.1.2 [WIP] =
 * Register subhead field with REST API

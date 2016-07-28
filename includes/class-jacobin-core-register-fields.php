@@ -175,20 +175,25 @@ class Jacobin_Rest_API_Fields {
         $image_id = get_post_thumbnail_id( $post_id );
         $post_data = get_post( $image_id );
 
-        $featured_image_secondary = array(
-            'id'            => $post_data->ID,
-            'title'         => array(
-                'rendered'  => $post_data->post_title
-            ),
-            'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
-            'description'   => $post_data->post_content,
-            'caption'       => $post_data->post_excerpt,
-            'link'          => wp_get_attachment_url( $image_id ),
-            'author'        => (int) $post_data->post_author,
-            'media_details' => wp_get_attachment_metadata( $image_id ),
-        );
-        
-        return $featured_image_secondary;
+        if( !empty( $post_data ) ) {
+            $featured_image_secondary = array(
+                'id'            => $post_data->ID,
+                'title'         => array(
+                    'rendered'  => $post_data->post_title
+                ),
+                'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
+                'description'   => $post_data->post_content,
+                'caption'       => $post_data->post_excerpt,
+                'link'          => wp_get_attachment_url( $image_id ),
+                'author'        => (int) $post_data->post_author,
+                'media_details' => wp_get_attachment_metadata( $image_id ),
+            );
+            
+            return $featured_image_secondary;
+        }
+
+        return;
+
     }
 
     /**
