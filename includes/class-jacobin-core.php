@@ -121,6 +121,7 @@ class Jacobin_Core {
 
 		// Modify custom post args
 		add_filter( 'issue_register_args', array( $this, 'modify_issue_args' ), 'issue' );
+		add_filter( 'timeline_register_args', array( $this, 'modify_timeline_args' ), 'timeline' );
 	} // End __construct ()
 
 	/**
@@ -260,7 +261,7 @@ class Jacobin_Core {
 	} // End _log_version_number ()
 
 	/**
-	 * Modify 
+	 * Modify Issue CPT Args
 	 * @access  public
 	 * @since   0.1.0
 	 * @return  $args array
@@ -272,6 +273,20 @@ class Jacobin_Core {
 	    return $args;
 
 	} // End modify_issue_args 
+
+	/**
+	 * Modify Timeline CPT Args
+	 * @access  public
+	 * @since    0.1.2
+	 * @return  $args array
+	 */
+	public function modify_timeline_args( $args ) {
+
+	    $args['menu_icon'] = 'dashicons-list-view';
+	    
+	    return $args;
+
+	} // End modify_timeline_args
 	
 
 }

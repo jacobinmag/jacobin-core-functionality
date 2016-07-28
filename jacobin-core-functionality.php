@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.1.2
+ * Version:         0.1.3
  *
  * @package         Core_Functionality
  */
@@ -36,6 +36,8 @@ require_once( 'includes/class-jacobin-core-register-fields.php' );
 require_once( 'includes/lib/class-jacobin-core-admin-api.php' );
 require_once( 'includes/lib/class-jacobin-core-post-type.php' );
 require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
+
+require_once( 'includes/class-jacobin-core-shortcodes.php' );
 
 /**
  * Returns the main instance of Jacobin_Core to prevent the need to use globals.
@@ -65,6 +67,12 @@ Jacobin_Core()->register_post_type(
     'issue', 
     __( 'Issues', 'jacobin-core' ), 
     __( 'Issue', 'jacobin-core' )
+);
+
+Jacobin_Core()->register_post_type(
+    'timeline',
+    __( 'Timelines', 'jacobin-core' ),
+    __( 'Timeline', 'jacobin-core' )
 );
 
 /**
@@ -99,3 +107,6 @@ Jacobin_Core()->register_taxonomy(
     __( 'Series', 'jacobin-core' ),
     'post'
 );
+
+
+

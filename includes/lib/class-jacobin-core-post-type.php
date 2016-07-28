@@ -112,12 +112,12 @@ class Jacobin_Core_Post_Type {
 			'show_in_rest'       	=> true,
 			'rest_base'          	=> $this->post_type,
 			'rest_controller_class' => 'WP_REST_Posts_Controller',
-			'supports' 				=> array( 'title', 'editor', 'excerpt', 'comments', 'thumbnail' ),
+			'supports' 				=> array( 'title', 'editor', 'excerpt', 'comments', 'thumbnail', 'post-formats' ),
 			'menu_position' 		=> 5,
 			'menu_icon' 			=> 'dashicons-admin-post',
 		);
 
-		$args = array_merge($args, $this->options);
+		$args = array_merge( $args, $this->options );
 
 		register_post_type( $this->post_type, apply_filters( $this->post_type . '_register_args', $args, $this->post_type ) );
 	}
