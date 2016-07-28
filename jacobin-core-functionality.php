@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.1.3
+ * Version:         0.1.4
  *
  * @package         Core_Functionality
  */
@@ -26,18 +26,19 @@ define( 'JACOBIN_CORE_DIR', dirname( __FILE__ ) );
 
 require_once( 'includes/helpers.php' );
 
+// Load plugin libraries
+require_once( 'includes/lib/class-jacobin-core-post-type.php' );
+require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
+
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
 require_once( 'includes/class-jacobin-core-settings.php' );
 require_once( 'includes/class-jacobin-core-field-settings.php' );
 require_once( 'includes/class-jacobin-core-register-fields.php' );
-
-// Load plugin libraries
-require_once( 'includes/lib/class-jacobin-core-admin-api.php' );
-require_once( 'includes/lib/class-jacobin-core-post-type.php' );
-require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
-
 require_once( 'includes/class-jacobin-core-shortcodes.php' );
+
+// Load admin files
+require_once( 'admin/class-jacobin-core-admin.php' );
 
 /**
  * Returns the main instance of Jacobin_Core to prevent the need to use globals.
@@ -46,7 +47,7 @@ require_once( 'includes/class-jacobin-core-shortcodes.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.1.1' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.1.4' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Jacobin_Core_Settings::instance( $instance );
@@ -73,6 +74,12 @@ Jacobin_Core()->register_post_type(
     'timeline',
     __( 'Timelines', 'jacobin-core' ),
     __( 'Timeline', 'jacobin-core' )
+);
+
+Jacobin_Core()->register_post_type(
+    'chart',
+    __( 'Charts', 'jacobin-core' ),
+    __( 'Chart', 'jacobin-core' )
 );
 
 /**

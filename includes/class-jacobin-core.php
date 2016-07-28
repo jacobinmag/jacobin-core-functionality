@@ -90,7 +90,7 @@ class Jacobin_Core {
 	 * @since   0.1.0
 	 * @return  void
 	 */
-	public function __construct ( $file = '', $version = '1.0.0' ) {
+	public function __construct ( $file = '', $version ) {
 		$this->_version = $version;
 		$this->_token = 'jacobin_core';
 
@@ -104,24 +104,15 @@ class Jacobin_Core {
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
 
-		// Load admin JS & CSS
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
-
-		// wp_enqueue_script ( string $handle, string $src = false, array $deps = array(), string|bool|null $ver = false, bool $in_footer = false )
-
-		// Load API for generic admin functions
+		// Load for admin functions
 		if ( is_admin() ) {
-			$this->admin = new Jacobin_Core_Admin_API();
+			$this->admin = new Jacobin_Core_Admin( $this->_token, $this->_version );
 		}
 
 		// Handle localisation
 		$this->load_plugin_textdomain();
 		add_action( 'init', array( $this, 'load_localisation' ), 0 );
-
-		// Modify custom post args
-		add_filter( 'issue_register_args', array( $this, 'modify_issue_args' ), 'issue' );
-		add_filter( 'timeline_register_args', array( $this, 'modify_timeline_args' ), 'timeline' );
+	
 	} // End __construct ()
 
 	/**
@@ -157,28 +148,6 @@ class Jacobin_Core {
 
 		return $taxonomy;
 	}
-
-	/**
-	 * Load admin CSS.
-	 * @access  public
-	 * @since   0.1.0
-	 * @return  void
-	 */
-	public function admin_enqueue_styles ( $hook = '' ) {
-		wp_register_style( $this->_token . '-admin', esc_url( $this->assets_url ) . 'css/admin.css', array(), $this->_version );
-		wp_enqueue_style( $this->_token . '-admin' );
-	} // End admin_enqueue_styles ()
-
-	/**
-	 * Load admin Javascript.
-	 * @access  public
-	 * @since   0.1.0
-	 * @return  void
-	 */
-	public function admin_enqueue_scripts ( $hook = '' ) {
-		wp_register_script( $this->_token . '-admin', esc_url( $this->assets_url ) . 'js/admin' . $this->script_suffix . '.js', array( 'jquery' ), $this->_version );
-		wp_enqueue_script( $this->_token . '-admin' );
-	} // End admin_enqueue_scripts ()
 
 	/**
 	 * Load plugin localisation
@@ -258,35 +227,6 @@ class Jacobin_Core {
 	 */
 	private function _log_version_number () {
 		update_option( $this->_token . '_version', $this->_version );
-	} // End _log_version_number ()
-
-	/**
-	 * Modify Issue CPT Args
-	 * @access  public
-	 * @since   0.1.0
-	 * @return  $args array
-	 */
-	public function modify_issue_args( $args ) {
-
-	    $args['menu_icon'] = 'dashicons-book';
-	    
-	    return $args;
-
-	} // End modify_issue_args 
-
-	/**
-	 * Modify Timeline CPT Args
-	 * @access  public
-	 * @since    0.1.2
-	 * @return  $args array
-	 */
-	public function modify_timeline_args( $args ) {
-
-	    $args['menu_icon'] = 'dashicons-list-view';
-	    
-	    return $args;
-
-	} // End modify_timeline_args
-	
+	} // End _log_version_number ()	
 
 }

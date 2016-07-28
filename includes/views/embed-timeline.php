@@ -3,7 +3,7 @@
  * Jacobin Core Embed Timeline View
  * 
  * @package    Jacobin_Core
- * @subpackage Jacobin_Core\Includes\Views
+ * @subpackage Jacobin_Core\Admin\Views
  * @since      0.1.3
  * @license    GPL-2.0+
  */

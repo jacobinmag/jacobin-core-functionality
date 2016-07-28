@@ -26,6 +26,8 @@ class Jacobin_Register_Shortcodes {
 
         add_action( 'init', array( $this, 'detect_shortcode_ui' ) );
         add_action( 'init', array( $this, 'register_shortcodes' ) );
+        add_action( 'init', array( $this, 'register_shortcode_ui' ) );
+        
     }
 
     /**
@@ -67,7 +69,7 @@ class Jacobin_Register_Shortcodes {
      */
     public function register_shortcodes() {
         add_shortcode( 'embed-timeline', array( $this, 'embed_timeline_shortcode' ) );
-        add_action( 'register_shortcode_ui', array( $this, 'embed_timeline_shortcode_ui' ) );
+        add_shortcode( 'embed-chart', array( $this, 'embed_chart_shortcode' ) );
     }
 
     /**
@@ -79,7 +81,10 @@ class Jacobin_Register_Shortcodes {
      * @param function $shortcode_function
      *
      */
-    public function register_shortcode_ui() {}
+    public function register_shortcode_ui() {
+        add_action( 'register_shortcode_ui', array( $this, 'embed_timeline_shortcode_ui' ) );
+        add_action( 'register_shortcode_ui', array( $this, 'embed_chart_shortcode_ui' ) );
+    }
 
     /**
      * Callback for the `embed_timeline` shortcode.
@@ -110,6 +115,33 @@ class Jacobin_Register_Shortcodes {
     }
 
     /**
+     * Callback for the `embed_chart` shortcode.
+     *
+     * It renders the shortcode based on supplied attributes.
+     *
+     * @example `[embed-chart post_id="382"]` where post_id is the ID of chart post
+     *
+     * @since 0.1.4
+     *
+     * @param string $attr
+     * @param string $content
+     * @param string $shortcode_tag
+     */
+    public function embed_chart_shortcode( $attr, $content, $shortcode_tag ) {
+        $attr = shortcode_atts( array(
+            'post_id'     => '',
+        ), $attr, $shortcode_tag );
+
+        global $wpdb;
+
+        // Output buffering here.
+        ob_start();
+        
+        include_once ( 'views/embed-chart.php' );
+
+        return ob_get_clean();
+    }
+    /**
      * Embed Timeline Shortcode UI
      *
      * @since 0.1.3
@@ -137,6 +169,36 @@ class Jacobin_Register_Shortcodes {
         );
 
         shortcode_ui_register_for_shortcode( 'embed-timeline', $shortcode_ui_args );
+    }
+
+    /**
+     * Embed Timeline Shortcode UI
+     *
+     * @since 0.1.4
+     *
+     */
+    public function embed_chart_shortcode_ui() {
+        $fields = array(
+            array(
+                'label'    => esc_html__( 'Select Chart', 'jacobin-core' ),
+                'attr'     => 'post_id',
+                'type'     => 'post_select',
+                'query'    => array( 'post_type' => 'chart' ),
+                'multiple' => false,
+            ),
+        );
+
+        /*
+         * Define the Shortcode UI arguments.
+         */
+        $shortcode_ui_args = array(
+            'label'         => esc_html__( 'Embed Chart', 'jacobin-core' ),
+            'listItemImage' => 'dashicons-chart-line',
+            'post_type'     => array( 'post' ),
+            'attrs'         => $fields,
+        );
+
+        shortcode_ui_register_for_shortcode( 'embed-chart', $shortcode_ui_args );
     }
 
 }

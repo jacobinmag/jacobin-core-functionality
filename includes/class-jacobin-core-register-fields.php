@@ -24,12 +24,13 @@ class Jacobin_Rest_API_Fields {
      */
     function __construct () {
         /**
-         * Filters to have fields returned in `custom_fields` instead of `acf`. For v2
+         * Filters to have fields returned in `custom_fields` instead of `acf`.
          */
         add_filter( 'acf/rest_api/post/get_fields', array( $this, 'set_custom_field_base' ) );
         add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'set_custom_field_base' ) );
         add_filter( 'acf/rest_api/term/get_fields', array( $this, 'set_custom_field_base' ) );
         add_filter( 'acf/rest_api/timeline/get_fields', array( $this, 'set_custom_field_base' ) );
+        add_filter( 'acf/rest_api/chart/get_fields', array( $this, 'set_custom_field_base' ) );
 
         /**
          * Filters to have fields returned in `custom_fields` instead of `acf`. For v1.
