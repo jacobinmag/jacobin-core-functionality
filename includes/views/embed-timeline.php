@@ -20,9 +20,9 @@ if( !function_exists( 'have_rows' ) ) {
 } ?>
 
 <!-- Begin timeline aside -->
-<aside id="timeline-<?php echo $attr['post_id']; ?>" title="<?php echo esc_attr( get_the_title( $attr['post_id'] ) ); ?>" role="secondary">
+<aside class="article-timeline" title="<?php echo esc_attr( get_the_title( $attr['post_id'] ) ); ?>" role="secondary">
 
-	<dl>
+	<dl id="timeline-<?php echo $attr['post_id']; ?>">
 
 	<?php if( have_rows( 'timeline_items', $attr['post_id'] ) ) : ?>
 

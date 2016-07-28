@@ -34,6 +34,7 @@ This section describes how to install the plugin and get it working.
 * Renamed the chart custom field key to `custom_fields`
 * Added admin style to fix display of ACF code field
 * Modified output to remove extra spaces, line feeds and tabs from chart output
+* Updated timeline markup to be more semantic
 
 = 0.1.3 July 27, 2016 =
 * Added `timeline` post type
