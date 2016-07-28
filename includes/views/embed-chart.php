@@ -18,7 +18,7 @@ $content = get_post_meta( $attr['post_id'], 'chart_code', true );
 	<figure title="<?php echo esc_attr( get_the_title( $attr['post_id'] ) ); ?>">
         <figcaption><?php echo esc_attr( get_the_title( $attr['post_id'] ) ); ?></figcaption>
         
-        <?php echo '<![CDATA[' . $content . ']]'; ?>
+        <?php echo preg_replace( '/\s+/S', " ", $content ); ?>
 
 	</figure>
 
