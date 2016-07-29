@@ -110,7 +110,7 @@ class Jacobin_Core_Post_Type {
 			'has_archive' 			=> true,
 			'hierarchical' 			=> true,
 			'show_in_rest'       	=> true,
-			'rest_base'          	=> $this->post_type,
+			'rest_base'          	=> str_replace( ' ', '-', strtolower( $this->plural ) ),
 			'rest_controller_class' => 'WP_REST_Posts_Controller',
 			'supports' 				=> array( 'title', 'editor', 'excerpt', 'comments', 'thumbnail', 'post-formats' ),
 			'menu_position' 		=> 5,
