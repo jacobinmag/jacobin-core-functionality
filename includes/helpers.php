@@ -21,7 +21,6 @@
  * @return  string $the_excerpt
  *
  */
-
 function jacobin_the_excerpt( $post_id, $word_count = 35, $line_breaks = TRUE ) {
     $post = get_post( $post_id );
 
@@ -41,4 +40,80 @@ function jacobin_the_excerpt( $post_id, $word_count = 35, $line_breaks = TRUE ) 
         $the_excerpt = trim( $the_excerpt );
         return $the_excerpt;
     }
+}
+
+/**
+ * Get Timeline Date Format
+ *
+ * Extract date format from timeline post type
+ *
+ * @since   0.1.5
+ * 
+ * @param   int $post_id
+ * @return  string $date_format
+ *
+ */
+function jacobin_timeline_date_format( $post_id ) {
+    $date = get_post_meta( $post_id, 'date_format' );
+
+    /**
+     * If there is no date, then just return the default 'F j, Y'
+     * i.e. January 1, 2024
+     */
+    if( !$date ) {
+      return 'F j, Y';
+    }
+    
+    $date = $date[0];
+
+    /**
+     * If `month` && `day`, but not `year`
+     *
+     * @return string 'F jS'
+     * e.g. January 1st
+     */
+    if( in_array( 'month', $date ) && in_array( 'day', $date ) && !in_array( 'year', $date ) ) {
+
+      return 'F jS';
+
+    /**
+     * If `day`, but not `month`
+     * Note: if `day` and `year` are selected, 'l' is still returned because Saturday 2024 doesn't make sense.
+     *
+     * @return string 'l'
+     * e.g. Saturday
+     */
+    } elseif( in_array( 'day', $date ) && !in_array( 'month', $date ) ) {
+
+      return 'l';
+
+    }
+
+    /**
+     * Build date format
+     *
+     * @return string $date_format
+     */
+    $date_format = '';
+
+    if( in_array( 'month', $date ) ) {
+
+      $date_format .= 'F ';
+
+    }
+
+    if( in_array( 'day', $date ) ) {
+
+      $date_format .= 'j, ';
+
+    }
+
+    if( in_array( 'year', $date ) ) {
+
+      $date_format .= 'Y';
+
+    }
+
+    return $date_format;
+
 }

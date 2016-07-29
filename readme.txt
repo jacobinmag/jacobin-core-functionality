@@ -26,6 +26,13 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.1.5 July 28, 2016 =
+* [Breaking Change] - Changed `rest_base` to use lowercase plural of custom post type (e.g. issues instead of issue) to be consistent with default post types.
+* Added function to return appropriate date format for timeline
+   * If `month` && `day`, but not `year` @return string 'F jS' (e.g. January 1st)
+   * If `day`, but not `month` @return string 'l' (e.g. Saturday)
+   * Otherwise, just build up to default 'F j, Y' (e.g. January 1, 2024)
+
 = 0.1.4 July 28, 2016 =
 * Added `chart` post type
 * Created shortcode for embedding chart
