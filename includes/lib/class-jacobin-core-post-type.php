@@ -1,7 +1,7 @@
 <?php
 /**
  * Jacobin Core Post Type API
- * 
+ *
  * @package    Jacobin_Core
  * @subpackage Jacobin_Core\Includes\Libs
  * @since      0.1.0
@@ -112,7 +112,7 @@ class Jacobin_Core_Post_Type {
 			'show_in_rest'       	=> true,
 			'rest_base'          	=> str_replace( ' ', '-', strtolower( $this->plural ) ),
 			'rest_controller_class' => 'WP_REST_Posts_Controller',
-			'supports' 				=> array( 'title', 'editor', 'excerpt', 'comments', 'thumbnail', 'post-formats' ),
+			'supports' 				=> array( 'title', 'author', 'editor', 'excerpt', 'comments', 'thumbnail', 'post-formats' ),
 			'menu_position' 		=> 5,
 			'menu_icon' 			=> 'dashicons-admin-post',
 		);

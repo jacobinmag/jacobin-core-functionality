@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.1.4
+ * Version:         0.1.5
  *
  * @package         Core_Functionality
  */
@@ -33,6 +33,7 @@ require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
 require_once( 'includes/class-jacobin-core-register-fields.php' );
+require_once( 'includes/class-jacobin-core-field-settings.php' );
 require_once( 'includes/class-jacobin-core-shortcodes.php' );
 
 // Load admin files
@@ -45,7 +46,7 @@ require_once( 'admin/class-jacobin-core-admin.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.1.4' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.1.5' );
 
 	return $instance;
 }
@@ -58,9 +59,9 @@ Jacobin_Core();
  *
  * @since  0.1.0
  */
-Jacobin_Core()->register_post_type( 
-    'issue', 
-    __( 'Issues', 'jacobin-core' ), 
+Jacobin_Core()->register_post_type(
+    'issue',
+    __( 'Issues', 'jacobin-core' ),
     __( 'Issue', 'jacobin-core' )
 );
 
@@ -108,6 +109,3 @@ Jacobin_Core()->register_taxonomy(
     __( 'Series', 'jacobin-core' ),
     'post'
 );
-
-
-

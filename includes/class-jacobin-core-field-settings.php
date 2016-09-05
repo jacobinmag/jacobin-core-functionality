@@ -1,7 +1,7 @@
 <?php
 /**
  * Jacobin Core Field Settings
- * 
+ *
  * @package    Jacobin_Core
  * @subpackage Jacobin_Core\Includes
  * @since      0.1.0
@@ -39,9 +39,9 @@ class Jacobin_Field_Settings {
          */
         add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
 
-        add_filter( 'acf/update_value/name=related_articles', array( $this, 'related_posts' ), 10, 3 );
-
-        add_filter( 'acf/update_value/name=article_issue_relationship', array( $this, 'related_posts' ), 10, 3 );
+        // add_filter( 'acf/update_value/name=related_articles', array( $this, 'related_posts' ), 10, 3 );
+        //
+        // add_filter( 'acf/update_value/name=article_issue_relationship', array( $this, 'related_posts' ), 10, 3 );
 
      }
 
@@ -58,10 +58,12 @@ class Jacobin_Field_Settings {
      * @since  0.1.0
      */
     function remove_meta_boxes() {
-        remove_meta_box( 'seriesdiv', 'post', 'normal' );
-        remove_meta_box( 'formatdiv', 'post', 'normal' );
-        remove_meta_box( 'departmentdiv', 'post', 'normal' );
-        remove_meta_box( 'locationdiv', 'post', 'normal' );
+        remove_meta_box( 'seriesdiv', 'post', 'side' );
+        remove_meta_box( 'formatdiv', 'post', 'side' );
+        remove_meta_box( 'formatdiv', 'issue', 'side' );
+        remove_meta_box( 'authordiv', 'issue', 'side' );
+        remove_meta_box( 'departmentdiv', 'post', 'side' );
+        remove_meta_box( 'locationdiv', 'post', 'side' );
     }
 
     /**
@@ -150,81 +152,81 @@ class Jacobin_Field_Settings {
      * @since  0.1.0
      */
     function related_posts( $value, $post_id, $field ) {
-    
+
         $field_name = $field['name'];
         $global_name = 'is_updating_' . $field_name;
-        
+
         // Bail early if this filter was triggered from the update_field() function called within the loop below
         // - this prevents an inifinte loop
         if( !empty( $GLOBALS[ $global_name ] ) ) return $value;
-        
+
         // Set global variable to avoid inifite loop
         // - could also remove_filter() then add_filter() again, but this is simpler
         $GLOBALS[ $global_name ] = 1;
-        
+
         // Loop over selected posts and add this $post_id
         if( is_array( $value ) ) {
-        
+
             foreach( $value as $post_id2 ) {
-                
+
                 // Load existing related posts
                 $value2 = get_field( $field_name, $post_id2, false );
-                
+
                 // Allow for selected posts to not contain a value
                 if( empty( $value2 ) ) {
-                    
+
                     $value2 = array();
-                    
+
                 }
-                
+
                 // Bail early if the current $post_id is already found in selected post's $value2
                 if( in_array( $post_id, $value2 ) ) continue;
-                
+
                 // Append the current $post_id to the selected post's 'related_posts' value
                 $value2[] = $post_id;
-                
+
                 // Update the selected post's value
                 update_field( $field_name, $value2, $post_id2 );
-                
+
             }
         }
-        
+
         // Find posts which have been removed
         $old_value = get_field( $field_name, $post_id, false );
-        
+
         if( is_array( $old_value ) ) {
-            
+
             foreach( $old_value as $post_id2 ) {
-                
+
                 // Bail early if this value has not been removed
                 if( is_array( $value ) && in_array( $post_id2, $value ) ) continue;
-                
+
                 // Load existing related posts
                 $value2 = get_field( $field_name, $post_id2, false );
-                
+
                 // Bail early if no value
                 if( empty( $value2 ) ) continue;
-                
+
                 // Find the position of $post_id within $value2 so we can remove it
                 $pos = array_search( $post_id, $value2 );
-                
+
                 // Remove
                 unset( $value2[$pos] );
-                
+
                 // Update the un-selected post's value
                 update_field( $field_name, $value2, $post_id2 );
-                
+
             }
         }
-        
+
         // Reset global varibale to allow this filter to function as per normal
         $GLOBALS[ $global_name ] = 0;
-        
+
         // return
         return $value;
-        
+
     }
-    
+
 }
 
 new Jacobin_Field_Settings();
