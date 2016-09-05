@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.5
 Tested up to: 4.5.3
-Version: 0.1.5
+Version: 0.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,6 +29,7 @@ This section describes how to install the plugin and get it working.
 = 0.1.6 September 4, 2016 =
 * Activated field settings that remove certain meta_boxes from posts and issues
 * Moved `lang` dir to `languages`
+* Added author support to custom post type library
 
 = 0.1.5 July 28, 2016 =
 * [Breaking Change] - Changed `rest_base` to use lowercase plural of custom post type (e.g. issues instead of issue) to be consistent with default post types.
