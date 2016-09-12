@@ -176,7 +176,6 @@ class Jacobin_Rest_API_Fields {
     public function get_issue_articles ( $object, $field_name, $request ) {
         $meta = get_post_meta( $object['id'], 'article_issue_relationship', true );
         $articles = [];
-        $count = 0;
 
         $args = array(
             'post__in' => $meta
@@ -186,41 +185,31 @@ class Jacobin_Rest_API_Fields {
 
         if( !empty( $posts ) ) {
             foreach( $posts as $post ) {
-                $articles[$count]['id'] = (int) $post->ID;
-                $articles[$count]['title']['rendered'] = $post->post_title;
-                $articles[$count]['slug'] = $post->post_name;
-                $articles[$count]['content'] = $post->post_content;
-                $articles[$count]['excerpt']['rendered'] = jacobin_the_excerpt( $post->ID );
 
-                if ( function_exists( 'get_coauthors' ) ) {
-                    $coauthors = get_coauthors ( $post->ID );
+                $article = array(
+                    'id'        => (int) $post->ID,
+                    'title'     => array(
+                        'rendered'  => $post->post_title,
+                    ),
+                    'slug'      => $post->post_name,
+                    'content'   => array(
+                        'rendered'  => $post->post_content,
+                    ),
+                    'excerpt'   => array(
+                        'rendered'    => jacobin_the_excerpt( $post->ID ),
+                    ),
+                    'authors'   => array(),
+                );
 
-                    $count_authors = 0;
+                $coauthors =  $this->get_authors_array ( $post->ID );
+                array_push( $article['authors'], $coauthors );
 
-                    foreach( $coauthors as $coauthor ) {
+                array_push( $articles, $article );
 
-                        $user_id = $coauthor->data->ID;
-                        $user_meta = get_userdata( $user_id );
-
-                        $articles[$count]['authors'][$count_authors]['id'] = (int) $user_id;
-                        $articles[$count]['authors'][$count_authors]['first_name'] = $user_meta->first_name;
-                        $articles[$count]['authors'][$count_authors]['last_name'] = $user_meta->last_name ;
-                        $articles[$count]['authors'][$count_authors]['name'] = $user_meta->display_name;
-                        $articles[$count]['authors'][$count_authors]['description'] = $user_meta->description;
-                        $articles[$count]['authors'][$count_authors]['link'] = get_author_posts_url( $user_id );
-
-                        $count_authors++;
-
-                    }
-
-                }
-
-                $count++;
             }
+            
         }
-
         return $articles;
-
     }
 
     /**
