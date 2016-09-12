@@ -75,6 +75,15 @@ class Jacobin_Rest_API_Fields {
                 )
             );
 
+            register_rest_field( 'issue',
+                'authors',
+                array(
+                    'get_callback'    => array( $this, 'get_authors' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
             register_rest_field( 'post',
                 'featured_image_secondary',
                 array(
@@ -207,7 +216,7 @@ class Jacobin_Rest_API_Fields {
                 array_push( $articles, $article );
 
             }
-            
+
         }
         return $articles;
     }

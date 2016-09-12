@@ -28,6 +28,7 @@ This section describes how to install the plugin and get it working.
 
 = 0.1.7.1 September 11, 2016 =
 * Optimized `get_issue_articles` function
+* Updated `authors` response data to return data from Co-authors Plus for issues
 
 = 0.1.7 September 11, 2016 =
 * Registered `guest-author` cpt and `author` taxonomy with REST API
