@@ -1,7 +1,7 @@
 <?php
 /**
  * Jacobin Core Register Fields with REST API
- * 
+ *
  * @package    Jacobin_Core
  * @subpackage Jacobin_Core\Includes
  * @since      0.1.0
@@ -55,48 +55,10 @@ class Jacobin_Rest_API_Fields {
      * @since 0.1.0
      */
     function register_fields () {
-        if ( function_exists( 'register_api_field' ) ) {
-
-            register_api_field( 'post',
-                'subhead',
-                array(
-                    'get_callback'    => array( $this, 'get_field' ),
-                    'update_callback' => null,
-                    'schema'          => null
-                )
-            );
-
-            register_api_field( 'post',
-                'authors',
-                array(
-                    'get_callback'    => array( $this, 'get_authors' ),
-                    'update_callback' => null,
-                    'schema'          => null
-                )
-            );
-
-            register_api_field( 'post',
-                'featured_image_secondary',
-                array(
-                    'get_callback'    => array( $this, 'get_featured_image_secondary' ),
-                    'update_callback' => null,
-                    'schema'          => null,
-                )
-            );
-
-            register_api_field( 'issue',
-                'articles',
-                array(
-                    'get_callback'    => array( $this, 'get_issue_articles' ),
-                    'update_callback' => null,
-                    'schema'          => null,
-                )
-            );
-
-        } elseif ( function_exists( 'register_rest_field' ) ) {
+        if ( function_exists( 'register_rest_field' ) ) {
 
             register_rest_field( 'post',
-                'authors',
+                'subhead',
                 array(
                     'get_callback'    => array( $this, 'get_field' ),
                     'update_callback' => null,
@@ -105,7 +67,7 @@ class Jacobin_Rest_API_Fields {
             );
 
             register_rest_field( 'post',
-                'subhead',
+                'authors',
                 array(
                     'get_callback'    => array( $this, 'get_authors' ),
                     'update_callback' => null,
@@ -189,7 +151,7 @@ class Jacobin_Rest_API_Fields {
                 'author'        => (int) $post_data->post_author,
                 'media_details' => wp_get_attachment_metadata( $image_id ),
             );
-            
+
             return $featured_image_secondary;
         }
 
@@ -229,7 +191,7 @@ class Jacobin_Rest_API_Fields {
                 $articles[$count]['slug'] = $post->post_name;
                 $articles[$count]['content'] = $post->post_content;
                 $articles[$count]['excerpt']['rendered'] = jacobin_the_excerpt( $post->ID );
-                
+
                 if ( function_exists( 'get_coauthors' ) ) {
                     $coauthors = get_coauthors ( $post->ID );
 
@@ -254,11 +216,11 @@ class Jacobin_Rest_API_Fields {
                 }
 
                 $count++;
-            } 
+            }
         }
 
         return $articles;
-        
+
     }
 
     /**
@@ -291,25 +253,49 @@ class Jacobin_Rest_API_Fields {
         if ( function_exists( 'get_coauthors' ) ) {
             $coauthors = get_coauthors ( $object_id );
             $authors = [];
-            $count = 0;
 
             foreach( $coauthors as $coauthor ) {
 
-                $user_id = $coauthor->data->ID;
-                $user_meta = get_userdata( $user_id );
+                $user_id = $coauthor->ID;
+                $author = [];
 
-                $authors[$count]['id'] = (int) $user_id;
-                $authors[$count]['first_name'] = $user_meta->first_name;
-                $authors[$count]['last_name'] = $user_meta->last_name ;
-                $authors[$count]['name'] = $user_meta->display_name;
-                $authors[$count]['description'] = $user_meta->description;
-                $authors[$count]['link'] = get_author_posts_url( $user_id );
+                if( array_key_exists( 'data', $coauthor ) && 'wpuser' == $coauthor->data->type ) {
+                    $user_meta = get_userdata( $user_id );
 
-                $count++;
+                    $author = array(
+                        'id'            => (int) $user_id,
+                        'name'          => $user_meta->display_name,
+                        'first_name'    => $user_meta->first_name,
+                        'last_name'     => $user_meta->last_name,
+                        'description'   => $user_meta->description,
+                        'link'          => get_author_posts_url( $user_id )
+                    );
+
+                    $author['id'] =             (int) $user_id;
+                    $author['name'] =           $user_meta->display_name;
+                    $author['first_name'] =     $user_meta->first_name;
+                    $author['last_name'] =      $user_meta->last_name;
+                    $author['description'] =    $user_meta->description;
+                    $author['link'] =           get_author_posts_url( $user_id );
+                }
+                elseif( 'guest-author' == $coauthor->type ) {
+                    $author = array(
+                        'id'            => (int) $user_id,
+                        'name'          => $coauthor->display_name,
+                        'first_name'    => $coauthor->first_name,
+                        'last_name'     => $coauthor->last_name,
+                        'description'   => $coauthor->description,
+                        'link'          => ( !empty( $coauthor->user_login ) ) ? get_author_posts_url( $user_id ) . $coauthor->user_login . '/' : null,
+                    );
+                }
+
+                array_push( $authors, $author );
 
             }
-
             return $authors;
+        }
+        else {
+            return false;
         }
 
     }
@@ -383,7 +369,7 @@ class Jacobin_Rest_API_Fields {
 
         return $response;
     }
-    
+
 }
 
 new Jacobin_Rest_API_Fields();
