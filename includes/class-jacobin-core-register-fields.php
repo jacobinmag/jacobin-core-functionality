@@ -270,13 +270,6 @@ class Jacobin_Rest_API_Fields {
                         'description'   => $user_meta->description,
                         'link'          => get_author_posts_url( $user_id )
                     );
-
-                    $author['id'] =             (int) $user_id;
-                    $author['name'] =           $user_meta->display_name;
-                    $author['first_name'] =     $user_meta->first_name;
-                    $author['last_name'] =      $user_meta->last_name;
-                    $author['description'] =    $user_meta->description;
-                    $author['link'] =           get_author_posts_url( $user_id );
                 }
                 elseif( 'guest-author' == $coauthor->type ) {
                     $author = array(
