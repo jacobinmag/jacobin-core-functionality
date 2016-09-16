@@ -346,10 +346,10 @@ class Jacobin_Rest_API_Fields {
 
     /**
      * Get interviewer
-     * @param  [type] $object     [description]
-     * @param  [type] $field_name [description]
-     * @param  [type] $request    [description]
-     * @return [type]             [description]
+     * @param  {obj} $object
+     * @param  {string} $field_name
+     * @param  {array} $request
+     * @return {array} get_guest_author_meta || false
      */
     public function get_interviewer( $object, $field_name, $request ) {
 
@@ -384,7 +384,7 @@ class Jacobin_Rest_API_Fields {
             'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
             'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
             'description'   => get_post_meta( $user_id, 'cap-description', true ),
-            'website'       => get_post_meta( $user_id, 'cap-website', true ),
+            'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
             'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
         );
 
