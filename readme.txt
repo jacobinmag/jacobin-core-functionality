@@ -26,6 +26,15 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.1.8 September 16, 2016 =
+* [#36] Added translator user field to articles using
+* [#37] Changed interviewee and interviewer fields. Interviewee will used the authors field (which using co-authors plus).
+* Modified cover artist to use guest-author
+Note: Interviewer, cover artist and translators use a custom field pulling from the custom post type guest-author. REST API is returning in form of authors.
+
+= 0.1.7.2 September 16, 2016 =
+* [#38] Decreased question field height for interview articles
+
 = 0.1.7.1 September 11, 2016 =
 * Optimized `get_issue_articles` function
 * Updated `authors` response data to return data from Co-authors Plus for issues
@@ -54,16 +63,6 @@ authors": [
     }
 ]
 ```
-
-= 0.1.8 September 16, 2016 =
-* [#36] Added translator user field to articles using
-* [#37] Changed interviewee and interviewer fields. Interviewee will used the authors field (which using co-authors plus).
-* Modified cover artist to use guest-author
-Note: Interviewer, cover artist and translators use a custom field pulling from the custom post type guest-author. REST API is returning in form of authors.
-
-= 0.1.7.1 September 16, 2016 =
-* [#38] Decreased question field height for interview articles
-
 = 0.1.6 September 4, 2016 =
 * Activated field settings that remove certain meta_boxes from posts and issues
 * Moved `lang` dir to `languages`
