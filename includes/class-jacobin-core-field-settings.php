@@ -39,6 +39,8 @@ class Jacobin_Field_Settings {
          */
         add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
 
+        add_action( 'acf/input/admin_head', array( $this, 'modify_interview_question_field_height' ) );
+
      }
 
     /**
@@ -60,6 +62,26 @@ class Jacobin_Field_Settings {
         remove_meta_box( 'authordiv', 'issue', 'side' );
         remove_meta_box( 'departmentdiv', 'post', 'side' );
         remove_meta_box( 'locationdiv', 'post', 'side' );
+    }
+
+    /**
+     * Descrease height of interview question editor box
+     *
+     * @return null
+     */
+    public function modify_interview_question_field_height() {
+
+        if( has_term( 'interview', 'format' ) ) { ?>
+            <style>
+        		.small .acf-editor-wrap iframe,
+                .small .acf-editor-wrap .wp-editor-area {
+        			height: 150px !important;
+        			min-height: 150px;
+        		}
+        	</style>
+            <?php
+        }
+
     }
 
 }
