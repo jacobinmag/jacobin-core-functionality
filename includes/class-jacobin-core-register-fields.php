@@ -84,6 +84,33 @@ class Jacobin_Rest_API_Fields {
                 )
             );
 
+            register_rest_field( 'issue',
+                'cover_artist',
+                array(
+                    'get_callback'    => array( $this, 'get_guest_author' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'post',
+                'translator',
+                array(
+                    'get_callback'    => array( $this, 'get_guest_author' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'post',
+                'interviewer',
+                array(
+                    'get_callback'    => array( $this, 'get_interviewer' ),
+                    'update_callback' => null,
+                    'schema'          => null
+                )
+            );
+
             register_rest_field( 'post',
                 'featured_image_secondary',
                 array(
@@ -132,22 +159,25 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.0
      *
-     * @uses  get_post_thumbnail_id()
+     * @uses  get_post_meta()
      * @uses  get_post()
      * @uses  get_post_meta()
-     * @param object $object
-     * @param string $field_name
-     * @param string $request
-     * @return array $authors
      *
+     * @param {object} $object
+     * @param {string} $field_name
+     * @param {string} $request
+     * @return {array} $authors
      */
     public function get_featured_image_secondary ( $object, $field_name, $request ) {
 
         $post_id = $object['id'];
-        $image_id = get_post_thumbnail_id( $post_id );
-        $post_data = get_post( $image_id );
+        $image_meta = get_post_meta( $post_id, $field_name, true );
 
-        if( !empty( $post_data ) ) {
+        if( !empty( $image_meta ) ) {
+
+            $image_id = (int) $image_meta;
+            $post_data = get_post( $image_id );
+
             $featured_image_secondary = array(
                 'id'            => $post_data->ID,
                 'title'         => array(
@@ -164,7 +194,7 @@ class Jacobin_Rest_API_Fields {
             return $featured_image_secondary;
         }
 
-        return;
+        return false;
 
     }
 
@@ -173,13 +203,15 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.0
      *
-     * @uses  get_post_thumbnail_id()
-     * @uses  get_post()
      * @uses  get_post_meta()
-     * @param object $object
-     * @param string $field_name
-     * @param string $request
-     * @return array $authors
+     * @uses  get_post()
+     * @uses  jacobin_the_excerpt()
+     * @uses  get_authors_array()
+     *
+     * @param {object} $object
+     * @param {string} $field_name
+     * @param {string} $request
+     * @return {array} $articles
      *
      */
     public function get_issue_articles ( $object, $field_name, $request ) {
@@ -210,7 +242,7 @@ class Jacobin_Rest_API_Fields {
                     'authors'   => array(),
                 );
 
-                $coauthors =  $this->get_authors_array ( $post->ID );
+                $coauthors =  $this->get_authors_array( $post->ID );
                 array_push( $article['authors'], $coauthors );
 
                 array_push( $articles, $article );
@@ -226,10 +258,10 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.0
      *
-     * @param object $object
-     * @param string $field_name
-     * @param string $request
-     * @return array $authors
+     * @param {object} $object
+     * @param {string} $field_name
+     * @param {string} $request
+     * @return {array} $authors
      *
      */
     public function get_authors ( $object, $field_name, $request ) {
@@ -246,7 +278,7 @@ class Jacobin_Rest_API_Fields {
      * @return array $authors
      *
      */
-    public function get_authors_array ( $object_id ) {
+    public function get_authors_array( $object_id ) {
 
         if ( function_exists( 'get_coauthors' ) ) {
             $coauthors = get_coauthors ( $object_id );
@@ -285,9 +317,82 @@ class Jacobin_Rest_API_Fields {
             }
             return $authors;
         }
-        else {
+
+        return false;
+    }
+
+    /**
+     * Get guest author
+     *
+     * @since 0.1.7
+     *
+     * @param   {object} $object
+     * @param   {string} $field_name
+     * @param   {string} $request
+     * @return  {array} $guest_author details
+     *
+     */
+    public function get_guest_author( $object, $field_name, $request ) {
+
+        $guest_author_id = get_post_meta( $object['id'], $field_name, true );
+
+        if( empty( $guest_author_id ) ) {
             return false;
         }
+
+        return $this->get_guest_author_meta( $guest_author_id );
+
+    }
+
+    /**
+     * Get interviewer
+     * @param  [type] $object     [description]
+     * @param  [type] $field_name [description]
+     * @param  [type] $request    [description]
+     * @return [type]             [description]
+     */
+    public function get_interviewer( $object, $field_name, $request ) {
+
+        if( has_term( 'interview', 'format', $object['id'] ) ) {
+            $interviewer_id = get_post_meta( $object['id'], 'interviewer_name', true );
+            return $this->get_guest_author_meta( $interviewer_id );
+        }
+
+        return false;
+
+    }
+
+    /**
+     * Get Guest Author Meta
+     * Guest author is a custom post type created by the Co-authors Plus plugin
+     * @since 0.1.7
+     *
+     * @link https://github.com/Automattic/Co-Authors-Plus
+     *
+     * @param {int} $user_id
+     * @return {array} $user_details
+     */
+    public function get_guest_author_meta( $user_id ) {
+
+        $user_id = is_array( $user_id ) ? $user_id[0] : $user_id;
+        $user_id = (int) $user_id;
+
+        $user_details = array(
+            'id'            => $user_id,
+            'login_name'    => get_post_meta( $user_id, 'cap-user_login', true ),
+            'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
+            'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
+            'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
+            'description'   => get_post_meta( $user_id, 'cap-description', true ),
+            'website'       => get_post_meta( $user_id, 'cap-website', true ),
+            'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
+        );
+
+        if( !empty( $user_details ) ) {
+            return $user_details;
+        }
+
+        return false;
 
     }
 

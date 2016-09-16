@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.5
 Tested up to: 4.5.3
-Version: 0.1.7.1
+Version: 0.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,15 @@ authors": [
     }
 ]
 ```
+
+= 0.1.8 September 16, 2016 =
+* [#36] Added translator user field to articles using
+* [#37] Changed interviewee and interviewer fields. Interviewee will used the authors field (which using co-authors plus).
+* Modified cover artist to use guest-author
+Note: Interviewer, cover artist and translators use a custom field pulling from the custom post type guest-author. REST API is returning in form of authors.
+
+= 0.1.7.1 September 16, 2016 =
+* [#38] Decreased question field height for interview articles
 
 = 0.1.6 September 4, 2016 =
 * Activated field settings that remove certain meta_boxes from posts and issues
