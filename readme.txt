@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.5
 Tested up to: 4.5.3
-Version: 0.1.8.1
+Version: 0.1.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,6 @@ Contains the site's core functionality.
 
 For backwards compatibility, if this section is missing, the full length of the short description will be used, and
 Markdown parsed.
-
 
 == Installation ==
 
@@ -34,6 +33,45 @@ This section describes how to install the plugin and get it working.
 * [#37] Changed interviewee and interviewer fields. Interviewee will used the authors field (which using co-authors plus).
 * Modified cover artist to use guest-author
 Note: Interviewer, cover artist and translators use a custom field pulling from the custom post type guest-author. REST API is returning in form of authors.
+
+```json
+"translator": {
+    "id": {int},
+    "login_name": {string},
+    "name": {string},
+    "first_name": {string},
+    "last_name": {string},
+    "description": {string},
+    "website": {url},
+    "link": {url}
+}
+```
+
+```json
+"interviewer": {
+    "id": {int},
+    "login_name": {string},
+    "name": {string},
+    "first_name": {string},
+    "last_name": {string},
+    "description": {string},
+    "website": {url},
+    "link": {url}
+}
+```
+
+```json
+"cover_artist": {
+    "id": {int},
+    "login_name": {string},
+    "name": {string},
+    "first_name": {string},
+    "last_name": {string},
+    "description": {string},
+    "website": {url},
+    "link": {url}
+}
+```
 
 = 0.1.7.2 September 16, 2016 =
 * [#38] Decreased question field height for interview articles

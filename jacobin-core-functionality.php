@@ -47,7 +47,7 @@ require_once( 'admin/class-jacobin-core-admin.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.1.7' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.1.8.1' );
 
 	return $instance;
 }
