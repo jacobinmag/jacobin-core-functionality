@@ -41,6 +41,8 @@ class Jacobin_Field_Settings {
 
         add_action( 'acf/input/admin_head', array( $this, 'modify_interview_question_field_height' ) );
 
+        add_filter( 'acf/fields/flexible_content/no_value_message', array( $this, 'modify_acf_flexible_content_message' ) );
+
      }
 
     /**
@@ -60,8 +62,6 @@ class Jacobin_Field_Settings {
         remove_meta_box( 'formatdiv', 'post', 'side' );
         remove_meta_box( 'formatdiv', 'issue', 'side' );
         remove_meta_box( 'authordiv', 'issue', 'side' );
-        remove_meta_box( 'departmentdiv', 'post', 'side' );
-        remove_meta_box( 'locationdiv', 'post', 'side' );
     }
 
     /**
@@ -82,6 +82,12 @@ class Jacobin_Field_Settings {
             <?php
         }
 
+    }
+
+    public function modify_acf_flexible_content_message( $no_value_message ) {
+        $no_value_message = __( 'Click the "%s" button below to add a section', 'jacobin-core' );
+
+        return $no_value_message;
     }
 
 }

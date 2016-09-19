@@ -25,6 +25,10 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.1.9 September 18, 2016 =
+* Unhid Location and Department taxonomy metaboxes, which will now allow multiple selections.
+* [#46] Modified instructional text displayed in Content Sections metabox.
+
 = 0.1.8.1 September 16, 2016 =
 * Escaped user website in REST response
 
