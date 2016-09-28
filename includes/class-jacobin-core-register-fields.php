@@ -353,8 +353,9 @@ class Jacobin_Rest_API_Fields {
      */
     public function get_interviewer( $object, $field_name, $request ) {
 
-        if( has_term( 'interview', 'format', $object['id'] ) ) {
-            $interviewer_array = get_post_meta( $object['id'], 'interviewer', true );
+        $interviewer_array = get_post_meta( $object['id'], 'interviewer', true );
+
+        if( !empty( $interviewer_array  ) ) {
 
             $interviewers = [];
 
@@ -363,6 +364,7 @@ class Jacobin_Rest_API_Fields {
             }
 
             return $interviewers;
+
         }
 
         return false;

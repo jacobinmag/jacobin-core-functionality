@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.5
 Tested up to: 4.5.3
-Version: 0.1.10
+Version: 0.1.10.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.10.1 September 28, 2016 =
+* Modified `this->get_interviewer` to check return isn't empty before proceeding.
 
 = 0.1.10 September 28, 2016 =
 * Updated Interviewer question editor height to work with new interface.
