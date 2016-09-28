@@ -32,7 +32,6 @@ require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
 
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
-require_once( 'includes/class-jacobin-core-content-filters.php' );
 require_once( 'includes/class-jacobin-core-register-cpt.php' );
 require_once( 'includes/class-jacobin-core-register-fields.php' );
 require_once( 'includes/class-jacobin-core-field-settings.php' );
