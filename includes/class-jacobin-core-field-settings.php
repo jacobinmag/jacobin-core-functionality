@@ -71,7 +71,7 @@ class Jacobin_Field_Settings {
      */
     public function modify_interview_question_field_height() {
 
-        if( has_term( 'interview', 'format' ) ) { ?>
+        if( 'post' == get_post_type() ) { ?>
             <style>
         		.small .acf-editor-wrap iframe,
                 .small .acf-editor-wrap .wp-editor-area {
