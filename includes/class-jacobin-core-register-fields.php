@@ -354,8 +354,15 @@ class Jacobin_Rest_API_Fields {
     public function get_interviewer( $object, $field_name, $request ) {
 
         if( has_term( 'interview', 'format', $object['id'] ) ) {
-            $interviewer_id = get_post_meta( $object['id'], 'interviewer_name', true );
-            return $this->get_guest_author_meta( $interviewer_id );
+            $interviewer_array = get_post_meta( $object['id'], 'interviewer', true );
+
+            $interviewers = [];
+
+            foreach( $interviewer_array as $interviewer ) {
+                array_push( $interviewers, $this->get_guest_author_meta( (int) $interviewer ) );
+            }
+
+            return $interviewers;
         }
 
         return false;
