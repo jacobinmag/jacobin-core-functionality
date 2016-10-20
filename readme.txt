@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.5
 Tested up to: 4.5.3
-Version: 0.1.10.1
+Version: 0.1.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,68 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.11 October 20, 2016 =
+* Removed unused REST API v1 methods
+* Modified response to return details for `location` and `department` taxonomies. Format:
+
+```
+locations": [
+  {
+    "term_id": 35,
+    "name": "Greece",
+    "slug": "greece",
+    "term_group": 0,
+    "term_taxonomy_id": 35,
+    "taxonomy": "location",
+    "description": "",
+    "parent": 33,
+    "count": 5,
+    "filter": "raw"
+  },
+  {
+    "term_id": 34,
+    "name": "Ireland",
+    "slug": "ireland",
+    "term_group": 0,
+    "term_taxonomy_id": 34,
+    "taxonomy": "location",
+    "description": "",
+    "parent": 33,
+    "count": 2,
+    "filter": "raw"
+  }
+]
+```
+
+```
+"departments": [
+  {
+    "term_id": 41,
+    "name": "Conservatism",
+    "slug": "conservatism",
+    "term_group": 0,
+    "term_taxonomy_id": 41,
+    "taxonomy": "department",
+    "description": "",
+    "parent": 39,
+    "count": 1,
+    "filter": "raw"
+  },
+  {
+      "term_id": 40,
+      "name": "Liberalism",
+      "slug": "liberalism",
+      "term_group": 0,
+      "term_taxonomy_id": 40,
+      "taxonomy": "department",
+      "description": "",
+      "parent": 39,
+      "count": 1,
+      "filter": "raw"
+  }
+]
+```
 
 = 0.1.10.1 September 28, 2016 =
 * Modified `this->get_interviewer` to check return isn't empty before proceeding.

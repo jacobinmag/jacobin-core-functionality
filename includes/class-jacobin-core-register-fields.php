@@ -33,18 +33,15 @@ class Jacobin_Rest_API_Fields {
         add_filter( 'acf/rest_api/chart/get_fields', array( $this, 'set_custom_field_base' ) );
 
         /**
-         * Filters to have fields returned in `custom_fields` instead of `acf`. For v1.
+         * Modify Responses
          */
-        add_filter( 'rest_prepare_department', array( $this, 'rest_prepare_term' ), 10, 2 );
+        add_filter( 'rest_prepare_post', array( $this, 'modify_taxonomy_location_response' ), 10, 3 );
+        add_filter( 'rest_prepare_post', array( $this, 'modify_taxonomy_department_response' ), 10, 3 );
 
-        add_filter( 'rest_prepare_issue', array( $this, 'rest_prepare_term' ), 10, 2 );
-
-        add_filter( 'rest_prepare_location', array( $this, 'rest_prepare_term' ), 10, 2 );
-
-        add_filter( 'rest_prepare_series', array( $this, 'rest_prepare_term' ), 10, 2 );
-
+        /**
+         * Register Fields
+         */
         add_action( 'rest_api_init', array( $this, 'register_fields' ) );
-
         add_action( 'init', array( $this, 'register_taxonomy' ), 25 );
 
     }
@@ -138,6 +135,44 @@ class Jacobin_Rest_API_Fields {
      * @since 0.1.0
      */
     function register_taxonomy () {}
+
+    /**
+     * Modify Response Data Returned for Taxonomies
+     * By default the REST API returns only the taxonomy ID in the post response.
+     * We want to get more information in the response
+     * @param {array} $data
+     * @param {obj} $post
+     * @param {array} $request
+     *
+     * @return {array} $data
+     */
+    function modify_taxonomy_location_response ( $data, $post, $request ) {
+        $_data = $data->data;
+
+        $_data['locations'] = wp_get_post_terms( $post->ID, 'location' );
+
+        $data->data = $_data;
+        return $data;
+    }
+
+    /**
+     * Modify Response Data Returned for Taxonomies
+     * By default the REST API returns only the taxonomy ID in the post response.
+     * We want to get more information in the response
+     * @param {array} $data
+     * @param {obj} $post
+     * @param {array} $request
+     *
+     * @return {array} $data
+     */
+    function modify_taxonomy_department_response ( $data, $post, $request ) {
+        $_data = $data->data;
+
+        $_data['departments'] = wp_get_post_terms( $post->ID, 'department' );
+
+        $data->data = $_data;
+        return $data;
+    }
 
     /**
      * Get post meta
@@ -388,7 +423,6 @@ class Jacobin_Rest_API_Fields {
 
         $user_details = array(
             'id'            => $user_id,
-            'login_name'    => get_post_meta( $user_id, 'cap-user_login', true ),
             'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
             'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
             'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
@@ -428,27 +462,6 @@ class Jacobin_Rest_API_Fields {
             $data['custom_fields'] = $data['acf'];
             unset( $data['acf'] );
         }
-        return $data;
-    }
-
-    /**
-     * Change Base Label of Custom Fields
-     *
-     * Advanced Custom Fields fields are displayed within `acf` for v1.
-     *
-     * @link https://github.com/airesvsg/acf-to-wp-rest-api/issues/11#issuecomment-230176396
-     *
-     * @param array $data
-     * @return modified array $data
-     *
-     * @since 0.1.0
-     */
-    public function set_custom_field_base_v1 ( $data ) {
-        if ( isset( $data['acf'] ) ) {
-          $data['custom_fields'] = $data['acf'];
-          unset( $data['acf'] );
-        }
-
         return $data;
     }
 
