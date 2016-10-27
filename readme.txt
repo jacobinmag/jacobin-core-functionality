@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.5
 Tested up to: 4.5.3
-Version: 0.1.11
+Version: 0.1.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,38 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.12 October 27, 2016 =
+* Added general function to modify taxonomy response for all registered taxonomies returned by REST API. Format:
+
+```
+"{taxonomy}": [
+  {
+    "term_id": {int},
+    "name": {string},
+    "slug": {string},
+    "term_group": {int},
+    "term_taxonomy_id": {int},
+    "taxonomy": {string},
+    "description": {string},
+    "parent": {int},
+    "count": {int},
+    "filter": {string}
+  },
+  {
+    "term_id": {int},
+    "name": {string},
+    "slug": {string},
+    "term_group": {int},
+    "term_taxonomy_id": {int},
+    "taxonomy": {string},
+    "description": {string},
+    "parent": {int},
+    "count": {int},
+    "filter": {string}
+  }
+]
+```
 
 = 0.1.11 October 20, 2016 =
 * Removed unused REST API v1 methods

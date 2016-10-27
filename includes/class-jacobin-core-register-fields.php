@@ -35,8 +35,7 @@ class Jacobin_Rest_API_Fields {
         /**
          * Modify Responses
          */
-        add_filter( 'rest_prepare_post', array( $this, 'modify_taxonomy_location_response' ), 10, 3 );
-        add_filter( 'rest_prepare_post', array( $this, 'modify_taxonomy_department_response' ), 10, 3 );
+        add_filter( 'rest_prepare_post', array( $this, 'modify_taxonomy_response' ), 10, 3 );
 
         /**
          * Register Fields
@@ -140,35 +139,27 @@ class Jacobin_Rest_API_Fields {
      * Modify Response Data Returned for Taxonomies
      * By default the REST API returns only the taxonomy ID in the post response.
      * We want to get more information in the response
+     *
+     * @since 0.1.12
+     *
      * @param {array} $data
      * @param {obj} $post
      * @param {array} $request
      *
      * @return {array} $data
      */
-    function modify_taxonomy_location_response ( $data, $post, $request ) {
+    function modify_taxonomy_response ( $data, $post, $request ) {
         $_data = $data->data;
 
-        $_data['locations'] = wp_get_post_terms( $post->ID, 'location' );
+        $taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
 
-        $data->data = $_data;
-        return $data;
-    }
+        foreach( $taxonomies as $taxonomy => $details ) {
+            $label = strtolower( str_replace( ' ', '_', $details->labels->name ) );
 
-    /**
-     * Modify Response Data Returned for Taxonomies
-     * By default the REST API returns only the taxonomy ID in the post response.
-     * We want to get more information in the response
-     * @param {array} $data
-     * @param {obj} $post
-     * @param {array} $request
-     *
-     * @return {array} $data
-     */
-    function modify_taxonomy_department_response ( $data, $post, $request ) {
-        $_data = $data->data;
-
-        $_data['departments'] = wp_get_post_terms( $post->ID, 'department' );
+            if( isset( $_data[$label] ) ) {
+                $_data[$label] = wp_get_post_terms( $post->ID, $taxonomy );
+            }
+        }
 
         $data->data = $_data;
         return $data;
@@ -390,7 +381,7 @@ class Jacobin_Rest_API_Fields {
 
         $interviewer_array = get_post_meta( $object['id'], 'interviewer', true );
 
-        if( !empty( $interviewer_array  ) ) {
+        if( !empty( $interviewer_array ) ) {
 
             $interviewers = [];
 
