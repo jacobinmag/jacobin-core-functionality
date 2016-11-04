@@ -157,7 +157,10 @@ class Jacobin_Rest_API_Fields {
             $label = strtolower( str_replace( ' ', '_', $details->labels->name ) );
 
             if( isset( $_data[$label] ) ) {
-                $_data[$label] = wp_get_post_terms( $post->ID, $taxonomy );
+                $args = array(
+                    'orderby'   => 'parent'
+                );
+                $_data[$label] = wp_get_post_terms( $post->ID, $taxonomy, $args );
             }
         }
 
