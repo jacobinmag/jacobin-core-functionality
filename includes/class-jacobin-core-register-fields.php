@@ -376,6 +376,7 @@ class Jacobin_Rest_API_Fields {
                         'rendered'  => $post->post_title,
                     ),
                     'slug'      => $post->post_name,
+                    'date'      => $post->post_date,
                     'content'   => array(
                         'rendered'  => $post->post_content,
                     ),
