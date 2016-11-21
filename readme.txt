@@ -1,9 +1,9 @@
 === Jacobin Core Functionality ===
 Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
-Requires at least: 4.5
-Tested up to: 4.5.3
-Version: 0.1.12.1
+Requires at least: 4.6
+Tested up to: 4.6.2
+Version: 0.1.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,70 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.13 November 19, 2016 =
+* #108 - Registered `related_articles` field - to each post entry, added departments, and featured_image
+
+```
+featured_image": {
+  "id": 92,
+  "title": {
+      "rendered": "Slave Market"
+  },
+  "alt_text": "Photo of slave market it Atlanta",
+  "description": "George N. Barnard/ Wikimedia Commons",
+  "caption": "",
+  "link": "http://jacobin.dev/wp-content/uploads/2016/06/slave-market.png",
+  "media_details": {
+      "width": 549,
+      "height": 300,
+      "file": "2016/06/slave-market.png",
+      "sizes": {
+        "thumbnail": {
+          "file": "slave-market-150x150.png",
+          "width": 150,
+          "height": 150,
+          "mime-type": "image/png"
+      },
+      "medium": {
+          "file": "slave-market-300x164.png",
+          "width": 300,
+          "height": 164,
+          "mime-type": "image/png"
+        }
+      },
+      "image_meta":
+        {
+          "aperture": "0",
+          "credit": "",
+          "camera": "",
+          "caption": "",
+          "created_timestamp": "0",
+          "copyright": "",
+          "focal_length": "0",
+          "iso": "0",
+          "shutter_speed": "0",
+          "title": "",
+          "orientation": "0",
+          "keywords": [ ]
+        }
+    }
+},
+"departments": [
+    {
+      "term_id": 3,
+      "name": "Culture",
+      "slug": "culture",
+      "term_group": 0,
+      "term_taxonomy_id": 3,
+      "taxonomy": "department",
+      "description": "Once all three plugins are installed and activated, browse to the Categories section of the WordPress backend. You’ll see new fields where you can assign an icon, color, and image. Icons use the Dashicon set that ships with WordPress.",
+      "parent": 0,
+      "count": 5,
+      "filter": "raw"
+    }
+]
+```
 
 = 0.1.12.1 November, 2016 =
 * Changed return of taxonomy terms to `orderby` => 'parent'

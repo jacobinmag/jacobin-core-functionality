@@ -41,7 +41,6 @@ class Jacobin_Rest_API_Fields {
          * Register Fields
          */
         add_action( 'rest_api_init', array( $this, 'register_fields' ) );
-        add_action( 'init', array( $this, 'register_taxonomy' ), 25 );
 
     }
 
@@ -116,6 +115,15 @@ class Jacobin_Rest_API_Fields {
                 )
             );
 
+            register_rest_field( 'post',
+                'related_articles',
+                array(
+                    'get_callback'    => array( $this, 'get_related_articles' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
             register_rest_field( 'issue',
                 'articles',
                 array(
@@ -125,15 +133,26 @@ class Jacobin_Rest_API_Fields {
                 )
             );
 
+            register_rest_field( 'department',
+                'term_meta',
+                array(
+                    'get_callback'    => array( $this, 'get_term_meta' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'category',
+                'term_meta',
+                array(
+                    'get_callback'    => array( $this, 'get_term_meta' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
         }
     }
-
-    /**
-     * Register the custom taxonomy
-     *
-     * @since 0.1.0
-     */
-    function register_taxonomy () {}
 
     /**
      * Modify Response Data Returned for Taxonomies
@@ -160,7 +179,16 @@ class Jacobin_Rest_API_Fields {
                 $args = array(
                     'orderby'   => 'parent'
                 );
-                $_data[$label] = wp_get_post_terms( $post->ID, $taxonomy, $args );
+
+                $terms = wp_get_post_terms( $post->ID, $taxonomy, $args );
+
+                foreach( $terms as $term ) {
+                    $term_detail = get_term( $term->term_id, $taxonomy, ARRAY_A );
+                    $term_meta = get_term_meta( $term->term_id );
+
+                    $_data[$label] = array_merge( $term_detail, $term_meta );
+
+                }
             }
         }
 
@@ -181,6 +209,21 @@ class Jacobin_Rest_API_Fields {
      */
     function get_field ( $object, $field_name, $request ) {
         return get_post_meta( $object[ 'id' ], $field_name, true );
+    }
+
+    /**
+     * Get term meta
+     *
+     * @since 0.1.0
+     *
+     * @param object $object
+     * @param string $field_name
+     * @param string $request
+     * @return array meta
+     *
+     */
+    function get_term_meta( $object, $field_name, $request ) {
+        return get_term_meta( $object[ 'id' ] );
     }
 
     /**
@@ -267,12 +310,101 @@ class Jacobin_Rest_API_Fields {
                     ),
                     'excerpt'   => array(
                         'rendered'    => jacobin_the_excerpt( $post->ID ),
+                    )
+                );
+
+                $image_id = ( !empty( get_post_thumbnail_id( $post->ID ) ) ) ? (int) get_post_thumbnail_id( $post->ID ) : null;
+
+                $image_data = get_post( $image_id );
+                $image_meta = array(
+                    'id'            => $image_id,
+                    'title'         => array(
+                        'rendered'  => $image_data->post_title
                     ),
-                    'authors'   => array(),
+                    'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
+                    'description'   => $image_data->post_content,
+                    'caption'       => $image_data->post_excerpt,
+                    'link'          => wp_get_attachment_url( $image_id ),
+                    'media_details' => wp_get_attachment_metadata( $image_id ),
+                );
+
+                $article['featured_image'] = $image_meta;
+
+                $coauthors =  $this->get_authors_array( $post->ID );
+                $article['authors'] = $coauthors;
+
+                array_push( $articles, $article );
+
+            }
+
+        }
+        return $articles;
+    }
+
+    /**
+     * Get related articles
+     *
+     * @since 0.1.13
+     *
+     * @uses  get_post_meta()
+     * @uses  get_post()
+     * @uses  jacobin_the_excerpt()
+     * @uses  get_authors_array()
+     *
+     * @param {object} $object
+     * @param {string} $field_name
+     * @param {string} $request
+     * @return {array} $articles
+     *
+     */
+    public function get_related_articles ( $object, $field_name, $request ) {
+        $meta = get_post_meta( $object['id'], 'related_articles', true );
+        $articles = [];
+
+        $args = array(
+            'post__in' => $meta
+        );
+
+        $posts = get_posts( $args );
+
+        if( !empty( $posts ) ) {
+            foreach( $posts as $post ) {
+
+                $article = array(
+                    'id'        => (int) $post->ID,
+                    'title'     => array(
+                        'rendered'  => $post->post_title,
+                    ),
+                    'slug'      => $post->post_name,
+                    'content'   => array(
+                        'rendered'  => $post->post_content,
+                    ),
+                    'excerpt'   => array(
+                        'rendered'    => jacobin_the_excerpt( $post->ID ),
+                    ),
                 );
 
                 $coauthors =  $this->get_authors_array( $post->ID );
-                array_push( $article['authors'], $coauthors );
+                $article['authors'] = $coauthors;
+
+                $image_id = ( !empty( get_post_thumbnail_id( $post->ID ) ) ) ? (int) get_post_thumbnail_id( $post->ID ) : null;
+
+                $image_data = get_post( $image_id );
+                $image_meta = array(
+                    'id'            => $image_id,
+                    'title'         => array(
+                        'rendered'  => $image_data->post_title
+                    ),
+                    'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
+                    'description'   => $image_data->post_content,
+                    'caption'       => $image_data->post_excerpt,
+                    'link'          => wp_get_attachment_url( $image_id ),
+                    'media_details' => wp_get_attachment_metadata( $image_id ),
+                );
+
+                $article['featured_image'] = $image_meta;
+
+                $article['departments'] = wp_get_post_terms( $post->ID, 'department', array( 'orderby'   => 'parent' ) );
 
                 array_push( $articles, $article );
 
@@ -309,6 +441,8 @@ class Jacobin_Rest_API_Fields {
      */
     public function get_authors_array( $object_id ) {
 
+        global $coauthors_plus;
+
         if ( function_exists( 'get_coauthors' ) ) {
             $coauthors = get_coauthors ( $object_id );
             $authors = [];
@@ -316,6 +450,7 @@ class Jacobin_Rest_API_Fields {
             foreach( $coauthors as $coauthor ) {
 
                 $user_id = $coauthor->ID;
+
                 $author = [];
 
                 if( array_key_exists( 'data', $coauthor ) && 'wpuser' == $coauthor->data->type ) {
@@ -471,7 +606,7 @@ class Jacobin_Rest_API_Fields {
      * @link http://v2.wp-api.org/extending/custom-content-types/
      */
     public function rest_prepare_term ( $response, $object ) {
-        if ( $object instanceof WP_Term ) {
+        if ( $object instanceof WP_Term && function_exists( 'get_fields' ) ) {
             if ( isset( $data['acf'] ) ) {
                 $data['custom_fields'] = $data['acf'];
                 unset( $data['acf'] );
