@@ -37,6 +37,9 @@ class Jacobin_Rest_API_Fields {
          */
         add_filter( 'rest_prepare_post', array( $this, 'modify_taxonomy_response' ), 10, 3 );
 
+        add_filter( 'rest_prepare_post', array( $this, 'modify_department_taxonomy_response' ), 10, 3 );
+
+
         /**
          * Register Fields
          */
@@ -155,6 +158,39 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
+     * Modify Response Data Returned for Department
+     * By default the REST API returns only the taxonomy ID in the post response.
+     * We want to get more information in the response
+     *
+     * @since 0.1.14
+     *
+     * @param {array} $data
+     * @param {obj} $post
+     * @param {array} $request
+     *
+     * @return {array} $data
+     */
+    function modify_department_taxonomy_response ( $data, $post, $request ) {
+        $_data = $data->data['departments'];
+
+        foreach( $_data  as $department ) {
+            $image = get_term_meta( $department->term_id, 'featured_image' );
+            $image_id = ( !empty( $image ) && is_array( $image ) ) ? (int) $image[0] : false;
+
+            $featured = get_term_meta(  $department->term_id, 'featured_article' );
+            $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0][0] : false;
+
+            $department->{"thumbnail"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+            $department->{"featured_article"} = ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
+        }
+
+        $data->data['departments'] = $_data;
+
+        return $data;
+
+    }
+
+    /**
      * Modify Response Data Returned for Taxonomies
      * By default the REST API returns only the taxonomy ID in the post response.
      * We want to get more information in the response
@@ -180,15 +216,8 @@ class Jacobin_Rest_API_Fields {
                     'orderby'   => 'parent'
                 );
 
-                $terms = wp_get_post_terms( $post->ID, $taxonomy, $args );
+                $_data[$label] = wp_get_post_terms( $post->ID, $taxonomy, $args );
 
-                foreach( $terms as $term ) {
-                    $term_detail = get_term( $term->term_id, $taxonomy, ARRAY_A );
-                    $term_meta = get_term_meta( $term->term_id );
-
-                    $_data[$label] = array_merge( $term_detail, $term_meta );
-
-                }
             }
         }
 
@@ -243,25 +272,13 @@ class Jacobin_Rest_API_Fields {
     public function get_featured_image_secondary ( $object, $field_name, $request ) {
 
         $post_id = $object['id'];
-        $image_meta = get_post_meta( $post_id, $field_name, true );
+        $image_id = get_post_meta( $post_id, $field_name, true );
 
         if( !empty( $image_meta ) ) {
 
-            $image_id = (int) $image_meta;
-            $post_data = get_post( $image_id );
+            $image_id = (int) $image_id;
 
-            $featured_image_secondary = array(
-                'id'            => $post_data->ID,
-                'title'         => array(
-                    'rendered'  => $post_data->post_title
-                ),
-                'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
-                'description'   => $post_data->post_content,
-                'caption'       => $post_data->post_excerpt,
-                'link'          => wp_get_attachment_url( $image_id ),
-                'author'        => (int) $post_data->post_author,
-                'media_details' => wp_get_attachment_metadata( $image_id ),
-            );
+            $featured_image_secondary = jacobin_get_image_meta( $image_id );
 
             return $featured_image_secondary;
         }
@@ -278,7 +295,7 @@ class Jacobin_Rest_API_Fields {
      * @uses  get_post_meta()
      * @uses  get_post()
      * @uses  jacobin_the_excerpt()
-     * @uses  get_authors_array()
+     * @uses  jacobin_get_authors_array()
      *
      * @param {object} $object
      * @param {string} $field_name
@@ -313,25 +330,13 @@ class Jacobin_Rest_API_Fields {
                     )
                 );
 
-                $image_id = ( !empty( get_post_thumbnail_id( $post->ID ) ) ) ? (int) get_post_thumbnail_id( $post->ID ) : null;
+                $image_id = ( !empty( get_post_thumbnail_id( $post->ID ) ) ) ? (int) get_post_thumbnail_id( $post->ID ) : false;
 
-                $image_data = get_post( $image_id );
-                $image_meta = array(
-                    'id'            => $image_id,
-                    'title'         => array(
-                        'rendered'  => $image_data->post_title
-                    ),
-                    'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
-                    'description'   => $image_data->post_content,
-                    'caption'       => $image_data->post_excerpt,
-                    'link'          => wp_get_attachment_url( $image_id ),
-                    'media_details' => wp_get_attachment_metadata( $image_id ),
-                );
+                $image_meta = jacobin_get_image_meta( $image_id );
 
                 $article['featured_image'] = $image_meta;
 
-                $coauthors =  $this->get_authors_array( $post->ID );
-                $article['authors'] = $coauthors;
+                $article['authors'] = jacobin_get_authors_array( $post->ID );
 
                 array_push( $articles, $article );
 
@@ -349,7 +354,7 @@ class Jacobin_Rest_API_Fields {
      * @uses  get_post_meta()
      * @uses  get_post()
      * @uses  jacobin_the_excerpt()
-     * @uses  get_authors_array()
+     * @uses  jacobin_get_authors_array()
      *
      * @param {object} $object
      * @param {string} $field_name
@@ -385,23 +390,11 @@ class Jacobin_Rest_API_Fields {
                     ),
                 );
 
-                $coauthors =  $this->get_authors_array( $post->ID );
-                $article['authors'] = $coauthors;
+                $article['authors'] = jacobin_get_authors_array( $post->ID );
 
-                $image_id = ( !empty( get_post_thumbnail_id( $post->ID ) ) ) ? (int) get_post_thumbnail_id( $post->ID ) : null;
+                $image_id = ( !empty( get_post_thumbnail_id( $post->ID ) ) ) ? (int) get_post_thumbnail_id( $post->ID ) : false;
 
-                $image_data = get_post( $image_id );
-                $image_meta = array(
-                    'id'            => $image_id,
-                    'title'         => array(
-                        'rendered'  => $image_data->post_title
-                    ),
-                    'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
-                    'description'   => $image_data->post_content,
-                    'caption'       => $image_data->post_excerpt,
-                    'link'          => wp_get_attachment_url( $image_id ),
-                    'media_details' => wp_get_attachment_metadata( $image_id ),
-                );
+                $image_meta = jacobin_get_image_meta( $image_id );
 
                 $article['featured_image'] = $image_meta;
 
@@ -427,63 +420,7 @@ class Jacobin_Rest_API_Fields {
      *
      */
     public function get_authors ( $object, $field_name, $request ) {
-
-        return $this->get_authors_array ( $object['id'] );
-    }
-
-    /**
-     * Create array of authors
-     *
-     * @since 0.1.0
-     *
-     * @param object $object->ID
-     * @return array $authors
-     *
-     */
-    public function get_authors_array( $object_id ) {
-
-        global $coauthors_plus;
-
-        if ( function_exists( 'get_coauthors' ) ) {
-            $coauthors = get_coauthors ( $object_id );
-            $authors = [];
-
-            foreach( $coauthors as $coauthor ) {
-
-                $user_id = $coauthor->ID;
-
-                $author = [];
-
-                if( array_key_exists( 'data', $coauthor ) && 'wpuser' == $coauthor->data->type ) {
-                    $user_meta = get_userdata( $user_id );
-
-                    $author = array(
-                        'id'            => (int) $user_id,
-                        'name'          => $user_meta->display_name,
-                        'first_name'    => $user_meta->first_name,
-                        'last_name'     => $user_meta->last_name,
-                        'description'   => $user_meta->description,
-                        'link'          => get_author_posts_url( $user_id )
-                    );
-                }
-                elseif( 'guest-author' == $coauthor->type ) {
-                    $author = array(
-                        'id'            => (int) $user_id,
-                        'name'          => $coauthor->display_name,
-                        'first_name'    => $coauthor->first_name,
-                        'last_name'     => $coauthor->last_name,
-                        'description'   => $coauthor->description,
-                        'link'          => ( !empty( $coauthor->user_login ) ) ? get_author_posts_url( $user_id ) . $coauthor->user_login . '/' : null,
-                    );
-                }
-
-                array_push( $authors, $author );
-
-            }
-            return $authors;
-        }
-
-        return false;
+        return jacobin_get_authors_array( $object['id'] );
     }
 
     /**
@@ -518,21 +455,15 @@ class Jacobin_Rest_API_Fields {
      */
     public function get_interviewer( $object, $field_name, $request ) {
 
-        $interviewer_array = get_post_meta( $object['id'], 'interviewer', true );
+        $interviewer = get_post_meta( $object['id'], 'interviewer', true );
 
-        if( !empty( $interviewer_array ) ) {
-
-            $interviewers = [];
-
-            foreach( $interviewer_array as $interviewer ) {
-                array_push( $interviewers, $this->get_guest_author_meta( (int) $interviewer ) );
-            }
-
-            return $interviewers;
-
+        if( empty( $interviewer ) || !is_array( $interviewer )  ) {
+            return false;
         }
 
-        return false;
+        $interviewer_id = (int) $interviewer[0];
+
+        return jacobin_get_coauthor_meta( $interviewer_id );
 
     }
 
@@ -551,15 +482,7 @@ class Jacobin_Rest_API_Fields {
         $user_id = is_array( $user_id ) ? $user_id[0] : $user_id;
         $user_id = (int) $user_id;
 
-        $user_details = array(
-            'id'            => $user_id,
-            'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
-            'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
-            'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
-            'description'   => get_post_meta( $user_id, 'cap-description', true ),
-            'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
-            'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
-        );
+        $user_details = jacobin_get_coauthor_meta( $user_id );
 
         if( !empty( $user_details ) ) {
             return $user_details;

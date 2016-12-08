@@ -1,9 +1,9 @@
 === Jacobin Core Functionality ===
 Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
-Requires at least: 4.6
-Tested up to: 4.6.2
-Version: 0.1.13.1
+Requires at least: 4.7
+Tested up to: 4.7
+Version: 0.1.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,13 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.14 December 8, 2016 =
+* Add Editor's Pick feature `wp-json/jacobin/featured-content/editors-pick`
+   * Includes `featured_image` and `authors` with meta
+* #124 - Returned Departments taxonomy as array of objects
+* Added Department `featured_image` and `featured_article` with meta
+* Changed `null` responses to `false`
 
 = 0.1.13.1 November 21, 2016 =
 * #108 - Added `date` property to `related_articles` field

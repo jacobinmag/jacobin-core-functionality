@@ -1,7 +1,7 @@
 <?php
 /**
  * Jacobin Core Helper functions
- * 
+ *
  * @package    Jacobin_Core
  * @subpackage Jacobin_Core\Includes
  * @since      0.1.0
@@ -9,12 +9,207 @@
  */
 
 /**
+ * Get Post Fields
+ *
+ * @since 0.1.14
+ *
+ * @uses get_post()
+ * @uses jacobin_get_image_meta()
+ * @uses jacobin_get_authors_array()
+ *
+ * @param  int $post_id
+ * @return array $post_data || false
+ */
+function jacobin_get_post_data( $post_id ) {
+    $post_id = (int) $post_id;
+
+    $post = get_post( $post_id );
+
+    if( empty( $post ) ) {
+        return false;
+    }
+
+    $post_data = array(
+        'id'        => $post_id,
+        'title'     => array(
+            'rendered'  => $post->post_title,
+        ),
+        'slug'      => $post->post_name,
+        'content'   => array(
+            'rendered'  => $post->post_content,
+        ),
+        'excerpt'   => array(
+            'rendered'    => jacobin_the_excerpt( $post_id ),
+        )
+    );
+
+    $image_id = ( !empty( get_post_thumbnail_id( $post_id ) ) ) ? (int) get_post_thumbnail_id( $post_id ) : false;
+
+    $post_data['featured_image'] = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+
+    return $post_data;
+}
+
+/**
+ * Get Image Meta
+ *
+ * @since 0.1.14
+ *
+ * @uses get_post()
+ * @uses get_post_meta()
+ * @uses wp_get_attachment_url()
+ * @uses wp_get_attachment_metadata()
+ *
+ * @param  int $image_id
+ *
+ * @return array $meta || false
+ */
+function jacobin_get_image_meta( $image_id ) {
+    $image_id = (int) $image_id;
+
+    $image_data = get_post( $image_id );
+    $meta = array(
+        'id'            => $image_id,
+        'title'         => array(
+            'rendered'  => $image_data->post_title
+        ),
+        'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
+        'description'   => $image_data->post_content,
+        'caption'       => $image_data->post_excerpt,
+        'link'          => wp_get_attachment_url( $image_id ),
+        'media_details' => wp_get_attachment_metadata( $image_id ),
+    );
+
+    if( empty( $meta ) ) {
+        return false;
+    }
+
+    return $meta;
+}
+
+/**
+ * Get Co-author Meta
+ *
+ * @since 0.1.14
+ *
+ * @param  int $author_id
+ *
+ * @return array $meta || false
+ */
+function jacobin_get_coauthor_meta( $author_id  ) {
+
+    $user_id = (int) $author_id;
+
+    $meta = array(
+        'id'            => $user_id,
+        'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
+        'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
+        'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
+        'description'   => get_post_meta( $user_id, 'cap-description', true ),
+        'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
+        'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
+    );
+
+    if( empty( $meta ) ) {
+        return false;
+    }
+
+    return $meta;
+}
+
+/**
+ * Get Author Meta
+ *
+ * @since 0.1.14
+ *
+ * @param int $author_id
+ *
+ * @return array $meta || false
+ */
+function jacobin_get_author_meta( $author_id ) {
+    $author_id = (int) $author_id;
+
+    $user_meta = get_userdata( $author_id );
+
+    if( empty( $user_meta ) ) {
+        return false;
+    }
+
+    $meta = array(
+        'id'            => $author_id,
+        'name'          => $user_meta->display_name,
+        'first_name'    => $user_meta->first_name,
+        'last_name'     => $user_meta->last_name,
+        'description'   => $user_meta->description,
+        'link'          => get_author_posts_url( $author_id )
+    );
+
+    return $meta;
+}
+
+/**
+ * Get Coauthors Array
+ *
+ * @since 0.1.14
+ *
+ * @uses get_coauthors()
+ * @uses jacobin_get_author_meta()
+ *
+ * @param  int $object_id
+ *
+ * @return array $authors || false
+ */
+function jacobin_get_authors_array( $object_id ) {
+
+    $object_id = (int) $object_id;
+
+    if ( function_exists( 'get_coauthors' ) ) {
+        global $coauthors_plus;
+
+        $coauthors = get_coauthors( $object_id );
+        $authors = [];
+
+        foreach( $coauthors as $coauthor ) {
+
+            $user_id = $coauthor->ID;
+
+            $author = [];
+
+            if( array_key_exists( 'data', $coauthor ) && 'wpuser' == $coauthor->data->type ) {
+
+                $author = jacobin_get_author_meta( $user_id );
+
+            }
+            elseif( 'guest-author' == $coauthor->type ) {
+
+                $author = array(
+                    'id'            => (int) $user_id,
+                    'name'          => $coauthor->display_name,
+                    'first_name'    => $coauthor->first_name,
+                    'last_name'     => $coauthor->last_name,
+                    'description'   => $coauthor->description,
+                    'link'          => get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ),
+                );
+            }
+
+            array_push( $authors, $author );
+
+        }
+        return $authors;
+    }
+
+    return false;
+}
+
+/**
  * Create Excerpt
  *
  * Auto-generates an excerpt if one hasn't been manually created.
  *
  * @since   0.1.0
- * 
+ *
+ * @uses get_post()
+ *
  * @param   int $post_id
  * @param   int $word_count
  * @param   bool $line_breaks
@@ -48,7 +243,9 @@ function jacobin_the_excerpt( $post_id, $word_count = 35, $line_breaks = TRUE ) 
  * Extract date format from timeline post type
  *
  * @since   0.1.5
- * 
+ *
+ * @uses get_post_meta()
+ *
  * @param   int $post_id
  * @return  string $date_format
  *
@@ -63,7 +260,7 @@ function jacobin_timeline_date_format( $post_id ) {
     if( !$date ) {
       return 'F j, Y';
     }
-    
+
     $date = $date[0];
 
     /**
@@ -97,21 +294,15 @@ function jacobin_timeline_date_format( $post_id ) {
     $date_format = '';
 
     if( in_array( 'month', $date ) ) {
-
       $date_format .= 'F ';
-
     }
 
     if( in_array( 'day', $date ) ) {
-
       $date_format .= 'j, ';
-
     }
 
     if( in_array( 'year', $date ) ) {
-
       $date_format .= 'Y';
-
     }
 
     return $date_format;
