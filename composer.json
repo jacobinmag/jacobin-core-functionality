@@ -12,5 +12,17 @@
             "email": "pea@misfist.com"
         }
     ],
-    "require": {}
+    "repositories":[
+        {
+            "type":"composer",
+            "url":"https://wpackagist.org"
+        }
+    ],
+    "require": {},
+    "extra": {
+        "installer-paths": {
+            "./includes/lib/{$name}/": ["type:wordpress-plugin"]
+        }
+    }
+
 }
