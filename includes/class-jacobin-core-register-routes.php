@@ -23,38 +23,93 @@ class Jacobin_Rest_API_Routes {
      * @since 0.1.14
      */
     function __construct () {
-        add_action( 'rest_api_init', array( $this, 'register_route' ) );
+        add_action( 'rest_api_init', array( $this, 'register_routes' ) );
     }
 
-    public function register_route () {
-    	register_rest_route( 'jacobin', '/featured-content/editors-pick/', array(
+    /**
+     * Register Routes
+     *
+     * @uses register_rest_route()
+     * @link https://developer.wordpress.org/reference/functions/register_rest_route/
+     * @return void
+     */
+    public function register_routes () {
+    	register_rest_route( 'jacobin', '/featured-content/editors-picks/', array(
     		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_editors_pick' ),
+    		'callback'    => array( $this, 'get_editors_picks' ),
+    	) );
+
+        register_rest_route( 'jacobin', '/featured-content/home-feature/', array(
+    		'methods'     => 'GET',
+    		'callback'    => array( $this, 'get_home_feature' ),
     	) );
     }
 
     /**
-     * Get Featured Content - Editor's Pick
+     * Get Editor's Picks
      *
-     * @param array $data Options for the function.
-     * @return string|false Post title for the latest,  * or false if none.
+     * @since 0.1.14
+     *
+     * @uses Jacobin_Rest_API_Routes::get_featured_content()
+     *
+     * @return array $posts
      */
-    public function get_editors_pick( $data ) {
-        $option = get_option( 'options_editors_pick' );
-        $post_id = ( !empty( $option ) ) ? (int) $option[0] : '' ;
-        $post = get_post( $post_id );
+    public function get_editors_picks() {
+        return $this->get_featured_content( 'options_editors_pick' );
+    }
 
-    	if ( empty( $post ) ) {
-    		return false;
-    	}
+    /**
+     * Get Home Feature
+     *
+     * @since 0.1.14
+     *
+     * @uses Jacobin_Rest_API_Routes::get_featured_content()
+     *
+     * @return array $posts
+     */
+    public function get_home_feature() {
+        return $this->get_featured_content( 'options_home_feature' );
+    }
 
-        $image_id = ( !empty( get_post_thumbnail_id( $post_id ) ) ) ? (int) get_post_thumbnail_id( $post_id ) : false;
+    /**
+     * Get Featured Content
+     *
+     * @since 0.1.14
+     *
+     * @param array $option_name
+     * @return array|false
+     */
+    public function get_featured_content( $option_name ) {
 
-        $post->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+        $option = get_option( $option_name  );
 
-        $post->{"authors"} = jacobin_get_authors_array( $post_id );
+        if( empty( $option ) || is_wp_error( $option ) ) {
+            return false;
+        }
 
-    	return $post;
+        $posts_ids = array_map(
+            function( $value ) {
+                return (int) $value;
+            },
+            $option
+        );
+
+        $posts = array_map(
+            function( $post_id ) {
+        		$post = get_post( $post_id );
+
+                $image_id = ( !empty( get_post_thumbnail_id( $post_id ) ) ) ? (int) get_post_thumbnail_id( $post_id ) : false;
+
+                $post->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+
+                $post->{"authors"} = jacobin_get_authors_array( $post_id );
+
+                return $post;
+            },
+            $posts_ids
+        );
+
+    	return $posts;
     }
 
 }
