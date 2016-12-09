@@ -41,6 +41,9 @@ require_once( 'includes/class-jacobin-core-shortcodes.php' );
 // Load admin files
 require_once( 'admin/class-jacobin-core-admin.php' );
 
+// Load utility files
+require_once( 'utils/copy-content.php' );
+
 /**
  * Returns the main instance of Jacobin_Core to prevent the need to use globals.
  *
