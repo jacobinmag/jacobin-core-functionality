@@ -137,18 +137,18 @@ class Jacobin_Rest_API_Fields {
             );
 
             register_rest_field( 'department',
-                'term_meta',
+                'featured_image',
                 array(
-                    'get_callback'    => array( $this, 'get_term_meta' ),
+                    'get_callback'    => array( $this, 'get_featured_image' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
             );
 
-            register_rest_field( 'category',
-                'term_meta',
+            register_rest_field( 'department',
+                'featured_article',
                 array(
-                    'get_callback'    => array( $this, 'get_term_meta' ),
+                    'get_callback'    => array( $this, 'get_featured_post' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -253,6 +253,40 @@ class Jacobin_Rest_API_Fields {
      */
     function get_term_meta( $object, $field_name, $request ) {
         return get_term_meta( $object[ 'id' ] );
+    }
+
+    /**
+     * Get Featured Image
+     *
+     * @since 0.1.14
+     *
+     * @param object $object
+     * @param string $field_name
+     * @param string $request
+     * @return array meta
+     *
+     */
+    function get_featured_image( $object, $field_name, $request ) {
+        $image = get_term_meta( $object[ 'id' ], 'featured_image' );
+        $image_id = ( !empty( $image ) && is_array( $image ) ) ? (int) $image[0] : false;
+        return ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+    }
+
+    /**
+     * Get Featured Post
+     *
+     * @since 0.1.14
+     *
+     * @param object $object
+     * @param string $field_name
+     * @param string $request
+     * @return array meta
+     *
+     */
+    function get_featured_post( $object, $field_name, $request ) {
+        $featured = get_term_meta(  $object[ 'id' ], 'featured_article' );
+        $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0][0] : false;
+        return ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
     }
 
     /**
