@@ -43,9 +43,7 @@ function jacobin_get_post_data( $post_id ) {
         )
     );
 
-    $image = get_post_thumbnail_id( $post_id );
-
-    $image_id = ( !empty( $image ) ) ? (int) $image : '';
+    $image_id = get_post_thumbnail_id( $post_id );
 
     $post_data['featured_image'] = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
 

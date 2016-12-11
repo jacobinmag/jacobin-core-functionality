@@ -98,7 +98,7 @@ class Jacobin_Rest_API_Routes {
             function( $post_id ) {
         		$post = get_post( $post_id );
 
-                $image_id = ( !empty( get_post_thumbnail_id( $post_id ) ) ) ? (int) get_post_thumbnail_id( $post_id ) : false;
+                $image_id = get_post_thumbnail_id( $post_id );
 
                 $post->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
 
