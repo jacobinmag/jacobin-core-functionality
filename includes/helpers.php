@@ -43,7 +43,9 @@ function jacobin_get_post_data( $post_id ) {
         )
     );
 
-    $image_id = ( !empty( get_post_thumbnail_id( $post_id ) ) ) ? (int) get_post_thumbnail_id( $post_id ) : false;
+    $image = get_post_thumbnail_id( $post_id );
+
+    $image_id = ( !empty( $image ) ) ? (int) $image : '';
 
     $post_data['featured_image'] = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
 
@@ -172,8 +174,6 @@ function jacobin_get_authors_array( $object_id ) {
         foreach( $coauthors as $coauthor ) {
 
             $user_id = $coauthor->ID;
-
-            $author = [];
 
             if( array_key_exists( 'data', $coauthor ) && 'wpuser' == $coauthor->data->type ) {
 
