@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7
-Version: 0.1.14
+Version: 0.1.15
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.1.15 January 9, 2017 =
+* Fixed error - `Fatal error: Can't use function return value in write context in /home/jacobin/webapps/editor_dev/wp-content/plugins/jacobin-core-functionality/includes/class-jacobin-core-register-fields.php on line 367`
 
 = 0.1.14 December 8, 2016 =
 * Add Editor's Pick feature `wp-json/jacobin/featured-content/editors-pick`

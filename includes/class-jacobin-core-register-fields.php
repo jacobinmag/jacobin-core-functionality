@@ -364,7 +364,9 @@ class Jacobin_Rest_API_Fields {
                     )
                 );
 
-                $image_id = ( !empty( get_post_thumbnail_id( $post->ID ) ) ) ? (int) get_post_thumbnail_id( $post->ID ) : false;
+                $image_id = get_post_thumbnail_id( $post->ID );
+
+                $image_id = ( !empty( $image_id ) ) ? (int) $image_id : false;
 
                 $image_meta = jacobin_get_image_meta( $image_id );
 
