@@ -34,15 +34,21 @@ class Jacobin_Rest_API_Routes {
      * @return void
      */
     public function register_routes () {
+        register_rest_route( 'jacobin', '/featured-content/home-feature/', array(
+    		'methods'     => 'GET',
+    		'callback'    => array( $this, 'get_home_feature' ),
+    	) );
+
+        register_rest_route( 'jacobin', '/featured-content/home-content/', array(
+    		'methods'     => 'GET',
+    		'callback'    => array( $this, 'get_home_content' ),
+    	) );
+
     	register_rest_route( 'jacobin', '/featured-content/editors-picks/', array(
     		'methods'     => 'GET',
     		'callback'    => array( $this, 'get_editors_picks' ),
     	) );
 
-        register_rest_route( 'jacobin', '/featured-content/home-feature/', array(
-    		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_home_feature' ),
-    	) );
     }
 
     /**
@@ -69,6 +75,19 @@ class Jacobin_Rest_API_Routes {
      */
     public function get_home_feature() {
         return $this->get_featured_content( 'options_home_feature' );
+    }
+
+    /**
+     * Get Home Content
+     *
+     * @since 0.1.16
+     *
+     * @uses Jacobin_Rest_API_Routes::get_featured_content()
+     *
+     * @return array $posts
+     */
+    public function get_home_content() {
+        return $this->get_featured_content( 'options_home_content' );
     }
 
     /**

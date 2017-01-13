@@ -25,6 +25,11 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.1.16 January 13, 2017 =
+* #150 - Added Home Page Content
+   * Allows up to 10 posts
+   * Accessed at `wp-json/jacobin/featured-content/home-content`
+
 = 0.1.15 January 9, 2017 =
 * Fixed error - `Fatal error: Can't use function return value in write context in /home/jacobin/webapps/editor_dev/wp-content/plugins/jacobin-core-functionality/includes/class-jacobin-core-register-fields.php on line 367`
 
