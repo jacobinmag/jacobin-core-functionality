@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.1.16
+ * Version:         0.2.0
  *
  * @package         Core_Functionality
  */
@@ -32,6 +32,7 @@ require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
 
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
+require_once( 'includes/class-jacobin-core-custom-fields.php' );
 require_once( 'includes/class-jacobin-core-register-cpt.php' );
 require_once( 'includes/class-jacobin-core-register-routes.php' );
 require_once( 'includes/class-jacobin-core-register-fields.php' );
