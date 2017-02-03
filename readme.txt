@@ -2,8 +2,8 @@
 Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
-Tested up to: 4.7
-Version: 0.1.15
+Tested up to: 4.7.2
+Version: 0.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.0 February 3, 2017 =
+* Registered custom fields.
 
 = 0.1.16 January 13, 2017 =
 * #150 - Added Home Page Content
