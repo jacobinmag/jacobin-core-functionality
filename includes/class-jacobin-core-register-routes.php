@@ -119,10 +119,11 @@ class Jacobin_Rest_API_Routes {
 
                 $post = new stdClass();
 
-                $post->{"ID"} = $post_detail->ID;
-                $post->{"post_title"} = $post_detail->post_title;
+                $post->{"id"} = $post_detail->ID;
+                $post->{"date"} = $post_detail->post_date;
+                $post->{"title"}["rendered"] = esc_attr( $post_detail->post_title );
                 $post->{"subhead"} = get_post_meta( $post_id, 'subhead', true );
-                $post->{"post_name"} = $post_detail->post_name;
+                $post->{"slug"} = $post_detail->post_name;
                 $post->{"authors"} = jacobin_get_authors_array( $post_id );
                 $post->{"departments"} = wp_get_post_terms( $post_id, 'department' );
 
