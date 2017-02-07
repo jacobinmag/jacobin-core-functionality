@@ -125,7 +125,7 @@ class Jacobin_Rest_API_Routes {
                 $post->{"subhead"} = get_post_meta( $post_id, 'subhead', true );
                 $post->{"slug"} = $post_detail->post_name;
                 $post->{"authors"} = jacobin_get_authors_array( $post_id );
-                $post->{"departments"} = wp_get_post_terms( $post_id, 'department' );
+                $post->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
 
                 $image_id = get_post_thumbnail_id( $post_id );
                 $post->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
