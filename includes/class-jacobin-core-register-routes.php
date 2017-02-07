@@ -72,7 +72,7 @@ class Jacobin_Rest_API_Routes {
      * @uses Jacobin_Rest_API_Routes::get_featured_content()
      *
      * @return array $posts
-     */
+       */
     public function get_home_feature() {
         return $this->get_featured_content( 'options_home_feature' );
     }
@@ -115,13 +115,19 @@ class Jacobin_Rest_API_Routes {
 
         $posts = array_map(
             function( $post_id ) {
-        		$post = get_post( $post_id );
+                $post_detail = get_post( $post_id );
+
+                $post = new stdClass();
+
+                $post->{"ID"} = $post_detail->ID;
+                $post->{"post_title"} = $post_detail->post_title;
+                $post->{"subhead"} = get_post_meta( $post_id, 'subhead', true );
+                $post->{"post_name"} = $post_detail->post_name;
+                $post->{"authors"} = jacobin_get_authors_array( $post_id );
+                $post->{"departments"} = wp_get_post_terms( $post_id, 'department' );
 
                 $image_id = get_post_thumbnail_id( $post_id );
-
                 $post->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
-
-                $post->{"authors"} = jacobin_get_authors_array( $post_id );
 
                 return $post;
             },
