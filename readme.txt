@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.1
+Version: 0.2.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,24 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.1. February 7, 2017 =
+* #162
+  * Added `date` to modified response
+  * Changed `post_title` to `title` to make consistent with other endpoints
+  * Changed `post_name` to `slug` to make consistent with other endpoints
+  * Changed `ID` to `id` to make consistent with other endpoints
+
+```
+"id",
+"date",
+"title"['rendered'],
+"slug",
+"subhead",
+"authors",
+"departments",
+"featured_image"
+```
 
 = 0.2.1 February 6, 2017 =
 * #162 Modified response for featured content endpoints.
