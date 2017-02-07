@@ -306,3 +306,36 @@ function jacobin_timeline_date_format( $post_id ) {
     return $date_format;
 
 }
+
+/**
+ * Get Post Terms
+ * Return post terms with parent slug
+ *
+ * @since 0.2.1.2
+ *
+ * @param  int $post_id
+ * @param  string $taxonomy
+ * @return array of obj $terms
+ */
+function jacobin_get_post_terms( $post_id = null, $taxonomy ) {
+
+  if( !$post_id ) {
+    return;
+  }
+
+  $post_id = (int) $post_id;
+
+  $term_ids = wp_get_post_terms( $post_id, $taxonomy, array( 'fields' => 'ids' ) );
+
+  $terms = array_map(
+      function( $id ) {
+        $term = get_term( $id, $taxonomy );
+        $term->{'parent_slug'} = get_post_field( 'post_name', $term->parent );
+
+        return $term;
+      },
+      $term_ids
+  );
+
+  return $terms;
+}

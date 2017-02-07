@@ -25,7 +25,12 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 0.2.1. February 7, 2017 =
+= 0.2.1.2 February 7, 2017 =
+* #162
+  * Added helper function `jacobin_get_post_terms` to add `parent_slug` to term object
+  * Added term `parent_slug` to department response
+
+= 0.2.1.1 February 7, 2017 =
 * #162
   * Added `date` to modified response
   * Changed `post_title` to `title` to make consistent with other endpoints
