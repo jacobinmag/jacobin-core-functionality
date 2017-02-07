@@ -330,7 +330,9 @@ function jacobin_get_post_terms( $post_id = null, $taxonomy ) {
   $terms = array_map(
       function( $id ) {
         $term = get_term( $id, $taxonomy );
-        $term->{'parent_slug'} = get_post_field( 'post_name', $term->parent );
+        
+        $parent_term = get_term( $term->parent, $taxonomy );
+        $term->{'parent_slug'} = ( !empty( $parent_term ) ) ? $parent_term->slug : false ;
 
         return $term;
       },
