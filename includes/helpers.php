@@ -68,6 +68,11 @@ function jacobin_get_image_meta( $image_id ) {
     $image_id = (int) $image_id;
 
     $image_data = get_post( $image_id );
+
+    if( empty( $image_data ) ) {
+      return false;
+    }
+
     $meta = array(
         'id'            => $image_id,
         'title'         => array(
@@ -315,11 +320,12 @@ function jacobin_timeline_date_format( $post_id ) {
  *
  * @param  int $post_id
  * @param  string $taxonomy
+ *
  * @return array of obj $terms
  */
 function jacobin_get_post_terms( $post_id = null, $taxonomy ) {
 
-  if( !$post_id ) {
+  if( !$post_id || !$taxonomy ) {
     return;
   }
 
@@ -330,7 +336,7 @@ function jacobin_get_post_terms( $post_id = null, $taxonomy ) {
   $terms = array_map(
       function( $id ) {
         $term = get_term( $id, $taxonomy );
-        
+
         $parent_term = get_term( $term->parent, $taxonomy );
         $term->{'parent_slug'} = ( !empty( $parent_term ) ) ? $parent_term->slug : false ;
 
