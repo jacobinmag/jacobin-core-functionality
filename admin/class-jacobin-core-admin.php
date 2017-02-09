@@ -70,6 +70,13 @@ class Jacobin_Core_Admin {
 		add_filter( 'timeline_register_args', array( $this, 'modify_timeline_args' ), 'timeline' );
 		add_filter( 'chart_register_args', array( $this, 'modify_chart_args' ), 'chart' );
 
+		/**
+		 * Modify Taxonomy Levels
+		 *
+		 * @since 0.2.2
+		 */
+		add_filter( 'wp_terms_checklist_args', array( $this, 'terms_checklist_args' ) );
+
 	}
 
 	/**
@@ -188,6 +195,28 @@ class Jacobin_Core_Admin {
 	public function modify_chart_args( $args ) {
 	    $args['menu_icon'] = 'dashicons-chart-line';
 	    return $args;
+	}
+
+	/**
+	 * Modify Taxonomy Args
+	 * Specify a custom Walker class for taxonomy metaboxes
+	 *
+	 * @access  public
+	 *
+	 * @since    0.2.2
+	 *
+	 * @uses class Jacobin_Core_Taxonomy_Walker
+	 * @uses wp_terms_checklist_args
+	 * @link http://wpfilte.rs/wp_terms_checklist_args/
+	 *
+	 * @param array $args
+	 * @return array $args
+	 */
+	public function terms_checklist_args( $args ) {
+		if ( isset( $args['taxonomy'] ) && 'department' == $args['taxonomy'] ) {
+			$args['walker'] = new Jacobin_Core_Taxonomy_Walker;
+		}
+		return $args;
 	}
 
 }

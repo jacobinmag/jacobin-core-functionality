@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.2.1.2
+ * Version:         0.2.2
  *
  * @package         Core_Functionality
  */
@@ -41,6 +41,7 @@ require_once( 'includes/class-jacobin-core-shortcodes.php' );
 
 // Load admin files
 require_once( 'admin/class-jacobin-core-admin.php' );
+require_once( 'admin/class-jacobin-tax-walker.php' );
 
 // Load utility files
 require_once( 'utils/copy-content.php' );
@@ -52,7 +53,7 @@ require_once( 'utils/copy-content.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.2.1.2' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.2.2' );
 
 	return $instance;
 }
