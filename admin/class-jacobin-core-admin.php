@@ -65,6 +65,8 @@ class Jacobin_Core_Admin {
 			add_action( 'admin_menu', array( $this, 'add_options_page' ) );
 		}
 
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+
 		// Modify custom post args
 		add_filter( 'issue_register_args', array( $this, 'modify_issue_args' ), 'issue' );
 		add_filter( 'timeline_register_args', array( $this, 'modify_timeline_args' ), 'timeline' );
@@ -75,7 +77,7 @@ class Jacobin_Core_Admin {
 		 *
 		 * @since 0.2.2
 		 */
-		add_filter( 'wp_terms_checklist_args', array( $this, 'terms_checklist_args' ) );
+		//add_filter( 'wp_terms_checklist_args', array( $this, 'terms_checklist_args' ) );
 
 	}
 
@@ -213,9 +215,9 @@ class Jacobin_Core_Admin {
 	 * @return array $args
 	 */
 	public function terms_checklist_args( $args ) {
-		if ( isset( $args['taxonomy'] ) && 'department' == $args['taxonomy'] ) {
-			$args['walker'] = new Jacobin_Core_Taxonomy_Walker;
-		}
+		// if ( isset( $args['taxonomy'] ) && 'department' == $args['taxonomy'] ) {
+		// 	$args['walker'] = new Jacobin_Core_Taxonomy_Walker;
+		// }
 		return $args;
 	}
 

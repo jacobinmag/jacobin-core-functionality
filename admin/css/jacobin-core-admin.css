@@ -6,3 +6,12 @@
 .acf-fields .CodeMirror-line {
     padding-left: 2em;
 }
+
+#departmentchecklist .children .children {
+  display: none;
+}
+
+  #departmentchecklist .children .children input {
+    pointer-events: none;
+    tab-index: -1;
+  }
