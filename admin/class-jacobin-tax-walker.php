@@ -25,9 +25,4 @@ if( !class_exists( 'Walker_Category_Checklist' ) ) {
  */
 class Jacobin_Core_Taxonomy_Walker extends Walker_Category_Checklist {
 
-	public function walk( $elements, $max_depth ) {
-		$max_depth = 2;
-		return parent::walk( $elements, $max_depth );
-	}
-
 }
