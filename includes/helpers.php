@@ -388,11 +388,11 @@ function jacobin_get_post_terms( $post_id = null, $taxonomy ) {
   $term_ids = wp_get_post_terms( $post_id, $taxonomy, array( 'fields' => 'ids' ) );
 
   $terms = array_map(
-      function( $id ) {
+      function( $id ) use ( $taxonomy ) {
         $term = get_term( $id, $taxonomy );
 
         $parent_term = get_term( $term->parent, $taxonomy );
-        $term->{'parent_slug'} = ( !empty( $parent_term ) ) ? $parent_term->slug : false ;
+        $term->{'parent_slug'} = ( !empty( $parent_term ) && !is_wp_error( $parent_term ) ) ? $parent_term->slug : false ;
 
         return $term;
       },

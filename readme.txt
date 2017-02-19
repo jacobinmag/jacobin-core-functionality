@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.3
+Version: 0.2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,24 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.3.1 February 19, 2017 =
+* Added `parent_slug` to `department` response
+* Fixed PHP Notice errors
+
+  ```
+  Undefined variable: taxonomy
+  Line: 394
+  ```
+
+  ```
+  Undefined variable: taxonomy
+  Line: 392
+  ```
+
+  ```Undefined property: WP_Error::$slug
+  Line: 395
+  ```
 
 = 0.2.3 February 19, 2017 =
 * #169 Updated related post fields
