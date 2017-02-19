@@ -16,6 +16,7 @@
  * @uses get_post()
  * @uses jacobin_get_image_meta()
  * @uses jacobin_get_authors_array()
+ * @uses jacobin_the_excerpt()
  *
  * @param  int $post_id
  * @return array $post_data || false
@@ -34,6 +35,7 @@ function jacobin_get_post_data( $post_id ) {
         'title'     => array(
             'rendered'  => $post->post_title,
         ),
+        'date'      => $post->post_date,
         'slug'      => $post->post_name,
         'content'   => array(
             'rendered'  => $post->post_content,
@@ -48,6 +50,52 @@ function jacobin_get_post_data( $post_id ) {
     $post_data['featured_image'] = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
 
     return $post_data;
+
+}
+
+/**
+ * Get Related Post Fields
+ * Fields are different than for post listings based on ticket #169
+ * @link https://github.com/positiondev/jacobin/issues/169#event-968394659
+ *
+ * @since 0.2.3
+ *
+ * @uses get_post()
+ * @uses get_post_meta()
+ * @uses jacobin_get_image_meta()
+ * @uses jacobin_get_authors_array()
+ * @uses jacobin_get_post_terms()
+ *
+ * @param  int $post_id
+ * @return array $post_data || false
+ */
+function jacobin_get_related_post_data( $post_id ) {
+    $post_id = (int) $post_id;
+
+    $post = get_post( $post_id );
+
+    if( empty( $post ) ) {
+        return false;
+    }
+
+    $post_data = array(
+        'id'        => $post_id,
+        'title'     => array(
+            'rendered'  => $post->post_title,
+        ),
+        'date'      => $post->post_date,
+        'slug'      => $post->post_name,
+        'subhead'   => get_post_meta( $post_id, 'subhead', true ),
+        'authors'   => jacobin_get_authors_array( $post_id ),
+        'departments' => jacobin_get_post_terms( $post_id, 'department' ),
+    );
+
+    $image_id = get_post_thumbnail_id( $post_id );
+
+    $post_data['featured_image'] = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+
+    return $post_data;
+
 }
 
 /**
@@ -97,6 +145,9 @@ function jacobin_get_image_meta( $image_id ) {
  *
  * @since 0.1.14
  *
+ * @uses get_post_meta()
+ * @uses get_author_posts_url()
+ *
  * @param  int $author_id
  *
  * @return array $meta || false
@@ -126,6 +177,9 @@ function jacobin_get_coauthor_meta( $author_id  ) {
  * Get Author Meta
  *
  * @since 0.1.14
+ *
+ * @uses get_userdata()
+ * @uses get_author_posts_url()
  *
  * @param int $author_id
  *
