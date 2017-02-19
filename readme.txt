@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.2.2
+Version: 0.2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,10 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 0.2.2.2 February 8, 2017 =
+= 0.2.3 February 19, 2017 =
+* #169 Updated related post fields
+
+= 0.2.2.2 February 18, 2017 =
 *  Limit hierarchical `department` taxonomy list to 2 levels deep using CSS
 
 = 0.2.2.1 February 8, 2017 =

@@ -347,38 +347,14 @@ class Jacobin_Rest_API_Fields {
 
         $posts = get_posts( $args );
 
-        if( !empty( $posts ) ) {
-            foreach( $posts as $post ) {
-
-                $article = array(
-                    'id'        => (int) $post->ID,
-                    'title'     => array(
-                        'rendered'  => $post->post_title,
-                    ),
-                    'slug'      => $post->post_name,
-                    'content'   => array(
-                        'rendered'  => $post->post_content,
-                    ),
-                    'excerpt'   => array(
-                        'rendered'    => jacobin_the_excerpt( $post->ID ),
-                    )
-                );
-
-                $image_id = get_post_thumbnail_id( $post->ID );
-
-                $image_id = ( !empty( $image_id ) ) ? (int) $image_id : false;
-
-                $image_meta = jacobin_get_image_meta( $image_id );
-
-                $article['featured_image'] = $image_meta;
-
-                $article['authors'] = jacobin_get_authors_array( $post->ID );
-
-                array_push( $articles, $article );
-
-            }
-
+        if( empty( $posts ) ) {
+            return false;
         }
+
+        $articles = array_map( function( $post ) {
+          return jacobin_get_related_post_data( $post->ID );
+        }, $posts );
+
         return $articles;
     }
 
@@ -408,41 +384,14 @@ class Jacobin_Rest_API_Fields {
 
         $posts = get_posts( $args );
 
-        if( !empty( $posts ) ) {
-            foreach( $posts as $post ) {
-
-                $article = array(
-                    'id'        => (int) $post->ID,
-                    'title'     => array(
-                        'rendered'  => $post->post_title,
-                    ),
-                    'slug'      => $post->post_name,
-                    'date'      => $post->post_date,
-                    'content'   => array(
-                        'rendered'  => $post->post_content,
-                    ),
-                    'excerpt'   => array(
-                        'rendered'    => jacobin_the_excerpt( $post->ID ),
-                    ),
-                );
-
-                $article['authors'] = jacobin_get_authors_array( $post->ID );
-
-                $image_id = get_post_thumbnail_id( $post->ID );
-
-                $image_id = ( !empty( $image_id ) ) ? (int) $image_id : false;
-
-                $image_meta = jacobin_get_image_meta( $image_id );
-
-                $article['featured_image'] = $image_meta;
-
-                $article['departments'] = wp_get_post_terms( $post->ID, 'department', array( 'orderby'   => 'parent' ) );
-
-                array_push( $articles, $article );
-
-            }
-
+        if( empty( $posts ) ) {
+            return false;
         }
+
+        $articles = array_map( function( $post ) {
+          return jacobin_get_related_post_data( $post->ID );
+        }, $posts );
+
         return $articles;
     }
 
