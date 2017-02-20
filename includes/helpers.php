@@ -370,6 +370,11 @@ function jacobin_timeline_date_format( $post_id ) {
  * Get Post Terms
  * Return post terms with parent slug
  *
+ * @uses get_term()
+ * @link https://codex.wordpress.org/Function_Reference/get_term
+ * @uses array_map()
+ * @link http://php.net/manual/en/function.array-map.php
+ *
  * @since 0.2.1.2
  *
  * @param  int $post_id
@@ -391,8 +396,8 @@ function jacobin_get_post_terms( $post_id = null, $taxonomy ) {
       function( $id ) use ( $taxonomy ) {
         $term = get_term( $id, $taxonomy );
 
-        $parent_term = get_term( $term->parent, $taxonomy );
-        $term->{'parent_slug'} = ( !empty( $parent_term ) && !is_wp_error( $parent_term ) ) ? $parent_term->slug : false ;
+        $parent_term = get_term( (int) $term->parent, $taxonomy );
+        $term->{'parent_slug'} = ( !is_wp_error( $parent_term ) ) ? $parent_term->slug: false;
 
         return $term;
       },
