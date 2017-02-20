@@ -174,17 +174,17 @@ class Jacobin_Rest_API_Fields {
         $_data = $data->data['departments'];
 
         foreach( $_data  as $department ) {
-            $department->{'parent_slug'} = ( !empty( $parent_term ) && !is_wp_error( $parent_term ) ) ? $parent_term->slug : false;
+          $parent_term = get_term( $department->parent, 'department' );
+          $department->{'parent_slug'} = ( !empty( $parent_term ) && !is_wp_error( $parent_term ) ) ? $parent_term->slug : false;
 
-            $image = get_term_meta( $department->term_id, 'featured_image' );
-            $image_id = ( !empty( $image ) && is_array( $image ) ) ? (int) $image[0] : false;
+          $image = get_term_meta( $department->term_id, 'featured_image' );
+          $image_id = ( !empty( $image ) && is_array( $image ) ) ? (int) $image[0] : false;
 
-            $featured = get_term_meta(  $department->term_id, 'featured_article' );
-            $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0][0] : false;
+          $featured = get_term_meta(  $department->term_id, 'featured_article' );
+          $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0][0] : false;
 
-            $department->{"thumbnail"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
-            $department->{"featured_article"} = ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
-            $parent_term = get_term( $department->parent, 'department' );
+          $department->{"thumbnail"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+          $department->{"featured_article"} = ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
         }
 
         $data->data['departments'] = $_data;
