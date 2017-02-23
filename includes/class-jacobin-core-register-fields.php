@@ -85,7 +85,7 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'issue',
                 'cover_artist',
                 array(
-                    'get_callback'    => array( $this, 'get_guest_author' ),
+                    'get_callback'    => array( $this, 'get_author' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -94,7 +94,7 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'post',
                 'translator',
                 array(
-                    'get_callback'    => array( $this, 'get_guest_author' ),
+                    'get_callback'    => array( $this, 'get_author' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -103,7 +103,7 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'post',
                 'interviewer',
                 array(
-                    'get_callback'    => array( $this, 'get_interviewer' ),
+                    'get_callback'    => array( $this, 'get_author' ),
                     'update_callback' => null,
                     'schema'          => null
                 )
@@ -443,18 +443,17 @@ class Jacobin_Rest_API_Fields {
      * @param  {array} $request
      * @return {array} get_guest_author_meta || false
      */
-    public function get_interviewer( $object, $field_name, $request ) {
+    public function get_author( $object, $field_name, $request ) {
 
-        $interviewer = get_post_meta( $object['id'], 'interviewer', true );
+        $interviewer = get_post_meta( $object['id'], $field_name, true );
 
-        if( empty( $interviewer ) || !is_array( $interviewer )  ) {
+        if( empty( $interviewer ) ) {
             return false;
         }
 
-        $interviewer_id = (int) $interviewer[0];
+        $interviewer_id = (int) $interviewer;
 
         return jacobin_get_coauthor_meta( $interviewer_id );
-
     }
 
     /**

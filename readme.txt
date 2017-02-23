@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.3.2
+Version: 0.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,8 +25,11 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.2.4 February 22, 2017 =
+* Added back `interviewer` field
+
 = 0.2.3.2 February 20, 2017 =
-* Fixed issue `parent_slug` always returning false in post reponse
+* Fixed issue `parent_slug` always returning false in post response
 
 = 0.2.3.1 February 19, 2017 =
 * Added `parent_slug` to `department` response
