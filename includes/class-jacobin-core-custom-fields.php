@@ -282,6 +282,58 @@
        /**
         * Post Content Custom Fields
         */
+        acf_add_local_field_group( array(
+        	'key' => 'group_58ade90c4e2a0',
+        	'title' => __( 'Interviewer', 'jacobin-core' ),
+        	'fields' => array (
+        		array (
+        			'key' => 'field_58ade9120d132',
+        			'label' => __( 'Interviewer Name', 'jacobin-core' ),
+        			'name' => 'interviewer',
+        			'type' => 'post_object',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'post_type' => array(
+        				0 => 'guest-author',
+        			),
+        			'taxonomy' => array(
+        			),
+        			'allow_null' => 0,
+        			'multiple' => 0,
+        			'return_format' => 'object',
+        			'ui' => 1,
+        		),
+        	),
+        	'location' => array(
+        		array (
+        			array (
+        				'param' => 'post_taxonomy',
+        				'operator' => '==',
+        				'value' => 'format:interview',
+        			),
+        			array (
+        				'param' => 'post_type',
+        				'operator' => '==',
+        				'value' => 'post',
+        			),
+        		),
+        	),
+        	'menu_order' => 0,
+        	'position' => 'normal',
+        	'style' => 'default',
+        	'label_placement' => 'top',
+        	'instruction_placement' => 'label',
+        	'hide_on_screen' => '',
+        	'active' => 1,
+        	'description' => '',
+        ));
+
        acf_add_local_field_group(array (
        	'key' => 'group_57dee289876c8',
        	'title' => __( 'Content Sections', 'jacobin-core' ),
@@ -1757,7 +1809,7 @@
        	'active' => 1,
        	'description' => '',
        ));
-       
+
      }
 
      /**
