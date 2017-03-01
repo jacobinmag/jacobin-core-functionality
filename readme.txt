@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.4
+Version: 0.2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,12 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.5 February 28, 2017 =
+* Converted `interviewer` field to multi-select
+* Added `jacobin_get_guest_author_meta_for_field()` helper for getting guest author information based on field name
+* Added route for guest-authors accessed at `jacobin/guest-author/(?P<id>\d+)` where `(?P<id>\d+)` is `id`
+* Added `_collection` link field that links to listing of posts for author
 
 = 0.2.4 February 22, 2017 =
 * Added back `interviewer` field

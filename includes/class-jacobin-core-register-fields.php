@@ -103,7 +103,7 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'post',
                 'interviewer',
                 array(
-                    'get_callback'    => array( $this, 'get_author' ),
+                    'get_callback'    => array( $this, 'get_guest_authors' ),
                     'update_callback' => null,
                     'schema'          => null
                 )
@@ -437,10 +437,10 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
-     * Get interviewer
+     * Get Author
      * @param  {obj} $object
      * @param  {string} $field_name
-     * @param  {array} $request
+     * @param  {obj} $request
      * @return {array} get_guest_author_meta || false
      */
     public function get_author( $object, $field_name, $request ) {
@@ -457,7 +457,26 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
-     * Get Guest Author Meta
+     * Get Guest Authors
+     * Return array of guest author meta for specific field
+     *
+     * @since 0.2.5
+     *
+     * @uses jacobin_get_guest_author_meta_for_field()
+     *
+     * @param  obj $object
+     * @param  string $field_name
+     * @param  obj $request
+     * @return array
+     */
+    public function get_guest_authors( $object, $field_name, $request ) {
+
+      return jacobin_get_guest_author_meta_for_field( $object['id'], $field_name );
+
+    }
+
+    /**
+     * Get Guest Author Meta Helper Function
      * Guest author is a custom post type created by the Co-authors Plus plugin
      * @since 0.1.7
      *
