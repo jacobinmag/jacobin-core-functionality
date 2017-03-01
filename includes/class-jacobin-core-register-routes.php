@@ -49,6 +49,18 @@ class Jacobin_Rest_API_Routes {
     		'callback'    => array( $this, 'get_editors_picks' ),
     	) );
 
+      register_rest_route( 'jacobin', '/guest-author/(?P<id>\d+)', array(
+    		'methods'     => 'GET',
+    		'callback'    => array( $this, 'get_guest_author' ),
+        'args' => array(
+    			'id' => array(
+    				'validate_callback' => function( $param, $request, $key ) {
+    					return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
+    				}
+    			),
+    		),
+    	) );
+
     }
 
     /**
@@ -136,6 +148,22 @@ class Jacobin_Rest_API_Routes {
         );
 
     	return $posts;
+    }
+
+    /**
+     * Get Guest Author Meta
+     *
+     * @since 0.2.5
+     *
+     * @uses jacobin_get_coauthor_meta()
+     *
+     * @param obj $data
+     * @return array coauthor_meta
+     */
+    public function get_guest_author( $data ) {
+      $author_id = $data['id'];
+
+      return jacobin_get_coauthor_meta( $author_id  );
     }
 
 }

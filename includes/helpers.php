@@ -142,6 +142,7 @@ function jacobin_get_image_meta( $image_id ) {
 
 /**
  * Get Co-author Meta
+ * Returns meta array for co-author
  *
  * @since 0.1.14
  *
@@ -164,6 +165,7 @@ function jacobin_get_coauthor_meta( $author_id  ) {
         'description'   => get_post_meta( $user_id, 'cap-description', true ),
         'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
         'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
+        '_collection'   => esc_url( get_rest_url( 0, '/wp/v2/posts/?filter[author]=' ) . $user_id )
     );
 
     if( empty( $meta ) ) {
@@ -174,7 +176,40 @@ function jacobin_get_coauthor_meta( $author_id  ) {
 }
 
 /**
+ * Get Guest Author Meta
+ * Return guest author meta for a specific field (i.e. coauthors plus is used for other fields like 'translator', 'interviewer', 'editor', 'cover_artist')
+ *
+ * @since 0.2.5
+ *
+ * @uses get_post_meta()
+ * @uses jacobin_get_coauthor_meta()
+ *
+ * @param  int $post_id
+ * @param  string $field
+ * @return array of meta || false
+ */
+function jacobin_get_guest_author_meta_for_field( $post_id, $field ) {
+  $author_ids = get_post_meta( (int) $post_id, $field );
+
+  if( empty( $author_ids ) ) {
+    return false;
+  }
+
+  $author_ids = $author_ids[0];
+
+  $authors = array_map( function( $author_id ) {
+
+    return jacobin_get_coauthor_meta( $author_id );
+
+  }, $author_ids );
+
+  return $authors;
+
+}
+
+/**
  * Get Author Meta
+ * Returns meta array for WP author user
  *
  * @since 0.1.14
  *
@@ -200,6 +235,7 @@ function jacobin_get_author_meta( $author_id ) {
         'first_name'    => $user_meta->first_name,
         'last_name'     => $user_meta->last_name,
         'description'   => $user_meta->description,
+        'website'       => $user_meta->user_url,
         'link'          => get_author_posts_url( $author_id )
     );
 
@@ -207,12 +243,14 @@ function jacobin_get_author_meta( $author_id ) {
 }
 
 /**
- * Get Coauthors Array
+ * Get Authors Array
+ * Gets an array of co-authors
  *
  * @since 0.1.14
  *
  * @uses get_coauthors()
  * @uses jacobin_get_author_meta()
+ * @uses jacobin_get_coauthor_meta()
  *
  * @param  int $object_id
  *
@@ -226,32 +264,25 @@ function jacobin_get_authors_array( $object_id ) {
         global $coauthors_plus;
 
         $coauthors = get_coauthors( $object_id );
-        $authors = [];
 
-        foreach( $coauthors as $coauthor ) {
+        $authors = array_map( function( $coauthor ) {
 
-            $user_id = $coauthor->ID;
+          $user_id = $coauthor->ID;
 
-            if( array_key_exists( 'data', $coauthor ) && 'wpuser' == $coauthor->data->type ) {
+          if( array_key_exists( 'data', $coauthor ) && 'wpuser' == $coauthor->data->type ) {
 
-                $author = jacobin_get_author_meta( $user_id );
+              return jacobin_get_author_meta( $user_id );
 
-            }
-            elseif( 'guest-author' == $coauthor->type ) {
+          }
+          elseif( 'guest-author' == $coauthor->type ) {
 
-                $author = array(
-                    'id'            => (int) $user_id,
-                    'name'          => $coauthor->display_name,
-                    'first_name'    => $coauthor->first_name,
-                    'last_name'     => $coauthor->last_name,
-                    'description'   => $coauthor->description,
-                    'link'          => get_author_posts_url( $coauthor->ID, $coauthor->user_nicename ),
-                );
-            }
+              return jacobin_get_coauthor_meta( $user_id );
 
-            array_push( $authors, $author );
+          }
 
-        }
+        }, $coauthors );
+
+
         return $authors;
     }
 
