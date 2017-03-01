@@ -143,6 +143,8 @@ function jacobin_get_image_meta( $image_id ) {
 /**
  * Get Co-author Meta
  * Returns meta array for co-author
+ * `guest-author` is a post type
+ * `author terms` are added to a post and guest-author in order to connect a post with multiple authors
  *
  * @since 0.1.14
  *
@@ -157,6 +159,8 @@ function jacobin_get_coauthor_meta( $author_id  ) {
 
     $user_id = (int) $author_id;
 
+    $term_id = wp_get_post_terms( $user_id, 'author', array( 'fields' => 'ids' ) );
+
     $meta = array(
         'id'            => $user_id,
         'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
@@ -164,9 +168,11 @@ function jacobin_get_coauthor_meta( $author_id  ) {
         'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
         'description'   => get_post_meta( $user_id, 'cap-description', true ),
         'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
-        'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
-        '_collection'   => esc_url( get_rest_url( 0, '/wp/v2/posts?filter[guest-author]=' ) . $user_id )
+        'term_id'       => ( !empty( $term_id) ) ? intval( $term_id[0] ) : false,
+        '_link'         => ( !empty( $term_id ) ) ? esc_url( get_rest_url( 0, '/wp/v2/posts?authors=' ) . intval( $term_id[0] ) ) : false,
     );
+
+    //var_dump( get_post_meta( $user_id ) );
 
     if( empty( $meta ) ) {
         return false;
@@ -197,11 +203,19 @@ function jacobin_get_guest_author_meta_for_field( $post_id, $field ) {
 
   $author_ids = $author_ids[0];
 
-  $authors = array_map( function( $author_id ) {
+  if( is_array( $author_ids ) ) {
 
-    return jacobin_get_coauthor_meta( $author_id );
+    $authors = array_map( function( $author_id ) {
 
-  }, $author_ids );
+      return jacobin_get_coauthor_meta( $author_id );
+
+    }, $author_ids );
+
+  } else {
+
+    $authors = jacobin_get_coauthor_meta( $author_ids );
+
+  }
 
   return $authors;
 
