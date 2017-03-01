@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.5
+Version: 0.2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.5.1 February 28, 2017 =
+* Fixed filter format for `guest-author` that is display in `_collection`
 
 = 0.2.5 February 28, 2017 =
 * Converted `interviewer` field to multi-select

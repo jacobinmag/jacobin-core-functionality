@@ -165,7 +165,7 @@ function jacobin_get_coauthor_meta( $author_id  ) {
         'description'   => get_post_meta( $user_id, 'cap-description', true ),
         'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
         'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
-        '_collection'   => esc_url( get_rest_url( 0, '/wp/v2/posts/?filter[author]=' ) . $user_id )
+        '_collection'   => esc_url( get_rest_url( 0, '/wp/v2/posts?filter[guest-author]=' ) . $user_id )
     );
 
     if( empty( $meta ) ) {
