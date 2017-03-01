@@ -52,8 +52,8 @@ class Jacobin_Register_Rest_Api_Support {
             'author'
         );
 
-        add_action( 'init', array( $this, 'register_post_types' ), 25 );
-        add_action( 'init', array( $this, 'register_taxonomies' ), 25 );
+        add_action( 'init', array( $this, 'register_post_types' ), 100 );
+        add_action( 'init', array( $this, 'modify_taxonomy' ), 100 );
     }
 
     public function register_post_types() {
@@ -68,16 +68,27 @@ class Jacobin_Register_Rest_Api_Support {
         }
     }
 
-    public function register_taxonomies() {
-        global $wp_taxonomies;
+    /**
+     * Modify Registered Taxonomy
+     *
+     * @since 0.2.5.2
+     *
+     * @uses get_taxonomy()
+     * @uses register_taxonomy()
+     *
+     * @return object
+     */
+    public function modify_taxonomy() {
+      $taxonomy = get_taxonomy( 'author' );
+      $taxonomy->public = true;
+      $taxonomy->publicly_queryable = true;
+      $taxonomy->query_var = 'author_term';
+      $taxonomy->show_in_rest = true;
+      $taxonomy->rest_base = 'authors';
+      $taxonomy->rest_controller_class = 'WP_REST_Terms_Controller';
 
-        foreach( $this->custom_taxonomies as $taxonomy_name ) {
-            if ( isset( $wp_taxonomies[ $taxonomy_name ] ) ) {
-          		$wp_taxonomies[ $taxonomy_name ]->show_in_rest = true;
-          		$wp_taxonomies[ $taxonomy_name ]->rest_base = $taxonomy_name;
-          		$wp_taxonomies[ $taxonomy_name ]->rest_controller_class = 'WP_REST_Terms_Controller';
-          	}
-        }
+      register_taxonomy( 'author', array( 'guest-author', 'post', 'issue', 'chart', 'page', 'timeline' ), (array) $taxonomy );
+
     }
 
 }
