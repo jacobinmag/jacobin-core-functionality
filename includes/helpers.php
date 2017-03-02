@@ -157,6 +157,8 @@ function jacobin_get_coauthor_meta( $author_id  ) {
 
     $user_id = (int) $author_id;
 
+    $author_term = wp_get_post_terms( $user_id, 'author' );
+
     $meta = array(
         'id'            => $user_id,
         'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
@@ -164,8 +166,7 @@ function jacobin_get_coauthor_meta( $author_id  ) {
         'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
         'description'   => get_post_meta( $user_id, 'cap-description', true ),
         'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
-        'link'          => ( get_post_meta( $user_id, 'cap-user_login', true ) ) ? esc_url( get_author_posts_url( $user_id ) . get_post_meta( $user_id, 'cap-user_login', true ) . '/' ) : false,
-        '_collection'   => esc_url( get_rest_url( 0, '/wp/v2/posts/?filter[author]=' ) . $user_id )
+        'term_id'       => ( !is_wp_error( $author_term ) ) ? $author_term[0]->term_id : false,
     );
 
     if( empty( $meta ) ) {
