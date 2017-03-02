@@ -143,6 +143,8 @@ function jacobin_get_image_meta( $image_id ) {
 /**
  * Get Co-author Meta
  * Returns meta array for co-author
+ * `guest-author` is a post type
+ * `author terms` are added to a post and guest-author in order to connect a post with multiple authors
  *
  * @since 0.1.14
  *
@@ -198,11 +200,19 @@ function jacobin_get_guest_author_meta_for_field( $post_id, $field ) {
 
   $author_ids = $author_ids[0];
 
-  $authors = array_map( function( $author_id ) {
+  if( is_array( $author_ids ) ) {
 
-    return jacobin_get_coauthor_meta( $author_id );
+    $authors = array_map( function( $author_id ) {
 
-  }, $author_ids );
+      return jacobin_get_coauthor_meta( $author_id );
+
+    }, $author_ids );
+
+  } else {
+
+    $authors = jacobin_get_coauthor_meta( $author_ids );
+
+  }
 
   return $authors;
 

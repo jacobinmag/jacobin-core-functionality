@@ -25,10 +25,10 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-0.2.5 March 1, 2017
-
+= 0.2.5 March 1, 2017 =
 * #173 Modified related_articles and issue_articles to return up to 20 items
 * #171 Register `guest-term` in REST API and added `term_id` to author data
+  `/wp-json/wp/v2/posts?authors=426`
 
 = 0.2.5 February 28, 2017 =
 * Converted `interviewer` field to multi-select
