@@ -53,7 +53,7 @@ class Jacobin_Register_Rest_Api_Support {
         );
 
         add_action( 'init', array( $this, 'register_post_types' ), 25 );
-        add_action( 'init', array( $this, 'register_taxonomies' ), 25 );
+        add_action( 'init', array( $this, 'register_taxonomies' ), 100 );
     }
 
     public function register_post_types() {
@@ -74,7 +74,7 @@ class Jacobin_Register_Rest_Api_Support {
         foreach( $this->custom_taxonomies as $taxonomy_name ) {
             if ( isset( $wp_taxonomies[ $taxonomy_name ] ) ) {
           		$wp_taxonomies[ $taxonomy_name ]->show_in_rest = true;
-          		$wp_taxonomies[ $taxonomy_name ]->rest_base = $taxonomy_name;
+          		$wp_taxonomies[ $taxonomy_name ]->rest_base = 'author-term';
           		$wp_taxonomies[ $taxonomy_name ]->rest_controller_class = 'WP_REST_Terms_Controller';
           	}
         }
