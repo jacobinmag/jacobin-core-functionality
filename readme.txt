@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.5.2
+Version: 0.2.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,14 +25,10 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 0.2.5.2 March 1, 2017 =
-* #171 Enabled displaying posts by `authors`
-   * `/wp/v2/posts?authors=1120` where `1120` is the term id for `author` taxonomy term
-   * added `term_id` to `authors` property
-* #173 Modified `related_posts` to return all posts rather than limit to 5
-
-= 0.2.5.1 February 28, 2017 =
-* Fixed filter format for `author` that is displayed in `_link`
+= 0.2.5.1 March 1, 2017 =
+* #171 Made `author` taxonomy available at `/wp-json/wp/v2/posts?authors=<id>` where `<id>` is the `author` term `id`
+* Added `author_term` to author responses
+* Added `link` to author responses
 
 = 0.2.5 February 28, 2017 =
 * Converted `interviewer` field to multi-select
