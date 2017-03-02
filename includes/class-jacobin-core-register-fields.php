@@ -345,7 +345,8 @@ class Jacobin_Rest_API_Fields {
         $articles = [];
 
         $args = array(
-            'post__in' => $meta
+            'post__in'        => $meta,
+            'posts_per_page'  => 20
         );
 
         $posts = get_posts( $args );
@@ -383,7 +384,7 @@ class Jacobin_Rest_API_Fields {
 
         $args = array(
             'post__in'        => $meta,
-            'posts_per_page'  => -1
+            'posts_per_page'  => 20
         );
 
         $posts = get_posts( $args );
