@@ -54,9 +54,7 @@ class Jacobin_Register_Rest_Api_Support {
 
         add_action( 'init', array( $this, 'register_post_types' ), 100 );
         add_action( 'init', array( $this, 'modify_taxonomy' ), 100 );
-        add_action( 'init', array( $this, 'register_post_types' ), 25 );
-
-        add_action( 'init', array( $this, 'modify_taxonomy' ), 100 );
+        
     }
 
     public function register_post_types() {
