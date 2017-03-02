@@ -54,7 +54,7 @@ class Jacobin_Register_Rest_Api_Support {
 
         add_action( 'init', array( $this, 'register_post_types' ), 100 );
         add_action( 'init', array( $this, 'modify_taxonomy' ), 100 );
-        
+
     }
 
     public function register_post_types() {
@@ -70,33 +70,10 @@ class Jacobin_Register_Rest_Api_Support {
     }
 
     /**
-     * Modify Registered Taxonomy
-     *
-     * @since 0.2.5.2
-     *
-     * @uses get_taxonomy()
-     * @uses register_taxonomy()
-     *
-     * @return object
-     */
-    public function modify_taxonomy() {
-      $taxonomy = get_taxonomy( 'author' );
-      $taxonomy->public = true;
-      $taxonomy->publicly_queryable = true;
-      $taxonomy->query_var = 'author_term';
-      $taxonomy->show_in_rest = true;
-      $taxonomy->rest_base = 'authors';
-      $taxonomy->rest_controller_class = 'WP_REST_Terms_Controller';
-
-      register_taxonomy( 'author', array( 'guest-author', 'post', 'issue', 'chart', 'page', 'timeline' ), (array) $taxonomy );
-
-    }
-
-    /**
      * Modify `author` taxonomy
      * Make public and available to REST API
      *
-     * @since 0.2.5.1
+     * @since 0.2.5.2
      *
      * @return void
      */
@@ -107,6 +84,8 @@ class Jacobin_Register_Rest_Api_Support {
         $taxonomy->show_in_rest = true;
         $taxonomy->rest_base = 'authors';
         $taxonomy->rest_controller_class = 'WP_REST_Terms_Controller';
+
+        register_taxonomy( 'author', array( 'guest-author', 'post', 'issue', 'chart', 'page', 'timeline' ), (array) $taxonomy );
       }
     }
 
