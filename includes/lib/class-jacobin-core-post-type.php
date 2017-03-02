@@ -112,7 +112,7 @@ class Jacobin_Core_Post_Type {
 			'show_in_rest'       	=> true,
 			'rest_base'          	=> str_replace( ' ', '-', strtolower( $this->plural ) ),
 			'rest_controller_class' => 'WP_REST_Posts_Controller',
-			'supports' 				=> array( 'title', 'author', 'editor', 'excerpt', 'comments', 'thumbnail', 'post-formats' ),
+			'supports' 				=> array( 'title', 'author', 'editor', 'excerpt', 'comments', 'thumbnail', 'post-formats', 'custom-fields' ),
 			'menu_position' 		=> 5,
 			'menu_icon' 			=> 'dashicons-admin-post',
 		);

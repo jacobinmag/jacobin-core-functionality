@@ -26,7 +26,7 @@ class Jacobin_Rest_API_Fields {
         /**
          * Filters to have fields returned in `custom_fields` instead of `acf`.
          */
-        add_filter( 'acf/rest_api/post/get_fields', array( $this, 'set_custom_field_base' ) );
+        //add_filter( 'acf/rest_api/post/get_fields', array( $this, 'set_custom_field_base' ) );
         add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'set_custom_field_base' ) );
         add_filter( 'acf/rest_api/term/get_fields', array( $this, 'set_custom_field_base' ) );
         add_filter( 'acf/rest_api/timeline/get_fields', array( $this, 'set_custom_field_base' ) );
@@ -35,10 +35,9 @@ class Jacobin_Rest_API_Fields {
         /**
          * Modify Responses
          */
-        add_filter( 'rest_prepare_post', array( $this, 'modify_taxonomy_response' ), 10, 3 );
-
-        add_filter( 'rest_prepare_post', array( $this, 'modify_department_taxonomy_response' ), 10, 3 );
-
+        add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
+        add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
+        add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
 
         /**
          * Register Fields
@@ -136,6 +135,15 @@ class Jacobin_Rest_API_Fields {
                 )
             );
 
+            register_rest_field( 'issue',
+                'featured_article',
+                array(
+                    'get_callback'    => array( $this, 'get_featured_post_post' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
             register_rest_field( 'department',
                 'featured_image',
                 array(
@@ -148,7 +156,16 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'department',
                 'featured_article',
                 array(
-                    'get_callback'    => array( $this, 'get_featured_post' ),
+                    'get_callback'    => array( $this, 'get_featured_post_term' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'guest-author',
+                'term_id',
+                array(
+                    'get_callback'    => array( $this, 'get_author_term_id' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -164,34 +181,34 @@ class Jacobin_Rest_API_Fields {
      *
      * @since 0.1.14
      *
-     * @param {array} $data
+     * @param {array} $response
      * @param {obj} $post
      * @param {array} $request
      *
-     * @return {array} $data
+     * @return {array} $response
      */
-    function modify_department_taxonomy_response ( $data, $post, $request ) {
-        $_data = $data->data['departments'];
+     function modify_post_response_department ( $response, $post, $request ) {
+         $_data = $response->data['departments'];
 
-        foreach( $_data  as $department ) {
-          $parent_term = get_term( $department->parent, 'department' );
-          $department->{'parent_slug'} = ( !empty( $parent_term ) && !is_wp_error( $parent_term ) ) ? $parent_term->slug : false;
+         foreach( $_data  as $department ) {
+           $parent_term = get_term( $department->parent, 'department' );
+           $department->{'parent_slug'} = ( !empty( $parent_term ) && !is_wp_error( $parent_term ) ) ? $parent_term->slug : false;
 
-          $image = get_term_meta( $department->term_id, 'featured_image' );
-          $image_id = ( !empty( $image ) && is_array( $image ) ) ? (int) $image[0] : false;
+           $image = get_term_meta( $department->term_id, 'featured_image' );
+           $image_id = ( !empty( $image ) && is_array( $image ) ) ? (int) $image[0] : false;
 
-          $featured = get_term_meta(  $department->term_id, 'featured_article' );
-          $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0][0] : false;
+           $featured = get_term_meta(  $department->term_id, 'featured_article' );
+           $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0][0] : false;
 
-          $department->{"thumbnail"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
-          $department->{"featured_article"} = ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
-        }
+           $department->{"thumbnail"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+           $department->{"featured_article"} = ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
+         }
 
-        $data->data['departments'] = $_data;
+         $response->data['departments'] = $_data;
 
-        return $data;
+         return $response;
 
-    }
+     }
 
     /**
      * Modify Response Data Returned for Taxonomies
@@ -206,27 +223,51 @@ class Jacobin_Rest_API_Fields {
      *
      * @return {array} $data
      */
-    function modify_taxonomy_response ( $data, $post, $request ) {
-        $_data = $data->data;
+     function modify_post_response_taxonomy ( $response, $post, $request ) {
+         $_data = $response->data;
 
-        $taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
+         $taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
 
-        foreach( $taxonomies as $taxonomy => $details ) {
-            $label = strtolower( str_replace( ' ', '_', $details->labels->name ) );
+         foreach( $taxonomies as $taxonomy => $details ) {
+             $label = strtolower( str_replace( ' ', '_', $details->labels->name ) );
 
-            if( isset( $_data[$label] ) ) {
-                $args = array(
-                    'orderby'   => 'parent'
-                );
+             if( isset( $_data[$label] ) ) {
+                 $args = array(
+                     'orderby'   => 'parent'
+                 );
 
-                $_data[$label] = wp_get_post_terms( $post->ID, $taxonomy, $args );
+                 $_data[$label] = wp_get_post_terms( $post->ID, $taxonomy, $args );
 
-            }
-        }
+             }
+         }
 
-        $data->data = $_data;
-        return $data;
-    }
+         $response->data = $_data;
+         return $response;
+     }
+
+     /**
+      * Modify guest-author response
+      *
+      * @since 0.2.6.1
+      *
+      * @link http://v2.wp-api.org/extending/linking/
+      *
+      * @param  array $response
+      * @param  obj $post
+      * @param  array $request
+      * @return array $response
+      */
+     public function modify_guest_author_response( $response, $post, $request ) {
+
+       $author_term = wp_get_post_terms( $post->ID, 'author', array( 'fields' => 'ids' ) );
+
+       if( !empty( $author_term ) ) {
+         $term_id = array_pop( $author_term );
+         $response->add_link( 'author_posts', rest_url( '/wp/v2/posts?authors=' ) . $term_id  );
+       }
+
+       return $response;
+     }
 
     /**
      * Get post meta
@@ -259,6 +300,21 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
+     * Get term id
+     *
+     * @since 0.2.6.1
+     *
+     * @param object $object
+     * @param string $field_name
+     * @param string $request
+     * @return array meta
+     *
+     */
+    function get_author_term_id( $object, $field_name, $request ) {
+      return wp_get_post_terms( $object[ 'id' ], 'author', array( 'fields' => 'ids' ) );
+    }
+
+    /**
      * Get Featured Image
      *
      * @since 0.1.14
@@ -276,7 +332,24 @@ class Jacobin_Rest_API_Fields {
     }
 
     /**
-     * Get Featured Post
+     * Get Featured Post for Post Types
+     *
+     * @since 0.2.6.1
+     *
+     * @param object $object
+     * @param string $field_name
+     * @param string $request
+     * @return array meta
+     *
+     */
+    function get_featured_post_post( $object, $field_name, $request ) {
+        $featured = get_post_meta(  $object[ 'id' ], $field_name, true );
+        $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
+        return ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
+    }
+
+    /**
+     * Get Featured Post for Term
      *
      * @since 0.1.14
      *
@@ -286,9 +359,9 @@ class Jacobin_Rest_API_Fields {
      * @return array meta
      *
      */
-    function get_featured_post( $object, $field_name, $request ) {
-        $featured = get_term_meta(  $object[ 'id' ], 'featured_article' );
-        $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0][0] : false;
+    function get_featured_post_term( $object, $field_name, $request ) {
+        $featured = get_term_meta(  $object[ 'id' ], $field_name, true );
+        $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
         return ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
     }
 
