@@ -18,6 +18,15 @@
 class Jacobin_Rest_API_Routes {
 
     /**
+     * Namespace
+     *
+     * @since 0.2.7
+     *
+     * @var string
+     */
+    private $namespace = 'jacobin';
+
+    /**
      * Initialize all the things
      *
      * @since 0.1.14
@@ -34,22 +43,40 @@ class Jacobin_Rest_API_Routes {
      * @return void
      */
     public function register_routes () {
-        register_rest_route( 'jacobin', '/featured-content/home-feature/', array(
+
+      register_rest_route( $this->namespace, '/featured-content', array(
     		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_home_feature' ),
+    		'callback'    => array( $this, 'get_featured_content' ),
+        'args'        => array(
+          'slug'    => array(
+            'description' => esc_html__( 'The filter parameter is retrieve a particular set of featured content', 'jacobin-core' ),
+            'type'        => 'string',
+            'enum'        => array(
+              'home-feature',
+              'home-1',
+              'home-2',
+              'home-3',
+              'home-4',
+              'home-5',
+              'editors-picks'
+            ),
+          )
+        )
     	) );
 
-        register_rest_route( 'jacobin', '/featured-content/home-content/', array(
+      register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
     		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_home_content' ),
+    		'callback'    => array( $this, 'get_featured_content' ),
+        'args' => array(
+    			'slug' => array(
+    				'validate_callback' => function( $param, $request, $key ) {
+    					return ( is_string( $param ) );
+    				}
+    			),
+    		),
     	) );
 
-    	register_rest_route( 'jacobin', '/featured-content/editors-picks/', array(
-    		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_editors_picks' ),
-    	) );
-
-      register_rest_route( 'jacobin', '/guest-author/(?P<id>\d+)', array(
+      register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
     		'methods'     => 'GET',
     		'callback'    => array( $this, 'get_guest_author' ),
         'args' => array(
@@ -98,7 +125,7 @@ class Jacobin_Rest_API_Routes {
      *
      * @return array $posts
      */
-    public function get_home_content() {
+    public function get_home_content( $request ) {
         return $this->get_featured_content( 'options_home_content' );
     }
 
@@ -107,15 +134,27 @@ class Jacobin_Rest_API_Routes {
      *
      * @since 0.1.14
      *
-     * @param array $option_name
-     * @return array|false
+     * @param array $request
+     * @return array|WP_Error
      */
-    public function get_featured_content( $option_name ) {
+    public function get_featured_content( $request ) {
 
-        $option = get_option( $option_name  );
+        $slug  = $request->get_param( 'slug' );
+
+        $options = array(
+          'home-feature'  => 'options_home_feature_featured_post',
+          'home-1'        => 'options_home_1_featured_posts',
+          'home-2'        => 'options_home_2_featured_posts',
+          'home-3'        => 'options_home_3_featured_posts',
+          'home-4'        => 'options_home_4_featured_posts',
+          'home-5'        => 'options_home_5_featured_posts',
+          'editors-picks' => 'options_editors_pick_featured_posts'
+        );
+
+        $option = get_option( $options[$slug] );
 
         if( empty( $option ) || is_wp_error( $option ) ) {
-            return false;
+            return new WP_Error( 'rest_no_post', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
         }
 
         $posts_ids = array_map(
@@ -160,8 +199,10 @@ class Jacobin_Rest_API_Routes {
      * @param obj $data
      * @return array coauthor_meta
      */
-    public function get_guest_author( $data ) {
-      $author_id = $data['id'];
+    public function get_guest_author( $request ) {
+      $author_id = $request['id'];
+
+      var_dump(  $request  );
 
       return jacobin_get_coauthor_meta( $author_id  );
     }
