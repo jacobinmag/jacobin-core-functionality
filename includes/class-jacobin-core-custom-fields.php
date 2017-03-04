@@ -27,8 +27,9 @@
      function __construct() {
 
          if( function_exists( 'register_field_group' ) ) {
-             $this->register_field_groups();
-             $this->register_settings_fields();
+           $this->register_clone_fields();
+           $this->register_field_groups();
+           $this->register_settings_fields();
          }
      }
 
@@ -44,87 +45,176 @@
       * @return void
       */
      public function register_clone_fields() {
-       acf_add_local_field_group(array (
-        	'key' => 'group_58b9cbbf18c46',
-        	'title' => 'Featured Posts',
-        	'fields' => array (
-        		array (
-        			'key' => 'field_58b9cbd0ce677',
-        			'label' => 'Featured Posts (5 max)',
-        			'name' => 'featured_posts',
-        			'type' => 'relationship',
-        			'instructions' => '',
-        			'required' => 0,
-        			'conditional_logic' => 0,
-        			'wrapper' => array (
-        				'width' => '',
-        				'class' => '',
-        				'id' => '',
-        			),
-        			'post_type' => array (
-        				0 => 'post',
-        			),
-        			'taxonomy' => array (
-        			),
-        			'filters' => array (
-        				0 => 'search',
-        				1 => 'taxonomy',
-        			),
-        			'elements' => array (
-        				0 => 'featured_image',
-        			),
-        			'min' => 1,
-        			'max' => 5,
-        			'return_format' => 'id',
-        		),
-        		array (
-        			'key' => 'field_58b9ce520c8e2',
-        			'label' => 'Featured Post (Single)',
-        			'name' => 'featured_post',
-        			'type' => 'relationship',
-        			'instructions' => '',
-        			'required' => 0,
-        			'conditional_logic' => 0,
-        			'wrapper' => array (
-        				'width' => '',
-        				'class' => '',
-        				'id' => '',
-        			),
-        			'post_type' => array (
-        				0 => 'post',
-        			),
-        			'taxonomy' => array (
-        			),
-        			'filters' => array (
-        				0 => 'search',
-        				1 => 'taxonomy',
-        			),
-        			'elements' => array (
-        				0 => 'featured_image',
-        			),
-        			'min' => 1,
-        			'max' => 1,
-        			'return_format' => 'id',
-        		),
-        	),
-        	'location' => array (
-        		array (
-        			array (
-        				'param' => 'post_type',
-        				'operator' => '==',
-        				'value' => 'post',
-        			),
-        		),
-        	),
-        	'menu_order' => 0,
-        	'position' => 'normal',
-        	'style' => 'default',
-        	'label_placement' => 'top',
-        	'instruction_placement' => 'label',
-        	'hide_on_screen' => '',
-        	'active' => 0,
-        	'description' => '',
-        ));
+
+       acf_add_local_field_group( array (
+       	'key' => 'group_58b9cbbf18c46',
+       	'title' => 'Featured Posts',
+       	'fields' => array (
+       		array (
+       			'key' => 'field_clonefeatured1',
+       			'label' => 'Featured Post (Single)',
+       			'name' => 'featured_post_1',
+       			'type' => 'relationship',
+       			'instructions' => '',
+       			'required' => 0,
+       			'conditional_logic' => 0,
+       			'wrapper' => array (
+       				'width' => '',
+       				'class' => '',
+       				'id' => '',
+       			),
+       			'post_type' => array (
+       				0 => 'post',
+       			),
+       			'taxonomy' => array (
+       			),
+       			'filters' => array (
+       				0 => 'search',
+       				1 => 'taxonomy',
+       			),
+       			'elements' => array (
+       				0 => 'featured_image',
+       			),
+       			'min' => 1,
+       			'max' => 1,
+       			'return_format' => 'id',
+       		),
+       		array (
+       			'key' => 'field_clonefeatured5',
+       			'label' => 'Featured Posts (5 max)',
+       			'name' => 'featured_posts_5',
+       			'type' => 'relationship',
+       			'instructions' => '',
+       			'required' => 0,
+       			'conditional_logic' => 0,
+       			'wrapper' => array (
+       				'width' => '',
+       				'class' => '',
+       				'id' => '',
+       			),
+       			'post_type' => array (
+       				0 => 'post',
+       			),
+       			'taxonomy' => array (
+       			),
+       			'filters' => array (
+       				0 => 'search',
+       				1 => 'taxonomy',
+       			),
+       			'elements' => array (
+       				0 => 'featured_image',
+       			),
+       			'min' => 1,
+       			'max' => 5,
+       			'return_format' => 'id',
+       		),
+       		array (
+       			'key' => 'field_clonefeatured10',
+       			'label' => 'Featured Posts (10 max)',
+       			'name' => 'featured_posts_10',
+       			'type' => 'relationship',
+       			'instructions' => '',
+       			'required' => 0,
+       			'conditional_logic' => 0,
+       			'wrapper' => array (
+       				'width' => '',
+       				'class' => '',
+       				'id' => '',
+       			),
+       			'post_type' => array (
+       				0 => 'post',
+       			),
+       			'taxonomy' => array (
+       			),
+       			'filters' => array (
+       				0 => 'search',
+       				1 => 'taxonomy',
+       			),
+       			'elements' => array (
+       				0 => 'featured_image',
+       			),
+       			'min' => 1,
+       			'max' => 10,
+       			'return_format' => 'id',
+       		),
+       		array (
+       			'key' => 'field_clonefeatured15',
+       			'label' => 'Featured Posts (15 max)',
+       			'name' => 'featured_posts_15',
+       			'type' => 'relationship',
+       			'instructions' => '',
+       			'required' => 0,
+       			'conditional_logic' => 0,
+       			'wrapper' => array (
+       				'width' => '',
+       				'class' => '',
+       				'id' => '',
+       			),
+       			'post_type' => array (
+       				0 => 'post',
+       			),
+       			'taxonomy' => array (
+       			),
+       			'filters' => array (
+       				0 => 'search',
+       				1 => 'taxonomy',
+       			),
+       			'elements' => array (
+       				0 => 'featured_image',
+       			),
+       			'min' => 1,
+       			'max' => 15,
+       			'return_format' => 'id',
+       		),
+       		array (
+       			'key' => 'field_clonefeatured20',
+       			'label' => 'Featured Posts (20 max)',
+       			'name' => 'featured_posts_20',
+       			'type' => 'relationship',
+       			'instructions' => '',
+       			'required' => 0,
+       			'conditional_logic' => 0,
+       			'wrapper' => array (
+       				'width' => '',
+       				'class' => '',
+       				'id' => '',
+       			),
+       			'post_type' => array (
+       				0 => 'post',
+       			),
+       			'taxonomy' => array (
+       			),
+       			'filters' => array (
+       				0 => 'search',
+       				1 => 'taxonomy',
+       			),
+       			'elements' => array (
+       				0 => 'featured_image',
+       			),
+       			'min' => 1,
+       			'max' => 20,
+       			'return_format' => 'id',
+       		),
+       	),
+       	'location' => array (
+       		array (
+       			array (
+       				'param' => 'post_type',
+       				'operator' => '==',
+       				'value' => 'post',
+       			),
+       		),
+       	),
+       	'menu_order' => 0,
+       	'position' => 'normal',
+       	'style' => 'default',
+       	'label_placement' => 'top',
+       	'instruction_placement' => 'label',
+       	'hide_on_screen' => '',
+       	'active' => 0,
+       	'description' => '',
+       ));
+
      }
 
      /**
@@ -140,7 +230,7 @@
        /**
         * Post Default Custom Fields
         */
-       acf_add_local_field_group(array (
+       acf_add_local_field_group( array (
        	'key' => 'group_5771c00b7ae29',
        	'title' => __( 'Article Details', 'jacobin-core' ),
        	'fields' => array (
@@ -1807,159 +1897,200 @@
        /**
         * Featured Content Options Page Fields
         */
-       acf_add_local_field_group( array (
-         'key' => 'group_58b9cc9382667',
-         'title' => __( 'Home Page', 'jacobin-core' ),
-         'fields' => array (
-           array (
-             'key' => 'field_58b9ced60cd1b',
-             'label' => __( 'Featured Article', 'jacobin-core' ),
-             'name' => 'home_feature',
-             'type' => 'clone',
-             'instructions' => '',
-             'required' => 0,
-             'conditional_logic' => 0,
-             'wrapper' => array (
-               'width' => '',
-               'class' => '',
-               'id' => '',
-             ),
-             'clone' => array (
-               0 => 'field_58b9ce520c8e2',
-             ),
-             'display' => 'seamless',
-             'layout' => 'block',
-             'prefix_label' => 0,
-             'prefix_name' => 1,
-           ),
-           array (
-             'key' => 'field_58b9cca81a06d',
-             'label' => __( 'Section 1', 'jacobin-core' ),
-             'name' => 'home_1',
-             'type' => 'clone',
-             'instructions' => '',
-             'required' => 0,
-             'conditional_logic' => 0,
-             'wrapper' => array (
-               'width' => '',
-               'class' => '',
-               'id' => '',
-             ),
-             'clone' => array (
-               0 => 'field_58b9cbd0ce677',
-             ),
-             'display' => 'seamless',
-             'layout' => 'block',
-             'prefix_label' => 1,
-             'prefix_name' => 1,
-           ),
-           array (
-             'key' => 'field_58b9ccf51a06e',
-             'label' => __( 'Section 2', 'jacobin-core' ),
-             'name' => 'home_2',
-             'type' => 'clone',
-             'instructions' => '',
-             'required' => 0,
-             'conditional_logic' => 0,
-             'wrapper' => array (
-               'width' => '',
-               'class' => '',
-               'id' => '',
-             ),
-             'clone' => array (
-               0 => 'field_58b9cbd0ce677',
-             ),
-             'display' => 'seamless',
-             'layout' => 'block',
-             'prefix_label' => 1,
-             'prefix_name' => 1,
-           ),
-           array (
-             'key' => 'field_58b9cd2a1a06f',
-             'label' => __( 'Section 3', 'jacobin-core' ),
-             'name' => 'home_3',
-             'type' => 'clone',
-             'instructions' => '',
-             'required' => 0,
-             'conditional_logic' => 0,
-             'wrapper' => array (
-               'width' => '',
-               'class' => '',
-               'id' => '',
-             ),
-             'clone' => array (
-               0 => 'field_58b9cbd0ce677',
-             ),
-             'display' => 'seamless',
-             'layout' => 'block',
-             'prefix_label' => 1,
-             'prefix_name' => 1,
-           ),
-         ),
-         'location' => array (
-           array (
-             array (
-               'param' => 'options_page',
-               'operator' => '==',
-               'value' => 'featured-content',
-             ),
-           ),
-         ),
-         'menu_order' => 5,
-         'position' => 'normal',
-         'style' => 'default',
-         'label_placement' => 'top',
-         'instruction_placement' => 'label',
-         'hide_on_screen' => '',
-         'active' => 1,
-         'description' => '',
-       ));
+        acf_add_local_field_group( array (
+        	'key' => 'group_58b9cc9382667',
+        	'title' => __( 'Home Page', 'jacobin-core' ),
+        	'fields' => array (
+        		array (
+        			'key' => 'field_58b9ced60cd1b',
+        			'label' => __( 'Featured Article (single)', 'jacobin-core' ),
+        			'name' => 'home_feature',
+        			'type' => 'clone',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'clone' => array (
+        				0 => 'field_clonefeatured1',
+        			),
+        			'display' => 'seamless',
+        			'layout' => 'block',
+        			'prefix_label' => 0,
+        			'prefix_name' => 1,
+        		),
+        		array (
+        			'key' => 'field_58b9cca81a06d',
+        			'label' => __( 'Section 1', 'jacobin-core' ),
+        			'name' => 'home_1',
+        			'type' => 'clone',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'clone' => array (
+        				0 => 'field_clonefeatured5',
+        			),
+        			'display' => 'seamless',
+        			'layout' => 'block',
+        			'prefix_label' => 1,
+        			'prefix_name' => 1,
+        		),
+        		array (
+        			'key' => 'field_58b9ccf51a06e',
+        			'label' => __( 'Section 2', 'jacobin-core' ),
+        			'name' => 'home_2',
+        			'type' => 'clone',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'clone' => array (
+        				0 => 'field_clonefeatured5',
+        			),
+        			'display' => 'seamless',
+        			'layout' => 'block',
+        			'prefix_label' => 1,
+        			'prefix_name' => 1,
+        		),
+        		array (
+        			'key' => 'field_58b9cd2a1a06f',
+        			'label' => __( 'Section 3', 'jacobin-core' ),
+        			'name' => 'home_3',
+        			'type' => 'clone',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'clone' => array (
+        				0 => 'field_clonefeatured5',
+        			),
+        			'display' => 'seamless',
+        			'layout' => 'block',
+        			'prefix_label' => 1,
+        			'prefix_name' => 1,
+        		),
+        		array (
+        			'key' => 'field_58ba18867d794',
+        			'label' => __( 'Section 4', 'jacobin-core' ),
+        			'name' => 'home_4',
+        			'type' => 'clone',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'clone' => array (
+        				0 => 'field_clonefeatured10',
+        			),
+        			'display' => 'seamless',
+        			'layout' => 'block',
+        			'prefix_label' => 1,
+        			'prefix_name' => 1,
+        		),
+        		array (
+        			'key' => 'field_58ba18a87d795',
+        			'label' => __( 'Section 5', 'jacobin-core' ),
+        			'name' => 'home_5',
+        			'type' => 'clone',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'clone' => array (
+        				0 => 'field_clonefeatured15',
+        			),
+        			'display' => 'seamless',
+        			'layout' => 'block',
+        			'prefix_label' => 1,
+        			'prefix_name' => 1,
+        		),
+        	),
+        	'location' => array (
+        		array (
+        			array (
+                'param' => 'options_page',
+                'operator' => '==',
+                'value' => 'featured-content',
+        			),
+        		),
+        	),
+        	'menu_order' => 0,
+        	'position' => 'normal',
+        	'style' => 'default',
+        	'label_placement' => 'top',
+        	'instruction_placement' => 'label',
+        	'hide_on_screen' => '',
+        	'active' => 1,
+        	'description' => '',
+        ));
 
-
-       acf_add_local_field_group( array (
-         'key' => 'group_editorspick056',
-         'title' => __( 'Editor\'s Picks', 'jacobin-core' ),
-         'fields' => array (
-           array (
-             'key' => 'field_5849024645d08',
-             'label' => __( '', 'jacobin-core' ),
-             'name' => 'editors_pick',
-             'type' => 'clone',
-             'instructions' => '',
-             'required' => 0,
-             'conditional_logic' => 0,
-             'wrapper' => array (
-               'width' => '',
-               'class' => '',
-               'id' => '',
-             ),
-             'clone' => array (
-               0 => 'field_58b9cbd0ce677',
-             ),
-             'display' => 'seamless',
-             'layout' => 'block',
-             'prefix_label' => 1,
-             'prefix_name' => 1,
-           ),
-         ),
-         'location' => array (
-           array (
-             array (
-               'param' => 'options_page',
-               'operator' => '==',
-               'value' => 'featured-content',
-             ),
-           ),
-         ),
-         'menu_order' => 10,
-         'position' => 'normal',
-         'style' => 'default',
-         'label_placement' => 'top',
-         'instruction_placement' => 'label',
-         'hide_on_screen' => '',
-         'active' => 1,
-         'description' => '',
-       ));
+        acf_add_local_field_group( array (
+        	'key' => 'group_editorspicks',
+        	'title' => __( 'Editor\'s Picks', 'jacobin-core' ),
+        	'fields' => array (
+        		array (
+        			'key' => 'field_editorspick',
+        			'label' => __( 'Editor\'s Picks (max 5)', 'jacobin-core' ),
+        			'name' => 'editors_pick',
+        			'type' => 'clone',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'clone' => array (
+        				0 => 'field_clonefeatured5',
+        			),
+        			'display' => 'seamless',
+        			'layout' => 'block',
+        			'prefix_label' => 0,
+        			'prefix_name' => 1,
+        		),
+        	),
+        	'location' => array (
+        		array (
+        			array (
+                'param' => 'options_page',
+                'operator' => '==',
+                'value' => 'featured-content',
+        			),
+        		),
+        	),
+        	'menu_order' => 10,
+        	'position' => 'normal',
+        	'style' => 'default',
+        	'label_placement' => 'top',
+        	'instruction_placement' => 'label',
+        	'hide_on_screen' => '',
+        	'active' => 1,
+        	'description' => '',
+        ));
 
 
      }

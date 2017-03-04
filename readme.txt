@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.6.1
+Version: 0.2.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.7 March 3, 2017 =
+* Modify Featured Content to split Home into sections
 
 = 0.2.6.1 March 2, 2017 =
 * #171 added `term_id` and `author_posts` link to endpoint `/wp-json/wp/v2/guest-author`
