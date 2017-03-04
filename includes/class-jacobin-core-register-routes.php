@@ -142,19 +142,19 @@ class Jacobin_Rest_API_Routes {
         $slug  = $request->get_param( 'slug' );
 
         $options = array(
-          'home-feature'  => 'options_home_feature_featured_post',
-          'home-1'        => 'options_home_1_featured_posts',
-          'home-2'        => 'options_home_2_featured_posts',
-          'home-3'        => 'options_home_3_featured_posts',
-          'home-4'        => 'options_home_4_featured_posts',
-          'home-5'        => 'options_home_5_featured_posts',
-          'editors-picks' => 'options_editors_pick_featured_posts'
+          'home-feature'  => 'options_home_feature_featured_post_1',
+          'home-1'        => 'options_home_1_featured_posts_5',
+          'home-2'        => 'options_home_2_featured_posts_5',
+          'home-3'        => 'options_home_3_featured_posts_5',
+          'home-4'        => 'options_home_4_featured_posts_10',
+          'home-5'        => 'options_home_5_featured_posts_15',
+          'editors-picks' => 'options_editors_pick_featured_posts_5'
         );
 
         $option = get_option( $options[$slug] );
 
         if( empty( $option ) || is_wp_error( $option ) ) {
-            return new WP_Error( 'rest_no_post', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
+            return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
         }
 
         $posts_ids = array_map(
@@ -174,6 +174,7 @@ class Jacobin_Rest_API_Routes {
                 $post->{"date"} = $post_detail->post_date;
                 $post->{"title"}["rendered"] = esc_attr( $post_detail->post_title );
                 $post->{"subhead"} = get_post_meta( $post_id, 'subhead', true );
+                $post->{"excerpt"}["rendered"] = esc_attr( $post_detail->post_excerpt );
                 $post->{"slug"} = $post_detail->post_name;
                 $post->{"authors"} = jacobin_get_authors_array( $post_id );
                 $post->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
