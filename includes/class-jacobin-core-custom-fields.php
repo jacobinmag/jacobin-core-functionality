@@ -255,6 +255,23 @@
        			'readonly' => 0,
        			'disabled' => 0,
        		),
+          array (
+      			'key' => 'field_postexpert',
+      			'label' => __( 'Excerpt', 'jacobin-core' ),
+      			'name' => '',
+      			'type' => 'message',
+      			'instructions' => '',
+      			'required' => 0,
+      			'conditional_logic' => 0,
+      			'wrapper' => array (
+      				'width' => '',
+      				'class' => '',
+      				'id' => '',
+      			),
+      			'message' => '',
+      			'new_lines' => 'wpautop',
+      			'esc_html' => 0,
+      		),
        		array (
        			'key' => 'field_57dc2f429f3be',
        			'label' => __( 'Translator', 'jacobin-core' ),

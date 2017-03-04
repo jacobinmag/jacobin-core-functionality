@@ -26,7 +26,26 @@ This section describes how to install the plugin and get it working.
 == Changelog ==
 
 = 0.2.7 March 3, 2017 =
-* Modify Featured Content to split Home into sections
+* Modified Featured Content to split Home into sections
+  * `/wp-json/jacobin/featured-content?slug=home-feature`
+  * `/wp-json/jacobin/featured-content/home-feature`
+
+  ```
+  "enum": [
+    "home-feature",
+    "home-1",
+    "home-2",
+    "home-3",
+    "home-4",
+    "home-5",
+    "editors-picks"
+  ],
+  ```
+* Added 2 additional featured content fields: `home_4` and `home_5`
+* Added `excerpt` to Featured Content response
+* Modified post admin screen
+  * Moved Excerpt into Article Details section
+  * Moved Authors below Publish section in right column
 
 = 0.2.6.1 March 2, 2017 =
 * #171 added `term_id` and `author_posts` link to endpoint `/wp-json/wp/v2/guest-author`
