@@ -65,6 +65,11 @@ class Jacobin_Core_Admin {
 			add_action( 'admin_menu', array( $this, 'add_options_page' ) );
 		}
 
+		/**
+		 * Add JS to admin head for ACF
+		 */
+		add_action( 'acf/input/admin_head', array( $this, 'admin_head' ) );
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 
 		// Modify custom post args
@@ -110,6 +115,35 @@ class Jacobin_Core_Admin {
 	 */
 	public function get_setting_name() {
 		return $this->setting_name;
+	}
+
+	/**
+	 * Add Script to ACF Admin Head
+	 *
+	 * @since 0.2.7
+	 *
+	 * @link https://www.advancedcustomfields.com/resources/acfinputadmin_head/
+	 *
+	 * @return void
+	 */
+	public function admin_head() {
+		?>
+		 <script type="text/javascript">
+		 (function($) {
+
+				 $(document).ready(function(){
+
+						 $('.acf-field-postexpert .acf-input').append( $('#postexcerpt #excerpt') );
+						 $('#postexcerpt').remove();
+
+						 $('#coauthorsdiv').insertAfter( '#submitdiv' );
+
+				 });
+
+		 })(jQuery);
+		 </script>
+		 <style type="text/css"></style>
+	 <?php
 	}
 
 	/**
