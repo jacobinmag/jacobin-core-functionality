@@ -78,13 +78,27 @@ class Jacobin_Rest_API_Routes {
 
       register_rest_route( $this->namespace, '/guest-author', array(
     		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_guest_author_by_slug' ),
+    		'callback'    => array( $this, 'get_guest_author' ),
         'args' => array(
     			'slug' => array(
-            'description' => esc_html__( 'The slug parameter is used to retrieve a guest author', 'jacobin-core' ),
+            'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
             'type'        => 'string',
     				'validate_callback' => function( $param, $request, $key ) {
     					return ( is_string( $param ) );
+    				}
+    			),
+          'term_id' => array(
+            'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
+            'type'        => 'number',
+    				'validate_callback' => function( $param, $request, $key ) {
+    					return ( is_numeric( $param ) );
+    				}
+    			),
+          'id' => array(
+            'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
+            'type'        => 'number',
+    				'validate_callback' => function( $param, $request, $key ) {
+    					return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
     				}
     			),
     		),
@@ -94,9 +108,9 @@ class Jacobin_Rest_API_Routes {
     		'methods'     => 'GET',
     		'callback'    => array( $this, 'get_guest_author' ),
         'args' => array(
-    			'id' => array(
+    			'term_id' => array(
     				'validate_callback' => function( $param, $request, $key ) {
-    					return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
+    					return ( is_numeric( $param ) );
     				}
     			),
     		),
@@ -206,47 +220,56 @@ class Jacobin_Rest_API_Routes {
 
     /**
      * Get Guest Author Meta
+     * Retrieves Guest Author by slug, id or term_id (associated `author` term id)
      *
      * @since 0.2.5
      *
      * @uses jacobin_get_coauthor_meta()
      *
-     * @param obj $data
+     * @param obj $request
      * @return array coauthor_meta
      */
     public function get_guest_author( $request ) {
-      $author_id = $request['id'];
 
-      return jacobin_get_coauthor_meta( $author_id  );
-    }
+      $author_id = $request->get_param( 'id' );
 
-    /**
-     * Get Guest Author Meta by Slug
-     *
-     * @since 0.2.7.1
-     *
-     * @param  array $request
-     * @return array of guest author meta
-     */
-    public function get_guest_author_by_slug( $request ) {
-      $slug  = $request->get_param( 'slug' );
+      if( $author_id ) {
+        return jacobin_get_coauthor_meta( $author_id  );
+      }
+
+      $term_id = $request->get_param( 'term_id' );
+      $slug = $request->get_param( 'slug' );
 
       $args = array(
-        'name' => $slug,
         'posts_per_page' => 1,
         'post_type' => 'guest-author',
       );
 
+      if( $term_id ) {
+
+        $args['tax_query'][] = array(
+          'taxonomy'  => 'author',
+          'terms'     => intval( $term_id ),
+          'field'     => 'term_id'
+        );
+
+      } elseif( $slug ) {
+
+        $args['name'] = $slug;
+
+      } else {
+        return new WP_Error( 'rest_param_invalid', __( 'No valid parameter provided.', 'jacobin-core' ), array( 'status' => 400 ) );
+      }
+
       $author_post = get_posts( $args );
 
       if( empty( $author_post ) ) {
-        return new WP_Error( 'rest_no_posts', __( 'No guest author with this slug was found.', 'jacobin-core' ), array( 'status' => 404 ) );
+        return new WP_Error( 'rest_no_posts', __( 'No guest author with this term_id or slug was found.', 'jacobin-core' ), array( 'status' => 404 ) );
       }
 
       $author_id = $author_post[0]->ID;
 
       return jacobin_get_coauthor_meta( $author_id  );
-
     }
 
 }
