@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.7.2
+Version: 0.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,14 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.8 March 15, 2017 =
+* #178 Added `issue_season` field to issue post type and registered in REST API
+* #165 Replicated `better_featured_image` response for all endpoints
+* #177 Added slug to author response - comes from `cap-user_login` field in `guest-author` post
+* #163 Added `subhead` and `authors` for the featured articles in `department` and `issue` responses
+* Changed `custom_fields` property to default `acf`
+* Limited related post lists to post = `publish`
 
 = 0.2.7.2 March 8, 2017 =
 * Enabled `guest-authors` to be retrieve using `id` ( `?id={id}` ) and `term_id` ( `?term_id={term_id}` )

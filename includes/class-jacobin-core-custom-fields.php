@@ -1533,7 +1533,9 @@
        			'filters' => array (
        				0 => 'search',
        			),
-       			'elements' => '',
+            'elements' => array (
+       				0 => 'featured_image',
+       			),
        			'return_format' => 'id',
        		),
        		array (
@@ -1638,7 +1640,69 @@
        /**
         * Issue Post Type Custom Fields
         */
-       acf_add_local_field_group(array (
+        acf_add_local_field_group(array (
+        	'key' => 'group_58c998325fdcc',
+        	'title' => 'Issue',
+        	'fields' => array (
+        		array (
+        			'key' => 'field_57cb88a7b0567',
+        			'label' => __( 'Number', 'jacobin-core' ),
+        			'name' => 'issue_number',
+              'type' => 'text',
+              'instructions' => '',
+              'required' => 1,
+              'conditional_logic' => 0,
+              'wrapper' => array (
+                'width' => '',
+                'class' => '',
+                'id' => '',
+              ),
+              'default_value' => '',
+              'placeholder' => '',
+              'prepend' => __( 'Issue', 'jacobin-core' ),
+              'append' => '',
+              'maxlength' => '',
+        		),
+        		array (
+        			'key' => 'field_issue_season',
+        			'label' => __( 'Season', 'jacobin-core' ),
+        			'name' => 'issue_season',
+        			'type' => 'text',
+        			'instructions' => '',
+        			'required' => 0,
+        			'conditional_logic' => 0,
+        			'wrapper' => array (
+        				'width' => '',
+        				'class' => '',
+        				'id' => '',
+        			),
+        			'default_value' => '',
+        			'placeholder' => 'Spring 2019',
+        			'prepend' => '',
+        			'append' => '',
+        			'maxlength' => '',
+        		),
+        	),
+        	'location' => array (
+        		array (
+        			array (
+        				'param' => 'post_type',
+        				'operator' => '==',
+        				'value' => 'issue',
+        			),
+        		),
+        	),
+        	'menu_order' => 0,
+        	'position' => 'side',
+        	'style' => 'default',
+        	'label_placement' => 'top',
+        	'instruction_placement' => 'label',
+        	'hide_on_screen' => '',
+        	'active' => 1,
+        	'description' => '',
+        ));
+
+       acf_add_local_field_group( array(
        	'key' => 'group_5771c00b6d7c6',
        	'title' => __( 'Issue Details', 'jacobin-core' ),
        	'fields' => array (
@@ -1685,25 +1749,6 @@
        			'new_lines' => 'wpautop',
        			'readonly' => 0,
        			'disabled' => 0,
-       		),
-       		array (
-       			'key' => 'field_57cb88a7b0567',
-       			'label' => __( 'Issue Number', 'jacobin-core' ),
-       			'name' => 'issue_number',
-       			'type' => 'text',
-       			'instructions' => '',
-       			'required' => 1,
-       			'conditional_logic' => 0,
-       			'wrapper' => array (
-       				'width' => '',
-       				'class' => '',
-       				'id' => '',
-       			),
-       			'default_value' => '',
-       			'placeholder' => '',
-       			'prepend' => '',
-       			'append' => '',
-       			'maxlength' => '',
        		),
        		array (
        			'key' => 'field_5761b4a265e4e',

@@ -24,15 +24,6 @@ class Jacobin_Rest_API_Fields {
      */
     function __construct () {
         /**
-         * Filters to have fields returned in `custom_fields` instead of `acf`.
-         */
-        //add_filter( 'acf/rest_api/post/get_fields', array( $this, 'set_custom_field_base' ) );
-        add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'set_custom_field_base' ) );
-        add_filter( 'acf/rest_api/term/get_fields', array( $this, 'set_custom_field_base' ) );
-        add_filter( 'acf/rest_api/timeline/get_fields', array( $this, 'set_custom_field_base' ) );
-        add_filter( 'acf/rest_api/chart/get_fields', array( $this, 'set_custom_field_base' ) );
-
-        /**
          * Modify Responses
          */
         add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
@@ -142,6 +133,24 @@ class Jacobin_Rest_API_Fields {
                     'update_callback' => null,
                     'schema'          => null,
                 )
+            );
+
+            register_rest_field( 'issue',
+              'issue_number',
+              array(
+                'get_callback'      => array( $this, 'get_field' ),
+                'update_callback'   => null,
+                'schema'            => null
+              )
+            );
+
+            register_rest_field( 'issue',
+              'issue_season',
+              array(
+                'get_callback'      => array( $this, 'get_field' ),
+                'update_callback'   => null,
+                'schema'            => null
+              )
             );
 
             register_rest_field( 'department',
@@ -345,7 +354,7 @@ class Jacobin_Rest_API_Fields {
     function get_featured_post_post( $object, $field_name, $request ) {
         $featured = get_post_meta(  $object[ 'id' ], $field_name, true );
         $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
-        return ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
+        return ( !empty( $featured_id ) ) ? jacobin_get_related_post_data( $featured_id ) : false;
     }
 
     /**
@@ -362,7 +371,7 @@ class Jacobin_Rest_API_Fields {
     function get_featured_post_term( $object, $field_name, $request ) {
         $featured = get_term_meta(  $object[ 'id' ], $field_name, true );
         $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
-        return ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
+        return ( !empty( $featured_id ) ) ? jacobin_get_related_post_data( $featured_id ) : false;
     }
 
     /**
@@ -573,55 +582,6 @@ class Jacobin_Rest_API_Fields {
 
         return false;
 
-    }
-
-    /**
-     * Change Base Label of Custom Fields
-     *
-     * Advanced Custom Fields fields are displayed within `acf`.
-     *
-     * @link https://github.com/airesvsg/acf-to-rest-api/issues/41#issuecomment-222460783
-     *
-     * @param array $data
-     * @return modified array $data
-     *
-     * @since 0.1.0
-     */
-    public function set_custom_field_base ( $data ) {
-        if ( method_exists( $data, 'get_data' ) ) {
-            $data = $data->get_data();
-        } else {
-            $data = (array) $data;
-        }
-
-        if ( isset( $data['acf'] ) ) {
-            $data['custom_fields'] = $data['acf'];
-            unset( $data['acf'] );
-        }
-        return $data;
-    }
-
-    /**
-     * Change response field to `custom_fields`.
-     *
-     * @since 0.1.0
-     *
-     * @param $response
-     * @param $object
-     * @return modified $response
-     *
-     * @link http://v2.wp-api.org/extending/custom-content-types/
-     */
-    public function rest_prepare_term ( $response, $object ) {
-        if ( $object instanceof WP_Term && function_exists( 'get_fields' ) ) {
-            if ( isset( $data['acf'] ) ) {
-                $data['custom_fields'] = $data['acf'];
-                unset( $data['acf'] );
-            }
-            $response->data['custom_fields'] = get_fields( $object->taxonomy . '_' . $object->term_id );
-        }
-
-        return $response;
     }
 
 }

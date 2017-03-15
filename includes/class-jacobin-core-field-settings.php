@@ -43,6 +43,10 @@ class Jacobin_Field_Settings {
 
         add_filter( 'acf/fields/flexible_content/no_value_message', array( $this, 'modify_acf_flexible_content_message' ) );
 
+        add_filter( 'acf/fields/relationship/query/name=translator', array( $this, 'relationship_options_filter' ) , 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=interviewer', array( $this, 'relationship_options_filter' ) , 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=name', array( $this, 'relationship_options_filter' ) , 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=cover_artist', array( $this, 'relationship_options_filter' ) , 10, 3 );
      }
 
     /**
@@ -51,6 +55,27 @@ class Jacobin_Field_Settings {
      * @since 0.1.0
      */
     function register() {}
+
+
+    /**
+     * Filter out unpublished posts
+     * Relationship fields will only show posts where `post_status = publish`
+     *
+     * @since 0.2.8
+     *
+     * @access public
+     *
+     * @param  array $options
+     * @param  string $field
+     * @param  obj $the_post
+     * @return array $options
+     */
+    public function relationship_options_filter( $options, $field, $the_post ) {
+
+    	$options['post_status'] = array( 'publish' );
+
+    	return $options;
+    }
 
     /**
      * Remove standard WordPress metaboxes for custom taxonomies.
