@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.2
-Version: 0.2.8
+Version: 0.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.2.9 March 16, 2017 =
+* Registered featured image (`featured_image`) for each public post type
 
 = 0.2.8 March 15, 2017 =
 * #178 Added `issue_season` field to issue post type and registered in REST API

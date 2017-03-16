@@ -17,23 +17,30 @@
  */
 class Jacobin_Rest_API_Fields {
 
+    public $post_types;
+
     /**
      * Initialize all the things
      *
      * @since 0.1.0
      */
     function __construct () {
-        /**
-         * Modify Responses
-         */
-        add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
-        add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
-        add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
 
-        /**
-         * Register Fields
-         */
-        add_action( 'rest_api_init', array( $this, 'register_fields' ) );
+      $this->post_types = get_post_types( array( 'public' => true ), 'objects' );
+
+      $this->register_featured_image( $this->post_types );
+
+      /**
+       * Modify Responses
+       */
+      add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
+      add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
+      add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
+
+      /**
+       * Register Fields
+       */
+      add_action( 'rest_api_init', array( $this, 'register_fields' ) );
 
     }
 
@@ -58,24 +65,6 @@ class Jacobin_Rest_API_Fields {
                 'authors',
                 array(
                     'get_callback'    => array( $this, 'get_authors' ),
-                    'update_callback' => null,
-                    'schema'          => null,
-                )
-            );
-
-            register_rest_field( 'issue',
-                'authors',
-                array(
-                    'get_callback'    => array( $this, 'get_authors' ),
-                    'update_callback' => null,
-                    'schema'          => null,
-                )
-            );
-
-            register_rest_field( 'issue',
-                'cover_artist',
-                array(
-                    'get_callback'    => array( $this, 'get_author' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -112,6 +101,24 @@ class Jacobin_Rest_API_Fields {
                 'related_articles',
                 array(
                     'get_callback'    => array( $this, 'get_related_articles' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'issue',
+                'authors',
+                array(
+                    'get_callback'    => array( $this, 'get_authors' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'issue',
+                'cover_artist',
+                array(
+                    'get_callback'    => array( $this, 'get_author' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -156,7 +163,7 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'department',
                 'featured_image',
                 array(
-                    'get_callback'    => array( $this, 'get_featured_image' ),
+                    'get_callback'    => array( $this, 'get_term_image' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -181,6 +188,40 @@ class Jacobin_Rest_API_Fields {
             );
 
         }
+    }
+
+    /**
+     * Register Featured Image
+     * Register field for all public post types
+     *
+     * @since 0.2.9
+     *
+     * @param  array $post_types
+     * @return void
+     */
+    public function register_featured_image( $post_types ) {
+
+      if( empty( $post_types ) ) {
+        return false;
+      }
+
+      foreach( $post_types as $post_type ) {
+        $post_type_name     = $post_type->name;
+    		$show_in_rest       = ( isset( $post_type->show_in_rest ) && $post_type->show_in_rest ) ? true : false;
+    		$supports_thumbnail = post_type_supports( $post_type_name, 'thumbnail' );
+
+        if( $show_in_rest && $supports_thumbnail ) {
+          register_rest_field( $post_type_name,
+              'featured_image',
+              array(
+                  'get_callback'    => array( $this, 'get_featured_image' ),
+                  'update_callback' => null,
+                  'schema'          => null,
+              )
+          );
+        }
+      }
+
     }
 
     /**
@@ -289,24 +330,24 @@ class Jacobin_Rest_API_Fields {
      * @return string meta
      *
      */
-    function get_field ( $object, $field_name, $request ) {
+    public function get_field ( $object, $field_name, $request ) {
         return get_post_meta( $object[ 'id' ], $field_name, true );
     }
 
-    /**
-     * Get term meta
-     *
-     * @since 0.1.0
-     *
-     * @param object $object
-     * @param string $field_name
-     * @param string $request
-     * @return array meta
-     *
-     */
-    function get_term_meta( $object, $field_name, $request ) {
-        return get_term_meta( $object[ 'id' ] );
-    }
+    // /**
+    //  * Get term meta
+    //  *
+    //  * @since 0.1.0
+    //  *
+    //  * @param object $object
+    //  * @param string $field_name
+    //  * @param string $request
+    //  * @return array meta
+    //  *
+    //  */
+    // public function get_term_meta( $object, $field_name, $request ) {
+    //     return get_term_meta( $object[ 'id' ] );
+    // }
 
     /**
      * Get term id
@@ -319,24 +360,57 @@ class Jacobin_Rest_API_Fields {
      * @return array meta
      *
      */
-    function get_author_term_id( $object, $field_name, $request ) {
+    public function get_author_term_id( $object, $field_name, $request ) {
       return wp_get_post_terms( $object[ 'id' ], 'author', array( 'fields' => 'ids' ) );
     }
 
     /**
      * Get Featured Image
+     * Return feature image fields for post
+     *
+     * @since 0.2.9
+     *
+     * @param  obj $object post object
+     * @param  string $field_name
+     * @param  array $request
+     * @return array image meta || false
+     */
+    public function get_featured_image( $object, $field_name, $request ) {
+      $image_id = get_post_thumbnail_id( $object['id'] );
+      return ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+    }
+
+    /**
+     * Get secondary featured image
+     *
+     * @since 0.1.0
+     *
+     * @uses  get_post_meta()
+     *
+     * @param obj $object
+     * @param string $field_name
+     * @param array $request
+     * @return array image meta || false
+     */
+    public function get_featured_image_secondary ( $object, $field_name, $request ) {
+        $image_id = get_post_meta( $object['id'], $field_name, true );
+        return ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+    }
+
+    /**
+     * Get Term Image
+     * Return image fields for taxonomy term
      *
      * @since 0.1.14
      *
      * @param object $object
      * @param string $field_name
      * @param string $request
-     * @return array meta
+     * @return array image meta || false
      *
      */
-    function get_featured_image( $object, $field_name, $request ) {
-        $image = get_term_meta( $object[ 'id' ], 'featured_image' );
-        $image_id = ( !empty( $image ) && is_array( $image ) ) ? (int) $image[0] : false;
+    public function get_term_image( $object, $field_name, $request ) {
+        $image_id = get_term_meta( $object[ 'id' ], $field_name, true );
         return ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
     }
 
@@ -351,7 +425,7 @@ class Jacobin_Rest_API_Fields {
      * @return array meta
      *
      */
-    function get_featured_post_post( $object, $field_name, $request ) {
+    public function get_featured_post_post( $object, $field_name, $request ) {
         $featured = get_post_meta(  $object[ 'id' ], $field_name, true );
         $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
         return ( !empty( $featured_id ) ) ? jacobin_get_related_post_data( $featured_id ) : false;
@@ -368,42 +442,10 @@ class Jacobin_Rest_API_Fields {
      * @return array meta
      *
      */
-    function get_featured_post_term( $object, $field_name, $request ) {
+    public function get_featured_post_term( $object, $field_name, $request ) {
         $featured = get_term_meta(  $object[ 'id' ], $field_name, true );
         $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
         return ( !empty( $featured_id ) ) ? jacobin_get_related_post_data( $featured_id ) : false;
-    }
-
-    /**
-     * Get secondary featured image
-     *
-     * @since 0.1.0
-     *
-     * @uses  get_post_meta()
-     * @uses  get_post()
-     * @uses  get_post_meta()
-     *
-     * @param {object} $object
-     * @param {string} $field_name
-     * @param {string} $request
-     * @return {array} $authors
-     */
-    public function get_featured_image_secondary ( $object, $field_name, $request ) {
-
-        $post_id = $object['id'];
-        $image_id = get_post_meta( $post_id, $field_name, true );
-
-        if( !empty( $image_meta ) ) {
-
-            $image_id = (int) $image_id;
-
-            $featured_image_secondary = jacobin_get_image_meta( $image_id );
-
-            return $featured_image_secondary;
-        }
-
-        return false;
-
     }
 
     /**
