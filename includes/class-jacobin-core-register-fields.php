@@ -17,23 +17,30 @@
  */
 class Jacobin_Rest_API_Fields {
 
+    public $post_types;
+
     /**
      * Initialize all the things
      *
      * @since 0.1.0
      */
     function __construct () {
-        /**
-         * Modify Responses
-         */
-        add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
-        add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
-        add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
 
-        /**
-         * Register Fields
-         */
-        add_action( 'rest_api_init', array( $this, 'register_fields' ) );
+      $this->post_types = get_post_types( array( 'public' => true ), 'objects' );
+
+      $this->register_featured_image( $this->post_types );
+
+      /**
+       * Modify Responses
+       */
+      add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
+      add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
+      add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
+
+      /**
+       * Register Fields
+       */
+      add_action( 'rest_api_init', array( $this, 'register_fields' ) );
 
     }
 
@@ -58,24 +65,6 @@ class Jacobin_Rest_API_Fields {
                 'authors',
                 array(
                     'get_callback'    => array( $this, 'get_authors' ),
-                    'update_callback' => null,
-                    'schema'          => null,
-                )
-            );
-
-            register_rest_field( 'issue',
-                'authors',
-                array(
-                    'get_callback'    => array( $this, 'get_authors' ),
-                    'update_callback' => null,
-                    'schema'          => null,
-                )
-            );
-
-            register_rest_field( 'issue',
-                'cover_artist',
-                array(
-                    'get_callback'    => array( $this, 'get_author' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -112,6 +101,24 @@ class Jacobin_Rest_API_Fields {
                 'related_articles',
                 array(
                     'get_callback'    => array( $this, 'get_related_articles' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'issue',
+                'authors',
+                array(
+                    'get_callback'    => array( $this, 'get_authors' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'issue',
+                'cover_artist',
+                array(
+                    'get_callback'    => array( $this, 'get_author' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )
@@ -181,6 +188,40 @@ class Jacobin_Rest_API_Fields {
             );
 
         }
+    }
+
+    /**
+     * Register Featured Image
+     * Register field for all public post types
+     *
+     * @since 0.2.9
+     *
+     * @param  array $post_types
+     * @return void
+     */
+    public function register_featured_image( $post_types ) {
+
+      if( empty( $post_types ) ) {
+        return false;
+      }
+
+      foreach( $post_types as $post_type ) {
+        $post_type_name     = $post_type->name;
+    		$show_in_rest       = ( isset( $post_type->show_in_rest ) && $post_type->show_in_rest ) ? true : false;
+    		$supports_thumbnail = post_type_supports( $post_type_name, 'thumbnail' );
+
+        if( $show_in_rest && $supports_thumbnail ) {
+          register_rest_field( $post_type_name,
+              'featured_image',
+              array(
+                  'get_callback'    => array( $this, 'get_featured_image' ),
+                  'update_callback' => null,
+                  'schema'          => null,
+              )
+          );
+        }
+      }
+
     }
 
     /**
