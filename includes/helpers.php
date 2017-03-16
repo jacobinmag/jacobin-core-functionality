@@ -144,7 +144,6 @@ function jacobin_get_image_meta( $image_id ) {
     if ( empty( $meta['media_details'] ) ) {
   		$meta['media_details'] = new stdClass;
   	} elseif ( ! empty( $meta['media_details']['sizes'] ) ) {
-  		$img_url_basename = wp_basename( $meta['source_url'] );
   		foreach ( $meta['media_details']['sizes'] as $size => &$size_data ) {
   			$image_src = wp_get_attachment_image_src( $image_id, $size );
   			if ( ! $image_src ) {
@@ -164,6 +163,12 @@ function jacobin_get_image_meta( $image_id ) {
     return $meta;
 }
 
+/**
+ * Get Image Data from Field
+ *
+ * @param  int $image_id
+ * @return array image meta || false
+ */
 function jacobin_featured_images_get_field( $image_id ) {
 
   $object = get_post( $image_id );
@@ -197,7 +202,6 @@ function jacobin_featured_images_get_field( $image_id ) {
 	if ( empty( $featured_image['media_details'] ) ) {
 		$featured_image['media_details'] = new stdClass;
 	} elseif ( ! empty( $featured_image['media_details']['sizes'] ) ) {
-		$img_url_basename = wp_basename( $featured_image['source_url'] );
 		foreach ( $featured_image['media_details']['sizes'] as $size => &$size_data ) {
 			$image_src = wp_get_attachment_image_src( $image_id, $size );
 			if ( ! $image_src ) {
