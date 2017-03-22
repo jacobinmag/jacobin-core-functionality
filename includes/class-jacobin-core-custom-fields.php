@@ -52,7 +52,7 @@
        	'fields' => array (
        		array (
        			'key' => 'field_clonefeatured1',
-       			'label' => 'Featured Post (Single)',
+       			'label' => 'Featured Article (Single)',
        			'name' => 'featured_post_1',
        			'type' => 'relationship',
        			'instructions' => '',
@@ -231,7 +231,7 @@
         * Post Default Custom Fields
         */
        acf_add_local_field_group( array (
-       	'key' => 'group_5771c00b7ae29',
+       	'key' => 'group_article_details',
        	'title' => __( 'Article Details', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -486,7 +486,7 @@
         * Post Content Custom Fields
         */
         acf_add_local_field_group( array(
-        	'key' => 'group_58ade90c4e2a0',
+        	'key' => 'group_interviewer',
         	'title' => __( 'Interviewer', 'jacobin-core' ),
         	'fields' => array (
         		array (
@@ -537,8 +537,8 @@
         	'description' => '',
         ));
 
-       acf_add_local_field_group(array (
-       	'key' => 'group_57dee289876c8',
+       acf_add_local_field_group( array(
+       	'key' => 'group_content_sections',
        	'title' => __( 'Content Sections', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1326,8 +1326,8 @@
        /**
         * Post Secondary Image
         */
-       acf_add_local_field_group(array (
-       	'key' => 'group_5771caab0d24c',
+       acf_add_local_field_group( array(
+       	'key' => 'group_featured_image_secondary',
        	'title' => __( 'Featured Image (Secondary)', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1378,8 +1378,8 @@
        /**
         * Post Taxonomy Fields
         */
-       acf_add_local_field_group(array (
-       	'key' => 'group_57df5d71bea6c',
+       acf_add_local_field_group( array(
+       	'key' => 'group_post_taxonomy',
        	'title' => __( 'Taxonomy', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1449,8 +1449,8 @@
        /**
         * Paywall Boolean
         */
-       acf_add_local_field_group(array (
-       	'key' => 'group_57cb51cb228d7',
+       acf_add_local_field_group( array(
+       	'key' => 'group_paywall',
        	'title' => __( 'Paywall', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1506,8 +1506,8 @@
        /**
         * Department Taxonomy Term Meta Fields
         */
-       acf_add_local_field_group(array (
-       	'key' => 'group_5771c00b6a407',
+       acf_add_local_field_group( array(
+       	'key' => 'group_department_term_meta',
        	'title' => __( 'Department Details', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1587,7 +1587,7 @@
         * Chart Custom Post Type Fields
         */
        acf_add_local_field_group( array (
-       	'key' => 'group_579a3a3ac715e',
+       	'key' => 'group_charts',
        	'title' => __( 'Charts', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1641,7 +1641,7 @@
         * Issue Post Type Custom Fields
         */
         acf_add_local_field_group(array (
-        	'key' => 'group_58c998325fdcc',
+        	'key' => 'group_issue_fields',
         	'title' => 'Issue',
         	'fields' => array (
         		array (
@@ -1703,7 +1703,7 @@
         ));
 
        acf_add_local_field_group( array(
-       	'key' => 'group_5771c00b6d7c6',
+       	'key' => 'group_issue_details',
        	'title' => __( 'Issue Details', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1832,7 +1832,7 @@
         * Timeline Post Type Custom Fields
         */
        acf_add_local_field_group( array (
-       	'key' => 'group_57991c7567f52',
+       	'key' => 'group_timeline',
        	'title' => __( 'Timeline', 'jacobin-core' ),
        	'fields' => array (
        		array (
@@ -1960,134 +1960,95 @@
         * Featured Content Options Page Fields
         */
         acf_add_local_field_group( array (
-        	'key' => 'group_58b9cc9382667',
-        	'title' => __( 'Home Page', 'jacobin-core' ),
+        	'key' => 'group_featured_content',
+        	'title' => __( 'Featured Content', 'jacobin-core' ),
         	'fields' => array (
         		array (
-        			'key' => 'field_58b9ced60cd1b',
-        			'label' => __( 'Featured Article (single)', 'jacobin-core' ),
-        			'name' => 'home_feature',
-        			'type' => 'clone',
+        			'key' => 'field_featured_article',
+        			'label' => __( 'Featured Article (max 1)', 'jacobin-core' ),
+        			'name' => 'featured_article',
+              'type' => 'relationship',
         			'instructions' => '',
         			'required' => 0,
         			'conditional_logic' => 0,
         			'wrapper' => array (
         				'width' => '',
         				'class' => '',
-        				'id' => '',
+        				'id' => 'featured-article',
         			),
-        			'clone' => array (
-        				0 => 'field_clonefeatured1',
+        			'post_type' => array (
+        				0 => 'post',
         			),
-        			'display' => 'seamless',
-        			'layout' => 'block',
-        			'prefix_label' => 0,
-        			'prefix_name' => 1,
+        			'taxonomy' => array (
+        			),
+        			'filters' => array (
+        				0 => 'search',
+        				1 => 'taxonomy',
+        			),
+        			'elements' => array (
+        				0 => 'featured_image',
+        			),
+        			'min' => 0,
+        			'max' => 1,
+        			'return_format' => 'id',
         		),
-        		array (
-        			'key' => 'field_58b9cca81a06d',
-        			'label' => __( 'Section 1', 'jacobin-core' ),
-        			'name' => 'home_1',
-        			'type' => 'clone',
+            array (
+        			'key' => 'field_home_content',
+        			'label' => __( 'Home Content (36 total)', 'jacobin-core' ),
+        			'name' => 'home_content',
+        			'type' => 'relationship',
         			'instructions' => '',
         			'required' => 0,
         			'conditional_logic' => 0,
         			'wrapper' => array (
         				'width' => '',
         				'class' => '',
-        				'id' => '',
+        				'id' => 'home-sections',
         			),
-        			'clone' => array (
-        				0 => 'field_clonefeatured5',
+        			'post_type' => array (
+        				0 => 'post',
         			),
-        			'display' => 'seamless',
-        			'layout' => 'block',
-        			'prefix_label' => 1,
-        			'prefix_name' => 1,
+        			'taxonomy' => array (
+        			),
+        			'filters' => array (
+        				0 => 'search',
+        				1 => 'taxonomy',
+        			),
+        			'elements' => array (
+        				0 => 'featured_image',
+        			),
+        			'min' => 0,
+        			'max' => 36,
+        			'return_format' => 'id',
         		),
-        		array (
-        			'key' => 'field_58b9ccf51a06e',
-        			'label' => __( 'Section 2', 'jacobin-core' ),
-        			'name' => 'home_2',
-        			'type' => 'clone',
+            array (
+        			'key' => 'field_editorspick',
+        			'label' => __( 'Editor\'s Picks (max 5)', 'jacobin-core' ),
+        			'name' => 'editors_pick',
+              'type' => 'relationship',
         			'instructions' => '',
         			'required' => 0,
         			'conditional_logic' => 0,
         			'wrapper' => array (
         				'width' => '',
         				'class' => '',
-        				'id' => '',
+        				'id' => 'editors-pick',
         			),
-        			'clone' => array (
-        				0 => 'field_clonefeatured5',
+        			'post_type' => array (
+        				0 => 'post',
         			),
-        			'display' => 'seamless',
-        			'layout' => 'block',
-        			'prefix_label' => 1,
-        			'prefix_name' => 1,
-        		),
-        		array (
-        			'key' => 'field_58b9cd2a1a06f',
-        			'label' => __( 'Section 3', 'jacobin-core' ),
-        			'name' => 'home_3',
-        			'type' => 'clone',
-        			'instructions' => '',
-        			'required' => 0,
-        			'conditional_logic' => 0,
-        			'wrapper' => array (
-        				'width' => '',
-        				'class' => '',
-        				'id' => '',
+        			'taxonomy' => array (
         			),
-        			'clone' => array (
-        				0 => 'field_clonefeatured5',
+        			'filters' => array (
+        				0 => 'search',
+        				1 => 'taxonomy',
         			),
-        			'display' => 'seamless',
-        			'layout' => 'block',
-        			'prefix_label' => 1,
-        			'prefix_name' => 1,
-        		),
-        		array (
-        			'key' => 'field_58ba18867d794',
-        			'label' => __( 'Section 4', 'jacobin-core' ),
-        			'name' => 'home_4',
-        			'type' => 'clone',
-        			'instructions' => '',
-        			'required' => 0,
-        			'conditional_logic' => 0,
-        			'wrapper' => array (
-        				'width' => '',
-        				'class' => '',
-        				'id' => '',
+        			'elements' => array (
+        				0 => 'featured_image',
         			),
-        			'clone' => array (
-        				0 => 'field_clonefeatured10',
-        			),
-        			'display' => 'seamless',
-        			'layout' => 'block',
-        			'prefix_label' => 1,
-        			'prefix_name' => 1,
-        		),
-        		array (
-        			'key' => 'field_58ba18a87d795',
-        			'label' => __( 'Section 5', 'jacobin-core' ),
-        			'name' => 'home_5',
-        			'type' => 'clone',
-        			'instructions' => '',
-        			'required' => 0,
-        			'conditional_logic' => 0,
-        			'wrapper' => array (
-        				'width' => '',
-        				'class' => '',
-        				'id' => '',
-        			),
-        			'clone' => array (
-        				0 => 'field_clonefeatured15',
-        			),
-        			'display' => 'seamless',
-        			'layout' => 'block',
-        			'prefix_label' => 1,
-        			'prefix_name' => 1,
+        			'min' => 0,
+        			'max' => 5,
+        			'return_format' => 'id',
         		),
         	),
         	'location' => array (
@@ -2101,59 +2062,13 @@
         	),
         	'menu_order' => 0,
         	'position' => 'normal',
-        	'style' => 'default',
+        	'style' => 'seamless',
         	'label_placement' => 'top',
         	'instruction_placement' => 'label',
         	'hide_on_screen' => '',
         	'active' => 1,
         	'description' => '',
         ));
-
-        acf_add_local_field_group( array (
-        	'key' => 'group_editorspicks',
-        	'title' => __( 'Editor\'s Picks', 'jacobin-core' ),
-        	'fields' => array (
-        		array (
-        			'key' => 'field_editorspick',
-        			'label' => __( 'Editor\'s Picks (max 5)', 'jacobin-core' ),
-        			'name' => 'editors_pick',
-        			'type' => 'clone',
-        			'instructions' => '',
-        			'required' => 0,
-        			'conditional_logic' => 0,
-        			'wrapper' => array (
-        				'width' => '',
-        				'class' => '',
-        				'id' => '',
-        			),
-        			'clone' => array (
-        				0 => 'field_clonefeatured5',
-        			),
-        			'display' => 'seamless',
-        			'layout' => 'block',
-        			'prefix_label' => 0,
-        			'prefix_name' => 1,
-        		),
-        	),
-        	'location' => array (
-        		array (
-        			array (
-                'param' => 'options_page',
-                'operator' => '==',
-                'value' => 'featured-content',
-        			),
-        		),
-        	),
-        	'menu_order' => 10,
-        	'position' => 'normal',
-        	'style' => 'default',
-        	'label_placement' => 'top',
-        	'instruction_placement' => 'label',
-        	'hide_on_screen' => '',
-        	'active' => 1,
-        	'description' => '',
-        ));
-
 
      }
 
