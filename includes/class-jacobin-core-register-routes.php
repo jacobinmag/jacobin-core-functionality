@@ -52,7 +52,6 @@ class Jacobin_Rest_API_Routes {
             'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
             'type'        => 'string',
             'enum'        => array(
-              'featured-article',
               'home-content',
               'editors-picks',
             ),
@@ -169,7 +168,6 @@ class Jacobin_Rest_API_Routes {
         $page = $request->get_param( 'page' );
 
         $options = array(
-          'featured-article'  => 'options_featured_article',
           'home-content'      => 'options_home_content',
           'editors-picks'     => 'options_editors_pick',
         );
