@@ -50,6 +50,8 @@ class Jacobin_Core_Admin {
 	 */
 	private $setting_name = 'featured_content';
 
+	private $option_id;
+
 	/**
 	 * Initialize the class and set its properties.
 	 *
@@ -60,6 +62,7 @@ class Jacobin_Core_Admin {
 	public function __construct( $plugin_name, $version ) {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
+		$this->option_id = 'toplevel_page_featured-content';
 
 		if( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'add_options_page' ) );
@@ -68,9 +71,10 @@ class Jacobin_Core_Admin {
 		/**
 		 * Add JS to admin head for ACF
 		 */
-		add_action( 'acf/input/admin_head', array( $this, 'admin_head' ) );
+		add_action( 'acf/input/admin_footer', array( $this, 'admin_footer' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 
 		// Modify custom post args
 		add_filter( 'issue_register_args', array( $this, 'modify_issue_args' ), 'issue' );
@@ -85,6 +89,7 @@ class Jacobin_Core_Admin {
 		//add_filter( 'wp_terms_checklist_args', array( $this, 'terms_checklist_args' ) );
 
 	}
+
 
 	/**
 	 * Add an Options Page using ACF
@@ -118,7 +123,7 @@ class Jacobin_Core_Admin {
 	}
 
 	/**
-	 * Add Script to ACF Admin Head
+	 * Add Scripts and Styles to ACF Admin Head
 	 *
 	 * @since 0.2.7
 	 *
@@ -126,23 +131,29 @@ class Jacobin_Core_Admin {
 	 *
 	 * @return void
 	 */
-	public function admin_head() {
+	public function admin_footer() {
+		$current_screen = get_current_screen();
 		?>
-		 <script type="text/javascript">
-		 (function($) {
 
-				 $(document).ready(function(){
+		 <?php if( $this->option_id == $current_screen->id ) : ?>
 
-						 $('.acf-field-postexpert .acf-input').append( $('#postexcerpt #excerpt') );
-						 $('#postexcerpt').remove();
+			 <script type="text/javascript">
+			 (function($) {
 
-						 $('#coauthorsdiv').insertAfter( '#submitdiv' );
+			 })(jQuery);
+			 </script>
 
-				 });
+			 <style type="text/css">
+			 #home-sections .acf-relationship .list {
+            height: 510px !important;
+        }
+			 </style>
+		 <?php endif; ?>
 
-		 })(jQuery);
-		 </script>
-		 <style type="text/css"></style>
+		 <?php if( 'post' == $current_screen->base ) : ?>
+
+		 <?php endif; ?>
+
 	 <?php
 	}
 
@@ -152,19 +163,14 @@ class Jacobin_Core_Admin {
 	 * @since    0.1.2
 	 */
 	public function enqueue_styles() {
-
+		$current_screen = get_current_screen();
 		/**
 		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Jacobin_Core_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Jacobin_Core_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
 		 */
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/jacobin-core-admin.css', array(), $this->version, 'all' );
+		if( $this->option_id == $current_screen->id || 'post' == $current_screen->base ) {
+			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/jacobin-core-admin.css', array(), $this->version, 'all' );
+		}
+
 	}
 
 	/**
@@ -173,19 +179,13 @@ class Jacobin_Core_Admin {
 	 * @since    0.1.2
 	 */
 	public function enqueue_scripts() {
-
+		$current_screen = get_current_screen();
 		/**
 		 * This function is provided for demonstration purposes only.
-		 *
-		 * An instance of this class should be passed to the run() function
-		 * defined in Jacobin_Core_Loader as all of the hooks are defined
-		 * in that particular class.
-		 *
-		 * The Jacobin_Core_Loader will then create the relationship
-		 * between the defined hooks and the functions defined in this
-		 * class.
 		 */
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/jacobin-core-admin.js', array( 'jquery' ), $this->version, false );
+		if( $this->option_id == $current_screen->id || 'post' == $current_screen->base ) {
+			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/jacobin-core-admin.js', array( 'jquery' ), $this->version, true );
+		}
 	}
 
 	/**

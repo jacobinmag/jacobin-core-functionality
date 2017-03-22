@@ -1,0 +1,123 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+ $color__black: #222;
+ $color__white: #fff;
+
+ $color__primary:        $color__black;
+ $color__primary-light:  lighten( $color__primary, 20% );
+ $color__primary-dark:   darken( $color__primary, 20% );
+ $color__secondary:      #0073aa;
+ $color__accent:         #00a0d2;
+
+ $color__gray-lightest:  #f6f6f6;
+ $color__gray-light:     #d3d3d3;
+ $color__gray:           #9b9b9b;
+ $color__gray-dark:      #333;
+ $color__gray-darkest:   $color__black;
+
+ $color__button-primary:     #3f51b5;
+ $color__button-secondary:   #00796b;
+ $color__success:            #1abc9c;
+ $color__info:               #3949ab;
+ $color__warning:            #fbc02d;
+ $color__danger:             red;
+
+
+.acf-fields .CodeMirror-line {
+    padding-left: 2em;
+}
+
+#departmentchecklist {
+  .children .children {
+    display: none;
+
+    input {
+      pointer-events: none;
+      tab-index: -1;
+    }
+  }
+}
+
+
+#home-sections {
+  .acf-relationship {
+    .values {
+      ul {
+        counter-reset: childs;
+
+        li {
+          border-top: 1px dotted $color__gray-light;
+          counter-increment: childs;
+          content: counter(childs);
+
+          // Featured Section 1
+          &.item-1 {
+            background-color: $color__gray-dark;
+            color: $color__white;
+          }
+          // Featured Section 2
+          &.item-2 {
+            background-color: $color__danger;
+            color: $color__white;
+          }
+          // Featured Section 3
+          &.item-3 {
+            background-color: $color__warning;
+          }
+          // Standard Section 1
+          &.item-4,
+          &.item-5,
+          &.item-6,
+          &.item-7 {
+            background-color: lighten( $color__gray-dark, 20% );
+            color: $color__white;
+          }
+          // Standard Section 2
+          &.item-8,
+          &.item-9,
+          &.item-10,
+          &.item-11 {
+            background-color: lighten( $color__danger, 20% );
+            color: $color__white;
+          }
+          // Standard Section 3
+          &.item-12,
+          &.item-13,
+          &.item-14,
+          &.item-15 {
+            background-color: lighten( $color__warning, 20% );
+          }
+          // Secondary Section 4
+          &.item-16,
+          &.item-17,
+          &.item-18,
+          &.item-19,
+          &.item-20,
+          &.item-21,
+          &.item-22,
+          &.item-23 {
+            background-color: $color__gray;
+          }
+          //Secondary Section 5
+          &.item-24,
+          &.item-25,
+          &.item-26,
+          &.item-27,
+          &.item-28,
+          &.item-29,
+          &.item-30,
+          &.item-31,
+          &.item-32,
+          &.item-33,
+          &.item-34,
+          &.item-35 {
+            background-color: $color__gray-light;
+          }
+        }
+      }
+    }
+  }
+}
