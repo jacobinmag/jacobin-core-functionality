@@ -2,8 +2,8 @@
 Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
-Tested up to: 4.7.2
-Version: 0.2.9
+Tested up to: 4.7.3
+Version: 0.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,10 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.3.0 March 20, 2017 =
+* Modify featured content UI and response
+* [WIP] Implement custom REST Controller classes for featured content, authors, departments, posts and issue
 
 = 0.2.9 March 16, 2017 =
 * Registered featured image (`featured_image`) for each public post type
