@@ -47,21 +47,18 @@ class Jacobin_Rest_API_Routes {
       register_rest_route( $this->namespace, '/featured-content', array(
     		'methods'     => 'GET',
     		'callback'    => array( $this, 'get_featured_content' ),
-        'args'        => array(
+        'args'                => array(
           'slug'    => array(
             'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
             'type'        => 'string',
             'enum'        => array(
-              'home-feature',
-              'home-1',
-              'home-2',
-              'home-3',
-              'home-4',
-              'home-5',
-              'editors-picks'
+              'featured-article',
+              'home-content',
+              'editors-picks',
             ),
-          )
-        )
+            'required'    => true
+          ),
+        ),
     	) );
 
       register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
@@ -132,7 +129,7 @@ class Jacobin_Rest_API_Routes {
     }
 
     /**
-     * Get Home Feature
+     * Get Featured Content
      *
      * @since 0.1.14
      *
@@ -141,7 +138,7 @@ class Jacobin_Rest_API_Routes {
      * @return array $posts
        */
     public function get_home_feature() {
-        return $this->get_featured_content( 'options_home_feature' );
+        return $this->get_featured_content( 'options_featured_article' );
     }
 
     /**
@@ -168,21 +165,19 @@ class Jacobin_Rest_API_Routes {
     public function get_featured_content( $request ) {
 
         $slug  = $request->get_param( 'slug' );
+        $posts_per_page = $request->get_param( 'per_page' );
+        $page = $request->get_param( 'page' );
 
         $options = array(
-          'home-feature'  => 'options_home_feature_featured_post_1',
-          'home-1'        => 'options_home_1_featured_posts_5',
-          'home-2'        => 'options_home_2_featured_posts_5',
-          'home-3'        => 'options_home_3_featured_posts_5',
-          'home-4'        => 'options_home_4_featured_posts_10',
-          'home-5'        => 'options_home_5_featured_posts_15',
-          'editors-picks' => 'options_editors_pick_featured_posts_5'
+          'featured-article'  => 'options_featured_article',
+          'home-content'      => 'options_home_content',
+          'editors-picks'     => 'options_editors_pick',
         );
 
         $option = get_option( $options[$slug] );
 
         if( empty( $option ) || is_wp_error( $option ) ) {
-            return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
+            return new WP_Error( 'rest_no_posts_set', __( 'No posts were set', 'jacobin-core' ), array( 'status' => 404 ) );
         }
 
         $posts_ids = array_map(
@@ -192,30 +187,49 @@ class Jacobin_Rest_API_Routes {
             $option
         );
 
-        $posts = array_map(
-            function( $post_id ) {
-                $post_detail = get_post( $post_id );
-
-                $post = new stdClass();
-
-                $post->{"id"} = $post_detail->ID;
-                $post->{"date"} = $post_detail->post_date;
-                $post->{"title"}["rendered"] = esc_attr( $post_detail->post_title );
-                $post->{"subhead"} = get_post_meta( $post_id, 'subhead', true );
-                $post->{"excerpt"}["rendered"] = esc_attr( $post_detail->post_excerpt );
-                $post->{"slug"} = $post_detail->post_name;
-                $post->{"authors"} = jacobin_get_authors_array( $post_id );
-                $post->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
-
-                $image_id = get_post_thumbnail_id( $post_id );
-                $post->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
-
-                return $post;
-            },
-            $posts_ids
+        $args = array(
+          'post__in'    => $posts_ids,
+          'orderby'     => 'post__in'
         );
 
-    	return $posts;
+        if( isset( $posts_per_page ) ) {
+          $args['posts_per_page'] = $posts_per_page;
+        }
+
+        if( isset( $page ) ) {
+          $args['paged'] = $page;
+        }
+
+        $posts = get_posts( $args );
+
+        if( empty( $posts ) ) {
+          return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
+        }
+
+        $response = array_map(
+            function( $post ) {
+                $post_id = $post->ID;
+
+                $post_data = new stdClass();
+
+                $post_data->{"id"} = $post->ID;
+                $post_data->{"date"} = $post->post_date;
+                $post_data->{"title"}["rendered"] = esc_attr( $post->post_title );
+                $post_data->{"subhead"} = get_post_meta( $post_id, 'subhead', true );
+                $post_data->{"excerpt"}["rendered"] = esc_attr( $post->post_excerpt );
+                $post_data->{"slug"} = $post->post_name;
+                $post_data->{"authors"} = jacobin_get_authors_array( $post_id );
+                $post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
+
+                $image_id = get_post_thumbnail_id( $post_id );
+                $post_data->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+
+                return $post_data;
+            },
+            $posts
+        );
+
+        return $response;
     }
 
     /**
