@@ -14,26 +14,34 @@
 #home-sections .acf-relationship .values ul {
   counter-reset: childs; }
   #home-sections .acf-relationship .values ul li {
-    border-top: 1px dotted #d3d3d3;
-    counter-increment: childs;
-    content: counter(childs); }
+    border-top: 1px dotted #d3d3d3; }
+    #home-sections .acf-relationship .values ul li:before {
+      float: left;
+      padding: .25em;
+      width: 20px;
+      counter-increment: childs;
+      content: counter(childs); }
+    #home-sections .acf-relationship .values ul li:hover::before, #home-sections .acf-relationship .values ul li:focus::before {
+      color: #fff; }
+    #home-sections .acf-relationship .values ul li.item-0 {
+      background-color: red;
+      color: #fff; }
     #home-sections .acf-relationship .values ul li.item-1 {
       background-color: #333;
       color: #fff; }
     #home-sections .acf-relationship .values ul li.item-2 {
-      background-color: red;
+      background-color: #00796b;
       color: #fff; }
     #home-sections .acf-relationship .values ul li.item-3 {
       background-color: #fbc02d; }
     #home-sections .acf-relationship .values ul li.item-4, #home-sections .acf-relationship .values ul li.item-5, #home-sections .acf-relationship .values ul li.item-6, #home-sections .acf-relationship .values ul li.item-7 {
-      background-color: #666666;
+      background-color: gray;
       color: #fff; }
     #home-sections .acf-relationship .values ul li.item-8, #home-sections .acf-relationship .values ul li.item-9, #home-sections .acf-relationship .values ul li.item-10, #home-sections .acf-relationship .values ul li.item-11 {
-      background-color: #ff6666;
-      color: #fff; }
+      background-color: #13ffe4; }
     #home-sections .acf-relationship .values ul li.item-12, #home-sections .acf-relationship .values ul li.item-13, #home-sections .acf-relationship .values ul li.item-14, #home-sections .acf-relationship .values ul li.item-15 {
-      background-color: #fdde91; }
+      background-color: #feedc3; }
     #home-sections .acf-relationship .values ul li.item-16, #home-sections .acf-relationship .values ul li.item-17, #home-sections .acf-relationship .values ul li.item-18, #home-sections .acf-relationship .values ul li.item-19, #home-sections .acf-relationship .values ul li.item-20, #home-sections .acf-relationship .values ul li.item-21, #home-sections .acf-relationship .values ul li.item-22, #home-sections .acf-relationship .values ul li.item-23 {
       background-color: #9b9b9b; }
-    #home-sections .acf-relationship .values ul li.item-24, #home-sections .acf-relationship .values ul li.item-25, #home-sections .acf-relationship .values ul li.item-26, #home-sections .acf-relationship .values ul li.item-27, #home-sections .acf-relationship .values ul li.item-28, #home-sections .acf-relationship .values ul li.item-29, #home-sections .acf-relationship .values ul li.item-30, #home-sections .acf-relationship .values ul li.item-31, #home-sections .acf-relationship .values ul li.item-32, #home-sections .acf-relationship .values ul li.item-33, #home-sections .acf-relationship .values ul li.item-34, #home-sections .acf-relationship .values ul li.item-35 {
+    #home-sections .acf-relationship .values ul li.item-24, #home-sections .acf-relationship .values ul li.item-25, #home-sections .acf-relationship .values ul li.item-26, #home-sections .acf-relationship .values ul li.item-27, #home-sections .acf-relationship .values ul li.item-28, #home-sections .acf-relationship .values ul li.item-29, #home-sections .acf-relationship .values ul li.item-30, #home-sections .acf-relationship .values ul li.item-31, #home-sections .acf-relationship .values ul li.item-32, #home-sections .acf-relationship .values ul li.item-33, #home-sections .acf-relationship .values ul li.item-34, #home-sections .acf-relationship .values ul li.item-35, #home-sections .acf-relationship .values ul li.item-36 {
       background-color: #d3d3d3; }

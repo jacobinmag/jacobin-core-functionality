@@ -45,7 +45,7 @@
 
 		$items.removeClass().addClass( 'list-item' );
 		$items.addClass(function( index ) {
-			return "item-" + ( index + 1 );
+			return "item-" + ( index );
 		});
 
 	}
