@@ -161,6 +161,15 @@ class Jacobin_Rest_API_Fields {
             );
 
             register_rest_field( 'department',
+                'parent_slug',
+                array(
+                    'get_callback'    => array( $this, 'get_parent_slug' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+
+            register_rest_field( 'department',
                 'featured_image',
                 array(
                     'get_callback'    => array( $this, 'get_term_image' ),
@@ -428,7 +437,7 @@ class Jacobin_Rest_API_Fields {
     public function get_featured_post_post( $object, $field_name, $request ) {
         $featured = get_post_meta(  $object[ 'id' ], $field_name, true );
         $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
-        return ( !empty( $featured_id ) ) ? jacobin_get_related_post_data( $featured_id ) : false;
+        return ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
     }
 
     /**
@@ -445,7 +454,7 @@ class Jacobin_Rest_API_Fields {
     public function get_featured_post_term( $object, $field_name, $request ) {
         $featured = get_term_meta(  $object[ 'id' ], $field_name, true );
         $featured_id = ( !empty( $featured ) && is_array( $featured ) ) ? (int) $featured[0] : false;
-        return ( !empty( $featured_id ) ) ? jacobin_get_related_post_data( $featured_id ) : false;
+        return ( !empty( $featured_id ) ) ? jacobin_get_post_data( $featured_id ) : false;
     }
 
     /**
@@ -480,7 +489,7 @@ class Jacobin_Rest_API_Fields {
         }
 
         $articles = array_map( function( $post ) {
-          return jacobin_get_related_post_data( $post->ID );
+          return jacobin_get_post_data( $post->ID );
         }, $posts );
 
         return $articles;
@@ -518,7 +527,7 @@ class Jacobin_Rest_API_Fields {
         }
 
         $articles = array_map( function( $post ) {
-          return jacobin_get_related_post_data( $post->ID );
+          return jacobin_get_post_data( $post->ID );
         }, $posts );
 
         return $articles;
@@ -624,6 +633,15 @@ class Jacobin_Rest_API_Fields {
 
         return false;
 
+    }
+
+    public function get_parent_slug( $object, $field_name, $request ) {
+      $parent_id = $object['parent'];
+      if( $parent_id ) {
+        $parent = get_term( $parent_id, $object['taxonomy'] );
+        return $parent->slug;
+      }
+      return false;
     }
 
 }
