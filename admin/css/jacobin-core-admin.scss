@@ -50,8 +50,25 @@
 
         li {
           border-top: 1px dotted $color__gray-light;
-          counter-increment: childs;
-          content: counter(childs);
+
+          &:before {
+            float: left;
+            padding: .25em;
+            width: 20px;
+            counter-increment: childs;
+            content: counter(childs);
+          }
+
+          &:hover::before,
+          &:focus::before {
+            color: $color__white;
+          }
+
+          // Global Feature
+          &.item-0 {
+            background-color: $color__danger;
+            color: $color__white;
+          }
 
           // Featured Section 1
           &.item-1 {
@@ -60,19 +77,20 @@
           }
           // Featured Section 2
           &.item-2 {
-            background-color: $color__danger;
+            background-color: $color__button-secondary;
             color: $color__white;
           }
           // Featured Section 3
           &.item-3 {
             background-color: $color__warning;
           }
+
           // Standard Section 1
           &.item-4,
           &.item-5,
           &.item-6,
           &.item-7 {
-            background-color: lighten( $color__gray-dark, 20% );
+            background-color: lighten( $color__gray-dark, 30% );
             color: $color__white;
           }
           // Standard Section 2
@@ -80,15 +98,15 @@
           &.item-9,
           &.item-10,
           &.item-11 {
-            background-color: lighten( $color__danger, 20% );
-            color: $color__white;
+            background-color: lighten( $color__button-secondary, 30% );
+            // color: $color__white;
           }
           // Standard Section 3
           &.item-12,
           &.item-13,
           &.item-14,
           &.item-15 {
-            background-color: lighten( $color__warning, 20% );
+            background-color: lighten( $color__warning, 30% );
           }
           // Secondary Section 4
           &.item-16,
@@ -113,7 +131,8 @@
           &.item-32,
           &.item-33,
           &.item-34,
-          &.item-35 {
+          &.item-35,
+          &.item-36 {
             background-color: $color__gray-light;
           }
         }
