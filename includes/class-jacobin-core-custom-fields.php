@@ -1963,35 +1963,6 @@
         	'key' => 'group_featured_content',
         	'title' => __( 'Featured Content', 'jacobin-core' ),
         	'fields' => array (
-        		// array (
-        		// 	'key' => 'field_featured_article',
-        		// 	'label' => __( 'Featured Article (max 1)', 'jacobin-core' ),
-        		// 	'name' => 'featured_article',
-            //   'type' => 'relationship',
-        		// 	'instructions' => '',
-        		// 	'required' => 0,
-        		// 	'conditional_logic' => 0,
-        		// 	'wrapper' => array (
-        		// 		'width' => '',
-        		// 		'class' => '',
-        		// 		'id' => 'featured-article',
-        		// 	),
-        		// 	'post_type' => array (
-        		// 		0 => 'post',
-        		// 	),
-        		// 	'taxonomy' => array (
-        		// 	),
-        		// 	'filters' => array (
-        		// 		0 => 'search',
-        		// 		1 => 'taxonomy',
-        		// 	),
-        		// 	'elements' => array (
-        		// 		0 => 'featured_image',
-        		// 	),
-        		// 	'min' => 0,
-        		// 	'max' => 1,
-        		// 	'return_format' => 'id',
-        		// ),
             array (
         			'key' => 'field_home_content',
         			'label' => __( 'Home Content (36 total)', 'jacobin-core' ),

@@ -43,10 +43,17 @@ class Jacobin_Field_Settings {
 
         add_filter( 'acf/fields/flexible_content/no_value_message', array( $this, 'modify_acf_flexible_content_message' ) );
 
-        add_filter( 'acf/fields/relationship/query/name=translator', array( $this, 'relationship_options_filter' ) , 10, 3 );
-        add_filter( 'acf/fields/relationship/query/name=interviewer', array( $this, 'relationship_options_filter' ) , 10, 3 );
-        add_filter( 'acf/fields/relationship/query/name=name', array( $this, 'relationship_options_filter' ) , 10, 3 );
-        add_filter( 'acf/fields/relationship/query/name=cover_artist', array( $this, 'relationship_options_filter' ) , 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=translator', array( $this, 'relationship_options_filter' ), 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=interviewer', array( $this, 'relationship_options_filter' ), 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=name', array( $this, 'relationship_options_filter' ), 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=cover_artist', array( $this, 'relationship_options_filter' ), 10, 3 );
+
+        add_filter( 'acf/fields/relationship/query/name=article_issue_relationship', array( $this, 'relationship_options_filter' ), 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=related_articles', array( $this, 'relationship_options_filter' ), 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=featured_article', array( $this, 'relationship_options_filter' ), 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=home_content', array( $this, 'relationship_options_filter' ), 10, 3 );
+        add_filter( 'acf/fields/relationship/query/name=editors_pick', array( $this, 'relationship_options_filter' ), 10, 3 );
+
      }
 
     /**
@@ -99,7 +106,7 @@ class Jacobin_Field_Settings {
         if( 'post' == get_post_type() ) { ?>
             <style>
         		.small .acf-editor-wrap iframe,
-                .small .acf-editor-wrap .wp-editor-area {
+            .small .acf-editor-wrap .wp-editor-area {
         			height: 150px !important;
         			min-height: 150px;
         		}
