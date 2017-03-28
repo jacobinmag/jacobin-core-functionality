@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.3.2
+ * Version:         0.3.3
  *
  * @package         Core_Functionality
  */
@@ -29,14 +29,13 @@ require_once( 'includes/helpers.php' );
 // Load plugin libraries
 require_once( 'includes/lib/class-jacobin-core-post-type.php' );
 require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
-// require_once()
 
 // Load plugin class files
 require_once( 'includes/class-jacobin-core.php' );
-require_once( 'includes/class-jacobin-core-custom-fields.php' );
 require_once( 'includes/class-jacobin-core-register-cpt.php' );
-require_once( 'includes/class-jacobin-core-register-routes.php' );
+require_once( 'includes/class-jacobin-core-custom-fields.php' );
 require_once( 'includes/class-jacobin-core-register-fields.php' );
+require_once( 'includes/class-jacobin-core-register-routes.php' );
 require_once( 'includes/class-jacobin-core-field-settings.php' );
 require_once( 'includes/class-jacobin-core-shortcodes.php' );
 
@@ -47,6 +46,8 @@ require_once( 'admin/class-jacobin-tax-walker.php' );
 // Load utility files
 require_once( 'utils/copy-content.php' );
 
+
+
 /**
  * Returns the main instance of Jacobin_Core to prevent the need to use globals.
  *
@@ -54,7 +55,7 @@ require_once( 'utils/copy-content.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.3.2' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.3.3' );
 
 	return $instance;
 }

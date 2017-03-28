@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.3
-Version: 0.3.2
+Version: 0.3.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,10 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 0.3.2 March 20, 2017 =
+= 0.3.3 March 28, 2017 =
+* #183 Added featured image to response for all public post types for which `show_in_rest` is true
+
+= 0.3.2 March 27, 2017 =
 * #182 Limited related posts fields to `publish` status
 
 = 0.3.1 March 20, 2017 =
