@@ -88,7 +88,7 @@ function jacobin_get_image_meta( $image_id ) {
         'caption'       => $image_data->post_excerpt,
         'description'   => $image_data->post_content,
         'media_type'    => wp_attachment_is_image( $image_id ) ? 'image' : 'file',
-        'url_source'    => wp_get_attachment_url( $image_id ),
+        'source_url'    => wp_get_attachment_url( $image_id ),
         'post'          => ! empty( $image_data->post_parent ) ? (int) $image_data->post_parent : null,
         'media_details' => wp_get_attachment_metadata( $image_id ),
     );
