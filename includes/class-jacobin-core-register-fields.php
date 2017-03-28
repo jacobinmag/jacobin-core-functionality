@@ -26,16 +26,14 @@ class Jacobin_Rest_API_Fields {
      */
     function __construct () {
 
-      $this->post_types = get_post_types( array( 'public' => true ), 'objects' );
-
-      $this->register_featured_image( $this->post_types );
-
       /**
        * Modify Responses
        */
       add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
       add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
       add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
+
+      add_action( 'init', array( $this, 'register_featured_image' ), 12 );
 
       /**
        * Register Fields
@@ -208,11 +206,9 @@ class Jacobin_Rest_API_Fields {
      * @param  array $post_types
      * @return void
      */
-    public function register_featured_image( $post_types ) {
+    public function register_featured_image() {
 
-      if( empty( $post_types ) ) {
-        return false;
-      }
+      $post_types = get_post_types( array( 'public' => true ), 'objects' );
 
       foreach( $post_types as $post_type ) {
         $post_type_name     = $post_type->name;
@@ -220,6 +216,7 @@ class Jacobin_Rest_API_Fields {
     		$supports_thumbnail = post_type_supports( $post_type_name, 'thumbnail' );
 
         if( $show_in_rest && $supports_thumbnail ) {
+
           register_rest_field( $post_type_name,
               'featured_image',
               array(
