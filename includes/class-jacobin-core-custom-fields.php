@@ -31,7 +31,28 @@
            $this->register_field_groups();
            $this->register_settings_fields();
          }
+
+         add_filter( 'coauthors_guest_author_fields', array( $this, 'add_guest_author_fields' ), 10, 2 );
      }
+
+     /**
+      * Add Guest Author Fields
+      *
+      * @since 0.3.5
+      *
+      * @param {array} $fields
+      * @param {obj} $groups
+      */
+      function add_guest_author_fields( $fields, $groups ) {
+        if ( in_array( 'all', $groups ) || in_array( 'name', $groups ) ) {
+          $fields[] = array(
+          'key'      => 'nickname',
+          'label'    => __( 'Nickname', 'jacobin-core' ),
+          'group'    => 'name',
+          );
+        }
+        return $fields;
+      }
 
      /**
       * Register Clone Fields
