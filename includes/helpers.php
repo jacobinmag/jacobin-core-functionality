@@ -185,6 +185,7 @@ function jacobin_featured_images_get_field( $image_id ) {
  * `author terms` are added to a post and guest-author in order to connect a post with multiple authors
  *
  * @since 0.1.14
+ * @since 0.3.5 `nickname` added
  *
  * @uses get_post_meta()
  * @uses get_author_posts_url()
@@ -205,6 +206,7 @@ function jacobin_get_coauthor_meta( $author_id  ) {
         'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
         'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
         'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
+        'nickname'      => get_post_meta( $user_id, 'cap-nickname', true ),
         'description'   => get_post_meta( $user_id, 'cap-description', true ),
         'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
         'term_id'       => ( !is_wp_error( $author_term ) ) ? $author_term[0]->term_id : false,

@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.7.3
-Version: 0.3.4
+Version: 0.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.3.5 April 24, 2017 =
+* #198 Added `nickname` field to `guest-author`
 
 = 0.3.4 March 28, 2017 =
 * Changed `url_source` to `source_url` in `featured_image` field
