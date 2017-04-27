@@ -58,7 +58,22 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
+            register_rest_field( 'post',
+                'antescript',
+                array(
+                    'get_callback'    => array( $this, 'get_field' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+            register_rest_field( 'post',
+                'postscript',
+                array(
+                    'get_callback'    => array( $this, 'get_field' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
             register_rest_field( 'post',
                 'authors',
                 array(
@@ -67,7 +82,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'post',
                 'translator',
                 array(
@@ -76,7 +90,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'post',
                 'interviewer',
                 array(
@@ -85,7 +98,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null
                 )
             );
-
             register_rest_field( 'post',
                 'featured_image_secondary',
                 array(
@@ -94,7 +106,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'post',
                 'related_articles',
                 array(
@@ -112,7 +123,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'issue',
                 'cover_artist',
                 array(
@@ -121,7 +131,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'issue',
                 'articles',
                 array(
@@ -130,7 +139,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'issue',
                 'featured_article',
                 array(
@@ -139,7 +147,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'issue',
               'issue_number',
               array(
@@ -148,7 +155,6 @@ class Jacobin_Rest_API_Fields {
                 'schema'            => null
               )
             );
-
             register_rest_field( 'issue',
               'issue_season',
               array(
@@ -166,7 +172,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'department',
                 'featured_image',
                 array(
@@ -175,7 +180,6 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-
             register_rest_field( 'department',
                 'featured_article',
                 array(
