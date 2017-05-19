@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.3.7
+ * Version:         0.3.8
  *
  * @package         Core_Functionality
  */
@@ -54,7 +54,7 @@ require_once( 'utils/copy-content.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.3.7' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.3.8' );
 
 	return $instance;
 }

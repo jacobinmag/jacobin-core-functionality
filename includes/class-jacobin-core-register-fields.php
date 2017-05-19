@@ -40,6 +40,13 @@ class Jacobin_Rest_API_Fields {
        */
       add_action( 'rest_api_init', array( $this, 'register_fields' ) );
 
+      /**
+       * Filter ACF_To_REST_API Response
+       *
+       * @since 0.3.8
+       */
+      add_filter( 'acf/rest_api/post/get_fields', array( $this, 'filter_issue_acf_response' ), 10, 3 );
+
     }
 
     /**
@@ -232,6 +239,35 @@ class Jacobin_Rest_API_Fields {
         }
       }
 
+    }
+
+    /**
+     * Add Meta to Issue Response
+     * Modify response from ACF_To_REST_API
+     *
+     * @link https://github.com/airesvsg/acf-to-rest-api/issues/9
+     *
+     * @since 0.3.8
+     *
+     * @param obj $data
+     * @param obj $request
+     * @param obj $response
+     * @return obj $data
+     */
+    public function filter_issue_acf_response( $data, $request, $response ) {
+      if ( $response instanceof WP_REST_Response ) {
+          $data = $response->get_data();
+      }
+
+      if( isset( $data['acf']['article_issue_relationship'] ) ) {
+        $issue_id = $data['acf']['article_issue_relationship'][0]->ID;
+        if( $issue_id ) {
+          $data['acf']['article_issue_relationship'][0]->issue_number = (int) get_post_meta( $issue_id, 'issue_number', true );
+          $data['acf']['article_issue_relationship'][0]->issue_season = get_post_meta( $issue_id, 'issue_season', true );
+        }
+      }
+
+      return $data;
     }
 
     /**
