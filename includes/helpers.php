@@ -36,7 +36,7 @@ function jacobin_get_post_data( $post_id ) {
     $post_data = array(
         'id'        => $post_id,
         'title'     => array(
-            'rendered'  => esc_attr( $post->post_title ),
+            'rendered'  => $post->post_title,
         ),
         'date'      => $post->post_date,
         'slug'      => $post->post_name,
