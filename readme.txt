@@ -25,6 +25,28 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+= 0.3.10 June 8, 2017 =
+* #281 - Organized post edit fields into tab groups
+* Fixed PHP warnings
+
+  ```
+  Trying to get property of non-object
+  Line: 263
+  File: /home/jacobin/webapps/editor_dev/wp-content/plugins/jacobin-core-functionality/includes/class-jacobin-core-register-fields.php
+
+  Uninitialized string offset: 0
+  Line: 263
+  File: /home/jacobin/webapps/editor_dev/wp-content/plugins/jacobin-core-functionality/includes/class-jacobin-core-register-fields.php
+
+  Trying to get property of non-object
+  Line: 212
+  File: /home/jacobin/webapps/editor_dev/wp-content/plugins/jacobin-core-functionality/includes/helpers.php
+
+  Undefined offset: 0
+  Line: 212
+  File: /home/jacobin/webapps/editor_dev/wp-content/plugins/jacobin-core-functionality/includes/helpers.php
+  ```
+
 = 0.3.9 June 8, 2017 =
 *  #291 - @link https://github.com/positiondev/jacobin/issues/291
    * Removed escaping for `title` property on `related-articles` and `featured-content`

@@ -18,9 +18,13 @@
 			var $coauthors = $('#coauthorsdiv');
 			var $featuredImage = $('#postimagediv');
 			var $secondaryImage = $('#acf-group_featured_image_secondary');
+			var $editorLabel = $( '.acf-field-content-label' );
+			var $postEditor = $( '#postdivrich' );
 
 			$publish.append( $excerpt );
 			$('#postexcerpt').remove();
+
+			$editorLabel.append( $postEditor );
 
 			$coauthors.insertAfter( '#submitdiv' );
 			$secondaryImage.insertAfter( $featuredImage );
