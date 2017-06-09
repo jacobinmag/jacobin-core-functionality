@@ -64,14 +64,16 @@ class Jacobin_Core_Admin {
 		$this->version = $version;
 		$this->option_id = 'toplevel_page_featured-content';
 
-		if( is_admin() ) {
-			add_action( 'admin_menu', array( $this, 'add_options_page' ) );
-		}
+		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
+		add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
+
+		//add_action( 'acf/input/admin_head', array( $this, 'modify_interview_question_field_height' ) );
 
 		/**
 		 * Add JS to admin head for ACF
 		 */
 		add_action( 'acf/input/admin_footer', array( $this, 'admin_footer' ) );
+		add_action( 'acf/input/admin_head', array( $this, 'admin_head' ) );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -80,13 +82,6 @@ class Jacobin_Core_Admin {
 		add_filter( 'issue_register_args', array( $this, 'modify_issue_args' ), 'issue' );
 		add_filter( 'timeline_register_args', array( $this, 'modify_timeline_args' ), 'timeline' );
 		add_filter( 'chart_register_args', array( $this, 'modify_chart_args' ), 'chart' );
-
-		/**
-		 * Modify Taxonomy Levels
-		 *
-		 * @since 0.2.2
-		 */
-		//add_filter( 'wp_terms_checklist_args', array( $this, 'terms_checklist_args' ) );
 
 	}
 
@@ -123,6 +118,26 @@ class Jacobin_Core_Admin {
 	}
 
 	/**
+	 * Descrease height of interview question editor box
+	 *
+	 * @return null
+	 */
+	public function admin_head() {
+
+			if( 'post' == get_post_type() ) : ?>
+					<style>
+					.small .acf-editor-wrap iframe,
+					.small .acf-editor-wrap .wp-editor-area {
+						height: 150px !important;
+						min-height: 150px;
+					}
+				</style>
+
+				<?php endif; ?>
+	<?php
+	}
+
+	/**
 	 * Add Scripts and Styles to ACF Admin Head
 	 *
 	 * @since 0.2.7
@@ -151,6 +166,13 @@ class Jacobin_Core_Admin {
 		 <?php endif; ?>
 
 		 <?php if( 'post' == $current_screen->base ) : ?>
+
+		 <style type="text/css">
+			#wp-content-editor-tools {
+					background-color: transparent;
+					padding-top: 0;
+			}
+		</style>
 
 		 <?php endif; ?>
 
@@ -234,25 +256,24 @@ class Jacobin_Core_Admin {
 	}
 
 	/**
-	 * Modify Taxonomy Args
-	 * Specify a custom Walker class for taxonomy metaboxes
+	 * Remove standard WordPress metaboxes for custom taxonomies.
 	 *
-	 * @access  public
-	 *
-	 * @since    0.2.2
-	 *
-	 * @uses class Jacobin_Core_Taxonomy_Walker
-	 * @uses wp_terms_checklist_args
-	 * @link http://wpfilte.rs/wp_terms_checklist_args/
-	 *
-	 * @param array $args
-	 * @return array $args
+	 * @since  0.1.0
+	 * @since 0.3.10
 	 */
-	public function terms_checklist_args( $args ) {
-		// if ( isset( $args['taxonomy'] ) && 'department' == $args['taxonomy'] ) {
-		// 	$args['walker'] = new Jacobin_Core_Taxonomy_Walker;
-		// }
-		return $args;
+	function remove_meta_boxes() {
+			remove_meta_box( 'seriesdiv', 'post', 'side' );
+			remove_meta_box( 'formatdiv', 'post', 'side' );
+			remove_meta_box( 'formatdiv', 'issue', 'side' );
+			remove_meta_box( 'authordiv', 'issue', 'side' );
+
+			/**
+			 * @since 0.3.9
+			 */
+			remove_meta_box( 'departmentdiv', 'post', 'side' );
+			remove_meta_box( 'categorydiv', 'post', 'side' );
+			remove_meta_box( 'tagsdiv-post_tag', 'post', 'side' );
+			remove_meta_box( 'locationdiv', 'post', 'side' );
 	}
 
 }

@@ -37,10 +37,6 @@ class Jacobin_Field_Settings {
          *
          * @link https://codex.wordpress.org/Function_Reference/remove_meta_box
          */
-        add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
-
-        add_action( 'acf/input/admin_head', array( $this, 'modify_interview_question_field_height' ) );
-
         add_filter( 'acf/fields/flexible_content/no_value_message', array( $this, 'modify_acf_flexible_content_message' ) );
 
         add_filter( 'acf/fields/relationship/query/name=translator', array( $this, 'relationship_options_filter' ), 10, 3 );
@@ -85,37 +81,11 @@ class Jacobin_Field_Settings {
     }
 
     /**
-     * Remove standard WordPress metaboxes for custom taxonomies.
+     * Change Flexible Content Text
      *
-     * @since  0.1.0
+     * @param string $no_value_message
+     * @return string $no_value_message
      */
-    function remove_meta_boxes() {
-        remove_meta_box( 'seriesdiv', 'post', 'side' );
-        remove_meta_box( 'formatdiv', 'post', 'side' );
-        remove_meta_box( 'formatdiv', 'issue', 'side' );
-        remove_meta_box( 'authordiv', 'issue', 'side' );
-    }
-
-    /**
-     * Descrease height of interview question editor box
-     *
-     * @return null
-     */
-    public function modify_interview_question_field_height() {
-
-        if( 'post' == get_post_type() ) { ?>
-            <style>
-        		.small .acf-editor-wrap iframe,
-            .small .acf-editor-wrap .wp-editor-area {
-        			height: 150px !important;
-        			min-height: 150px;
-        		}
-        	</style>
-            <?php
-        }
-
-    }
-
     public function modify_acf_flexible_content_message( $no_value_message ) {
         $no_value_message = __( 'Click the "%s" button below to add a section', 'jacobin-core' );
 
