@@ -209,7 +209,7 @@ function jacobin_get_coauthor_meta( $author_id  ) {
         'nickname'      => get_post_meta( $user_id, 'cap-nickname', true ),
         'description'   => get_post_meta( $user_id, 'cap-description', true ),
         'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
-        'term_id'       => ( !is_wp_error( $author_term ) ) ? $author_term[0]->term_id : false,
+        'term_id'       => ( !empty( $author_term ) && !is_wp_error( $author_term ) ) ? $author_term[0]->term_id : false,
     );
 
     if( empty( $meta ) ) {

@@ -259,7 +259,7 @@ class Jacobin_Rest_API_Fields {
           $data = $response->get_data();
       }
 
-      if( isset( $data['acf']['article_issue_relationship'] ) ) {
+      if( isset( $data['acf']['article_issue_relationship'][0] ) ) {
         $issue_id = $data['acf']['article_issue_relationship'][0]->ID;
         if( $issue_id ) {
           $data['acf']['article_issue_relationship'][0]->issue_number = (int) get_post_meta( $issue_id, 'issue_number', true );
