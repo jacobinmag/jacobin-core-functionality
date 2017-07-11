@@ -50,6 +50,14 @@ class Jacobin_Field_Settings {
         add_filter( 'acf/fields/relationship/query/name=home_content', array( $this, 'relationship_options_filter' ), 10, 3 );
         add_filter( 'acf/fields/relationship/query/name=editors_pick', array( $this, 'relationship_options_filter' ), 10, 3 );
 
+        /**
+         * Filter Default WP media markup
+         *
+         * @since 0.3.12
+         */
+        add_filter( 'img_caption_shortcode_width', '__return_false' );
+        add_filter( 'wp_calculate_image_srcset', '__return_false' );
+
      }
 
     /**
