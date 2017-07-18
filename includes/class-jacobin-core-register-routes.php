@@ -204,7 +204,14 @@ class Jacobin_Rest_API_Routes {
           return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
         }
 
-        $response = array_map(
+        $response['home_content_1'] = esc_attr( get_option( 'options_home_content_1' ) );
+        $response['home_content_2'] = esc_attr( get_option( 'options_home_content_2' ) );
+        $response['home_content_3'] = esc_attr( get_option( 'options_home_content_3' ) );
+        $response['home_content_1_tag'] = intval( get_option( 'options_home_content_1_tag' ) );
+        $response['home_content_2_tag'] = intval( get_option( 'options_home_content_2_tag' ) );
+        $response['home_content_3_tag'] = intval( get_option( 'options_home_content_3_tag' ) );
+
+        $response['posts'] = array_map(
             function( $post ) {
                 $post_id = $post->ID;
 
