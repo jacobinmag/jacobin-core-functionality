@@ -2106,7 +2106,7 @@
         	'fields' => array (
             array (
         			'key' => 'field_home_content',
-        			'label' => __( 'Home Content (36 total)', 'jacobin-core' ),
+        			'label' => __( 'Home Content (40 total)', 'jacobin-core' ),
         			'name' => 'home_content',
         			'type' => 'relationship',
         			'instructions' => '',
@@ -2130,12 +2130,12 @@
         				0 => 'featured_image',
         			),
         			'min' => 0,
-        			'max' => 36,
+        			'max' => 40,
         			'return_format' => 'id',
         		),
             array (
         			'key' => 'field_editorspick',
-        			'label' => __( 'Editor\'s Picks (max 5)', 'jacobin-core' ),
+        			'label' => __( 'Editor\'s Picks (max 4)', 'jacobin-core' ),
         			'name' => 'editors_pick',
               'type' => 'relationship',
         			'instructions' => '',
@@ -2159,7 +2159,7 @@
         				0 => 'featured_image',
         			),
         			'min' => 0,
-        			'max' => 5,
+        			'max' => 4,
         			'return_format' => 'id',
         		),
         	),
