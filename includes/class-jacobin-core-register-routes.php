@@ -207,9 +207,9 @@ class Jacobin_Rest_API_Routes {
         $response['home_content_1'] = esc_attr( get_option( 'options_home_content_1' ) );
         $response['home_content_2'] = esc_attr( get_option( 'options_home_content_2' ) );
         $response['home_content_3'] = esc_attr( get_option( 'options_home_content_3' ) );
-        $response['home_content_1_tag'] = intval( get_option( 'options_home_content_1_tag' ) );
-        $response['home_content_2_tag'] = intval( get_option( 'options_home_content_2_tag' ) );
-        $response['home_content_3_tag'] = intval( get_option( 'options_home_content_3_tag' ) );
+        $response['home_content_1_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_1_tag' ) ), 'post_tag' );
+        $response['home_content_2_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_2_tag' ) ), 'post_tag' );
+        $response['home_content_3_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_3_tag' ) ), 'post_tag' );
 
         $response['posts'] = array_map(
             function( $post ) {
