@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.8.0
-Version: 0.3.12
+Version: 0.3.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,13 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.3.13 July 17, 2017 =
+*  #307 - @link https://github.com/positiondev/jacobin/issues/307
+  * Increased home features to max 40
+  * Reduced editors picks to max 4
+  * Added text fields: `home_content_1`, `home_content_2`, `home_content_3`
+  * Added tag fields: `home_content_1_tag`, `home_content_2_tag`, `home_content_3_tag`
 
 = 0.3.12 July 11, 2017 =
 * #305 - @link https://github.com/positiondev/jacobin/issues/305 , #296 - @link https://github.com/positiondev/jacobin/issues/296
