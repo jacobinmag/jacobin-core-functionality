@@ -92,7 +92,7 @@ class Jacobin_Rest_API_Fields {
             register_rest_field( 'post',
                 'translator',
                 array(
-                    'get_callback'    => array( $this, 'get_author' ),
+                    'get_callback'    => array( $this, 'get_guest_authors' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )

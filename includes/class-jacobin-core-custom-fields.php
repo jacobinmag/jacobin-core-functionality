@@ -1186,7 +1186,7 @@
             'taxonomy' => array (
             ),
             'allow_null' => 0,
-            'multiple' => 0,
+            'multiple' => 1,
             'return_format' => 'id',
             'ui' => 1,
           ),
