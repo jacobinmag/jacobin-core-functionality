@@ -27,7 +27,7 @@ This section describes how to install the plugin and get it working.
 
 = 0.3.14 July 20, 2017 =
 *  #307 - @link https://github.com/positiondev/jacobin/issues/307
-  * Added new route at `/wp-json/jacobin/featured-content/home-content`
+  * Added new route at `/wp-json/jacobin/featured-content/section-titles`
 
 = 0.3.13 July 17, 2017 =
 *  #307 - @link https://github.com/positiondev/jacobin/issues/307
