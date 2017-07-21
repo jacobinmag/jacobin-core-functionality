@@ -220,13 +220,6 @@ class Jacobin_Rest_API_Routes {
           return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
         }
 
-        // $response['home_content_1'] = esc_attr( get_option( 'options_home_content_1' ) );
-        // $response['home_content_2'] = esc_attr( get_option( 'options_home_content_2' ) );
-        // $response['home_content_3'] = esc_attr( get_option( 'options_home_content_3' ) );
-        // $response['home_content_1_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_1_tag' ) ), 'post_tag' );
-        // $response['home_content_2_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_2_tag' ) ), 'post_tag' );
-        // $response['home_content_3_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_3_tag' ) ), 'post_tag' );
-
         $response = array_map(
             function( $post ) {
                 $post_id = $post->ID;
