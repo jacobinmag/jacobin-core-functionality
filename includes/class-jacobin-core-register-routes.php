@@ -54,7 +54,7 @@ class Jacobin_Rest_API_Routes {
             'enum'        => array(
               'home-content',
               'editors-picks',
-              'section-titles',
+              'section-topics',
             ),
             'required'    => true
           ),
@@ -171,18 +171,18 @@ class Jacobin_Rest_API_Routes {
         $options = array(
           'home-content'      => 'options_home_content',
           'editors-picks'     => 'options_editors_pick',
-          'section-titles'    => 'options_section_titles'
+          'section-topics'    => 'options_section_topics'
         );
 
         /* Response at /wp-json/jacobin/featured-content/home-content */
-        if( 'options_section_titles' === $options[$slug] ) {
+        if( 'options_section_topics' === $options[$slug] ) {
 
           $response['home_content_1'] = wp_kses_post( get_option( 'options_home_content_1' ) );
           $response['home_content_2'] = wp_kses_post( get_option( 'options_home_content_2' ) );
           $response['home_content_3'] = wp_kses_post( get_option( 'options_home_content_3' ) );
-          $response['home_content_1_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_1_tag' ) ), 'post_tag' );
-          $response['home_content_2_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_2_tag' ) ), 'post_tag' );
-          $response['home_content_3_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_3_tag' ) ), 'post_tag' );
+          $response['home_content_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_tag' ) ), 'post_tag' );
+          $response['home_content_category'] = get_term_by( 'id', intval( get_option( 'options_home_content_category' ) ), 'category' );
+          $response['home_content_series'] = get_term_by( 'id', intval( get_option( 'options_home_content_series' ) ), 'series' );
 
           return $response;
 
