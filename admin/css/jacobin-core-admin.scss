@@ -93,22 +93,7 @@
             background-color: lighten( $color__gray-dark, 30% );
             color: $color__white;
           }
-          // Standard Section 2
-          &.item-8,
-          &.item-9,
-          &.item-10,
-          &.item-11 {
-            background-color: lighten( $color__button-secondary, 30% );
-            // color: $color__white;
-          }
-          // Standard Section 3
-          &.item-12,
-          &.item-13,
-          &.item-14,
-          &.item-15 {
-            background-color: lighten( $color__warning, 30% );
-          }
-          // Secondary Section 4
+          // Secondary Section 1
           &.item-16,
           &.item-17,
           &.item-18,
@@ -117,9 +102,19 @@
           &.item-21,
           &.item-22,
           &.item-23 {
-            background-color: $color__gray;
+            background-color: lighten( $color__gray-dark, 30% );
+            color: $color__white;
           }
-          //Secondary Section 5
+
+          // Standard Section 2
+          &.item-8,
+          &.item-9,
+          &.item-10,
+          &.item-11 {
+            background-color: lighten( $color__button-secondary, 30% );
+            // color: $color__white;
+          }
+          //Secondary Section 2
           &.item-24,
           &.item-25,
           &.item-26,
@@ -127,7 +122,19 @@
           &.item-28,
           &.item-29,
           &.item-30,
-          &.item-31,
+          &.item-31 {
+            background-color: lighten( $color__button-secondary, 30% );
+            // color: $color__white;
+          }
+
+          // Standard Section 3
+          &.item-12,
+          &.item-13,
+          &.item-14,
+          &.item-15 {
+            background-color: lighten( $color__warning, 30% );
+          }
+          //Secondary Section 3
           &.item-32,
           &.item-33,
           &.item-34,
@@ -137,7 +144,7 @@
           &.item-38,
           &.item-39,
           &.item-40 {
-            background-color: $color__gray-light;
+            background-color: lighten( $color__warning, 30% );
           }
         }
       }

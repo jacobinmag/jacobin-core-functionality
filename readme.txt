@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.8.0
-Version: 0.3.14
+Version: 0.3.14.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,16 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.3.14.1 July 24, 2017 =
+*  #307 - @link https://github.com/positiondev/jacobin/issues/307
+  * Changed Home Content row colors
+  * Changed "Home Content 1 Text", "Home Content 2 Text" and "Home Content 3 Text" labels to "Home Title 1", "Home Title 2" and "Home Title 3"
+  * Removed Home Content 2 Tag and Home Content 3 Tag
+  * Rename the tag field to `home_content_tag` and its label "Featured Tag"; note: property is now `home_content_tag`
+  * Created "Featured Category" select field
+  * Created "Featured Series" select field
+  * Moved route to `section-topics`
 
 = 0.3.14 July 20, 2017 =
 *  #307 - @link https://github.com/positiondev/jacobin/issues/307
