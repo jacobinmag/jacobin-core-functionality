@@ -58,6 +58,8 @@ class Jacobin_Field_Settings {
         add_filter( 'img_caption_shortcode_width', '__return_false' );
         add_filter( 'wp_calculate_image_srcset', '__return_false' );
 
+        add_action( 'after_setup_theme', array( $this, 'add_theme_support' ) );
+
      }
 
     /**
@@ -67,6 +69,20 @@ class Jacobin_Field_Settings {
      */
     function register() {}
 
+    /**
+     * Add Feature Support
+     *
+     * @since 0.3.15
+     *
+     * @link https://developer.wordpress.org/reference/functions/add_theme_support/
+     *
+     * @return void
+     */
+    public function add_theme_support() {
+      add_theme_support( 'post-thumbnails' );
+      add_theme_support( 'custom-logo' );
+      add_theme_support( 'html5', array( 'gallery', 'caption' ) );
+    }
 
     /**
      * Filter out unpublished posts
