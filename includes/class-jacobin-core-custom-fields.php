@@ -1411,7 +1411,7 @@
               'id' => '',
             ),
             'taxonomy' => 'post_tag',
-            'field_type' => 'checkbox',
+      			'field_type' => 'multi_select',
             'allow_null' => 0,
             'add_term' => 1,
             'save_terms' => 1,
