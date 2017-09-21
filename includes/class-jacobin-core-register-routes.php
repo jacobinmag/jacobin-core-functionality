@@ -228,8 +228,8 @@ class Jacobin_Rest_API_Routes {
 
                 $post_data->{"id"} = $post->ID;
                 $post_data->{"date"} = $post->post_date;
-                $post_data->{"title"}["rendered"] = $post->post_title;
-                $post_data->{"subhead"} = get_post_meta( $post_id, 'subhead', true );
+                $post_data->{"title"}["rendered"] = get_the_title( $post_id );
+                $post_data->{"subhead"} = apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) );
                 $post_data->{"excerpt"}["rendered"] = esc_attr( $post->post_excerpt );
                 $post_data->{"slug"} = $post->post_name;
                 $post_data->{"authors"} = jacobin_get_authors_array( $post_id );

@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.8.0
-Version: 0.3.17
+Version: 0.3.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,10 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.3.18 Septembere 21, 2017 =
+* #326 Modified featured content (``/wp-json/jacobin/featured-content/{slug}/``) rendered title to use default filters
+* #326 Added `meta_content` text filters and applied to subhead fields.
 
 = 0.3.17 September 12, 2017 =
 * Removed Interviewer field group

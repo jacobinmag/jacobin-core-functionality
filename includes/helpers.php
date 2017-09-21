@@ -36,14 +36,14 @@ function jacobin_get_post_data( $post_id ) {
     $post_data = array(
         'id'        => $post_id,
         'title'     => array(
-            'rendered'  => $post->post_title,
+            'rendered'  => get_the_title( $post->ID ),
         ),
         'date'      => $post->post_date,
         'slug'      => $post->post_name,
         'excerpt'   => array(
             'rendered'    => jacobin_the_excerpt( $post_id ),
         ),
-        'subhead'   => get_post_meta( $post_id, 'subhead', true ),
+        'subhead'   => apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) ),
         'authors'   => jacobin_get_authors_array( $post_id ),
         'departments' => jacobin_get_post_terms( $post_id, 'department' ),
     );
@@ -82,7 +82,7 @@ function jacobin_get_image_meta( $image_id ) {
     $meta = array(
         'id'            => $image_id,
         'title'         => array(
-            'rendered'  => $image_data->post_title
+            'rendered'  => esc_attr( $image_data->post_title )
         ),
         'alt_text'      => get_post_meta( $image_id  , '_wp_attachment_image_alt', true ),
         'caption'       => $image_data->post_excerpt,
