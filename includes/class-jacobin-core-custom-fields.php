@@ -33,6 +33,8 @@
          }
 
          add_filter( 'coauthors_guest_author_fields', array( $this, 'add_guest_author_fields' ), 10, 2 );
+
+         $this->text_filters();
      }
 
      /**
@@ -2296,6 +2298,18 @@
        	} else {
        		return null;
         }
+     }
+
+     /**
+      * Text Filters for Custom Fields
+      *
+      * @since 0.3.18
+      *
+      * @return void
+      */
+     public function text_filters() {
+       add_filter( 'meta_content', 'wptexturize' );
+       add_filter( 'meta_content', 'convert_chars' );
      }
  }
 
