@@ -377,7 +377,13 @@ class Jacobin_Rest_API_Fields {
      *
      */
     public function get_field ( $object, $field_name, $request ) {
-        return get_post_meta( $object[ 'id' ], $field_name, true );
+      if( function_exists( 'get_field_object' ) ) {
+        $field_object = get_field_object( $field_name, $object['id'] );
+        if( 'wysiwyg' === $field_object['type'] ) {
+          return apply_filters( 'the_content', get_post_meta( $object[ 'id' ], $field_name, true ) );
+        }
+      }
+      return get_post_meta( $object[ 'id' ], $field_name, true );
     }
 
     // /**
