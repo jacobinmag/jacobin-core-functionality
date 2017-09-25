@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.3.18
+ * Version:         0.3.19
  *
  * @package         Core_Functionality
  */
@@ -54,7 +54,7 @@ require_once( 'admin/class-jacobin-core-admin.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.3.18' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.3.19' );
 
 	return $instance;
 }
@@ -116,4 +116,18 @@ Jacobin_Core()->register_taxonomy(
     __( 'Series', 'jacobin-core' ),
     __( 'Series', 'jacobin-core' ),
     'post'
+);
+
+/**
+ * Register Internal Status Class
+ * @var [type]
+ */
+Jacobin_Core()->register_taxonomy(
+    'status-internal',
+    __( 'Statuses', 'jacobin-core' ),
+    __( 'Status', 'jacobin-core' ),
+    array(
+			'post',
+			'issue'
+		)
 );

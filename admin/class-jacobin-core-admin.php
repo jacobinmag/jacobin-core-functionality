@@ -83,6 +83,12 @@ class Jacobin_Core_Admin {
 		add_filter( 'timeline_register_args', array( $this, 'modify_timeline_args' ), 'timeline' );
 		add_filter( 'chart_register_args', array( $this, 'modify_chart_args' ), 'chart' );
 
+		/**
+		 * Modify Status Tax Args
+		 * @since 0.3.19
+		 */
+		add_filter( 'status-internal_register_args', array( $this, 'modify_status_taxonomy_args' ) );
+
 	}
 
 
@@ -253,6 +259,29 @@ class Jacobin_Core_Admin {
 	public function modify_chart_args( $args ) {
 	    $args['menu_icon'] = 'dashicons-chart-line';
 	    return $args;
+	}
+
+	/**
+	 * Modify Status Taxonomy Args
+	 *
+	 * @access public
+	 *
+	 * @since 0.3.19
+	 *
+	 * @param array $args
+	 * @return array $args
+	 */
+	public function modify_status_taxonomy_args( $args ) {
+		$args['public'] = false;
+		$args['show_in_nav_menus'] = false;
+		$args['show_tagcloud'] = false;
+		$args['show_in_rest'] = false;
+		$args['rest_controller_class'] = false;
+		$args['rest_base'] = false;
+		$args['rewrite'] = false;
+		$args['description'] = __( 'For Internal Use', 'jacobin-core' );
+
+		return $args;
 	}
 
 	/**
