@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.8.0
-Version: 0.3.19
+Version: 0.3.21
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,7 +25,11 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-= 0.3.19 September 25f, 2017 =
+= 0.3.21 September 28, 2017 =
+* #329 Added `volume_number` field to issue and added to response @link https://github.com/positiondev/jacobin/issues/329
+* #331 Added boolean `toc` field to post. Response is at `acf` -> `toc` @link https://github.com/positiondev/jacobin/issues/331
+
+= 0.3.19 September 25, 2017 =
 * #332 Added new status taxonomy for internal use.
 * #334 Added Autop for antescript and postscript. wysiwyg fields are now treated like `the_content`.
 

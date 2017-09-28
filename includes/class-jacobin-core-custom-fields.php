@@ -1075,7 +1075,6 @@
             'placement' => 'left',
             'endpoint' => 0,
           ),
-
           array (
        			'key' => 'field_57cb51d4de8da',
        			'label' => __( 'Paywall', 'jacobin-core' ),
@@ -1092,7 +1091,22 @@
        			'message' => '',
        			'default_value' => 0,
        		),
-
+          array (
+       			'key' => 'field_toc',
+       			'label' => __( 'Table of Contents', 'jacobin-core' ),
+       			'name' => 'toc',
+       			'type' => 'true_false',
+       			'instructions' => '',
+       			'required' => 0,
+       			'conditional_logic' => 0,
+       			'wrapper' => array (
+       				'width' => '',
+       				'class' => '',
+       				'id' => '',
+       			),
+       			'message' => '',
+       			'default_value' => 0,
+       		),
           array (
             'key' => 'field_577c36bfea22d',
             'label' => __( 'Subhead (DEK)', 'jacobin-core' ),
@@ -1796,6 +1810,25 @@
         			'prepend' => '',
         			'append' => '',
         			'maxlength' => '',
+        		),
+            array (
+        			'key' => 'field_volume_number',
+        			'label' => __( 'Volume Number', 'jacobin-core' ),
+        			'name' => 'volume_number',
+              'type' => 'text',
+              'instructions' => '',
+              'required' => 0,
+              'conditional_logic' => 0,
+              'wrapper' => array (
+                'width' => '',
+                'class' => '',
+                'id' => '',
+              ),
+              'default_value' => '',
+              'placeholder' => '',
+              'prepend' => __( 'Volume', 'jacobin-core' ),
+              'append' => '',
+              'maxlength' => '',
         		),
         	),
         	'location' => array (

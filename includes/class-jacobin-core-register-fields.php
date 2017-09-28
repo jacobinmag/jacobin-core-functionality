@@ -170,6 +170,14 @@ class Jacobin_Rest_API_Fields {
                 'schema'            => null
               )
             );
+            register_rest_field( 'issue',
+              'volume_number',
+              array(
+                'get_callback'      => array( $this, 'get_field' ),
+                'update_callback'   => null,
+                'schema'            => null
+              )
+            );
 
             register_rest_field( 'department',
                 'parent_slug',
