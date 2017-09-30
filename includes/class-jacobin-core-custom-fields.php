@@ -1242,7 +1242,7 @@
               'class' => '',
               'id' => '',
             ),
-            'message' => __( 'If this is a reprinted article, please enter the publication name and source URL below.', 'jacobin-core' ),
+            'message' => __( 'If this is a reprinted article, please enter information below.', 'jacobin-core' ),
             'new_lines' => 'wpautop',
             'esc_html' => 0,
           ),
@@ -1281,6 +1281,41 @@
             'default_value' => '',
             'placeholder' => '',
           ),
+          array (
+            'key' => 'field_publication_publisher',
+            'label' => __( 'Publisher', 'jacobin-core' ),
+            'name' => 'publication_publisher',
+            'type' => 'text',
+            'instructions' => '',
+            'required' => 0,
+            'conditional_logic' => 0,
+            'wrapper' => array (
+              'width' => '',
+              'class' => '',
+              'id' => '',
+            ),
+            'default_value' => '',
+            'placeholder' => '',
+            'prepend' => '',
+            'append' => '',
+            'maxlength' => '',
+          ),
+          array (
+       			'key' => 'field_publication_adapted',
+       			'label' => __( 'Adapted', 'jacobin-core' ),
+       			'name' => 'publication_adapted',
+       			'type' => 'true_false',
+       			'instructions' => '',
+       			'required' => 0,
+       			'conditional_logic' => 0,
+       			'wrapper' => array (
+       				'width' => '',
+       				'class' => '',
+       				'id' => '',
+       			),
+       			'message' => '',
+       			'default_value' => 0,
+       		),
 
           /* Article Taxonomy Tab */
           array (
@@ -1631,6 +1666,50 @@
        	'description' => '',
        	'local' => 'php',
        ));
+
+
+      acf_add_local_field_group( array(
+      	'key' => 'group_internal',
+      	'title' => __( 'Internal', 'jacobin-core' ),
+      	'fields' => array (
+      		array (
+      			'key' => 'field_internal_memo',
+      			'label' => __( 'Memo', 'jacobin-core' ),
+      			'name' => 'internal_memo',
+      			'type' => 'textarea',
+      			'instructions' => __( 'For editorial comments', 'jacobin-core' ),
+      			'required' => 0,
+      			'conditional_logic' => 0,
+      			'wrapper' => array (
+      				'width' => '',
+      				'class' => '',
+      				'id' => '',
+      			),
+      			'default_value' => '',
+      			'placeholder' => '',
+      			'maxlength' => '',
+      			'rows' => '',
+      			'new_lines' => 'wpautop',
+      		),
+      	),
+      	'location' => array (
+      		array (
+      			array (
+      				'param' => 'post_type',
+      				'operator' => '==',
+      				'value' => 'post',
+      			),
+      		),
+      	),
+      	'menu_order' => 0,
+      	'position' => 'side',
+      	'style' => 'default',
+      	'label_placement' => 'top',
+      	'instruction_placement' => 'label',
+      	'hide_on_screen' => '',
+      	'active' => 1,
+      	'description' =>__( 'For Internal Use', 'jacobin-core' ),
+      ));
 
        /**
         * Department Taxonomy Term Meta Fields

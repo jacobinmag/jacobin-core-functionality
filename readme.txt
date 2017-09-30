@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.8.0
-Version: 0.3.21
+Version: 0.3.22
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,11 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+= 0.3.22 September 30, 2017 =
+* #345 Added post memo field @link https://github.com/positiondev/jacobin/issues/345
+* #333 Changed Status label to singular form. @link https://github.com/positiondev/jacobin/issues/332#issuecomment-332030317
+* #344 Added republication publisher field and adapted checkbox @link https://github.com/positiondev/jacobin/issues/344
 
 = 0.3.21 September 28, 2017 =
 * #329 Added `volume_number` field to issue and added to response @link https://github.com/positiondev/jacobin/issues/329
