@@ -89,8 +89,13 @@ class Jacobin_Core_Admin {
 		 */
 		add_filter( 'status-internal_register_args', array( $this, 'modify_status_taxonomy_args' ) );
 
-	}
+		/**
+		 * Modify Editor Role Capabilities
+		 * @since 0.4.1
+		 */
+		add_action( 'admin_init', array( $this, 'modify_editor_role_capabilities' ) );
 
+	}
 
 	/**
 	 * Add an Options Page using ACF
@@ -303,6 +308,21 @@ class Jacobin_Core_Admin {
 			remove_meta_box( 'categorydiv', 'post', 'side' );
 			remove_meta_box( 'tagsdiv-post_tag', 'post', 'side' );
 			remove_meta_box( 'locationdiv', 'post', 'side' );
+	}
+
+	/**
+	 * Modify Editor Role Capabilities
+	 * Allow the editor role to view users list
+	 *
+	 * @since 0.4.1
+	 *
+	 * @link https://codex.wordpress.org/Roles_and_Capabilities#Editor
+	 *
+	 * @return void
+	 */
+	function modify_editor_role_capabilities() {
+		$role = get_role( 'editor' );
+		$role->add_cap( 'list_users' );
 	}
 
 }
