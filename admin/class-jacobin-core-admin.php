@@ -201,7 +201,7 @@ class Jacobin_Core_Admin {
 		 * This function is provided for demonstration purposes only.
 		 */
 		if( $this->option_id == $current_screen->id || 'post' == $current_screen->base ) {
-			wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/jacobin-core-admin.css', array(), $this->version, 'all' );
+			wp_enqueue_style( $this->plugin_name, JACOBIN_CORE_DIR_URL . 'assets/css/admin.min.css', array(), $this->version, 'all' );
 		}
 
 	}
@@ -217,7 +217,7 @@ class Jacobin_Core_Admin {
 		 * This function is provided for demonstration purposes only.
 		 */
 		if( $this->option_id == $current_screen->id || 'post' == $current_screen->base ) {
-			wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/jacobin-core-admin.js', array( 'jquery' ), $this->version, true );
+			wp_enqueue_script( $this->plugin_name, JACOBIN_CORE_DIR_URL . 'assets/js/admin.js', array( 'jquery' ), $this->version, true );
 		}
 	}
 
