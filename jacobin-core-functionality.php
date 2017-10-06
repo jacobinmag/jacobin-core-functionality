@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.4.1
+ * Version:         0.4.2
  *
  * @package         Core_Functionality
  */
@@ -23,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @since 0.1.0
  */
 define( 'JACOBIN_CORE_DIR', dirname( __FILE__ ) );
+define( 'JACOBIN_CORE_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 require_once( 'includes/helpers.php' );
 
@@ -54,7 +55,7 @@ require_once( 'admin/class-jacobin-core-admin.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.4.1' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.4.2' );
 
 	return $instance;
 }

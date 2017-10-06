@@ -28,16 +28,13 @@ var dest = './assets/';
 
 var paths = {
     /* Source paths */
-    styles: src + 'css/**/*.scss',
-    adminStyles: './admin/css/**/*.scss',
-    adminScripts: './admin/js/',
-    scripts: src + 'js/',
+    styles: src + 'sass/**/*.scss',
+
+    scripts: src + 'js/*.js',
 
     /* Output paths */
     stylesOutput: dest + 'css/',
     scriptsOutput: dest + 'js/',
-    adminStylesOutput: './admin/css/',
-    adminScriptsOutput: './admin/js/',
 };
 
 
@@ -64,29 +61,6 @@ gulp.task( 'styles', function() {
     .pipe( notify( { message: 'Styles task complete' } ) );
 });
 
-gulp.task( 'admin-styles', function() {
-    return gulp.src( paths.adminStyles, {
-        style: 'expanded'
-    } )
-    .pipe( plumber( { errorHandler: onError } ) )
-    .pipe( sass() )
-    .pipe( gulp.dest( paths.adminStylesOutput ) )
-    .pipe(postcss([
-        autoprefixer({
-            browsers: ['last 2 version']
-        }),
-        mqpacker({
-            sort: true
-        }),
-    ]))
-    .pipe(sourcemaps.init())
-    .pipe( minifycss() )
-    .pipe(sourcemaps.write())
-    .pipe( rename( { suffix: '.min' } ) )
-    .pipe( gulp.dest( paths.adminStylesOutput ) )
-    .pipe( notify( { message: 'Styles task complete' } ) );
-});
-
 gulp.task('scripts', function(){
   return gulp.src(paths.scripts)
       .pipe(sourcemaps.write())
@@ -98,7 +72,6 @@ gulp.task( 'watch', function() {
     livereload.listen();
     gulp.watch( paths.styles, [ 'styles' ] );
     gulp.watch( paths.scripts, [ 'scripts' ] );
-    gulp.watch( paths.adminStyles, [ 'admin-styles' ] );
-} );
+``} );
 
-gulp.task( 'default', [ 'watch', 'styles', 'scripts', 'admin-styles'], function() {});
+gulp.task( 'default', [ 'watch', 'styles', 'scripts' ], function() {});
