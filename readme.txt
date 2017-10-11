@@ -25,7 +25,8 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-### 0.4.3 October 10, 2017
+### 0.4.3 October 11, 2017
+* #361 Added back listicle section type @link https://github.com/positiondev/jacobin/issues/361
 * #354 Added featured image to sections (removed from section items) @link https://github.com/positiondev/jacobin/issues/354
 
 ### 0.4.2 October 6, 2017
