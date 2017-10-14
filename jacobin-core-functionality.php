@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.4.3
+ * Version:         0.4.4
  *
  * @package         Core_Functionality
  */
@@ -55,7 +55,7 @@ require_once( 'admin/class-jacobin-core-admin.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.4.3' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.4.4' );
 
 	return $instance;
 }
