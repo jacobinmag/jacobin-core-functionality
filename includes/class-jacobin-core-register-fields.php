@@ -390,6 +390,9 @@ class Jacobin_Rest_API_Fields {
         if( 'wysiwyg' === $field_object['type'] ) {
           return apply_filters( 'the_content', get_post_meta( $object[ 'id' ], $field_name, true ) );
         }
+        if( 'text' === $field_object['type'] ) {
+          return apply_filters( 'the_title', get_post_meta( $object[ 'id' ], $field_name, true ) );
+        }
       }
       return get_post_meta( $object[ 'id' ], $field_name, true );
     }

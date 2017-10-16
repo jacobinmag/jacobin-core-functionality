@@ -60,6 +60,12 @@ class Jacobin_Field_Settings {
 
         add_action( 'after_setup_theme', array( $this, 'add_theme_support' ) );
 
+        /**
+         * Format text fields
+         * @since 0.4.5
+         */
+        add_filter( 'acf/format_value/type=text', array( $this, 'format_text_field' ), 10, 3 );
+
      }
 
     /**
@@ -68,6 +74,25 @@ class Jacobin_Field_Settings {
      * @since 0.1.0
      */
     function register() {}
+
+    /**
+     * Format Text Fields
+     * Apply `the_title` format filters to text fields
+     *
+     * @since 0.4.5
+     *
+     * @link https://www.advancedcustomfields.com/resources/acf-format_value/
+     *
+     * @param string $value
+     * @param int $post_id
+     * @param  $field
+     *
+     * @return string $value
+     */
+    public function format_text_field( $value, $post_id, $field ) {
+      $value = apply_filters( 'the_title', $value );
+      return $value;
+    }
 
     /**
      * Add Feature Support
