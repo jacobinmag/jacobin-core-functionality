@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.8.2
-Version: 0.4.5
+Version: 0.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+### 0.4.6 October 16, 2017
+* #353 Added back featured media to listed works @link https://github.com/positiondev/jacobin/issues/343#issuecomment-337048244
 
 ### 0.4.5 October 16, 2017
 * #353 Formatted section title values using `the_title` filter @link https://github.com/positiondev/jacobin/issues/353
