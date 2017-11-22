@@ -82,6 +82,14 @@ class Jacobin_Rest_API_Fields {
                 )
             );
             register_rest_field( 'post',
+                'footnotes',
+                array(
+                    'get_callback'    => array( $this, 'get_field' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+            register_rest_field( 'post',
                 'authors',
                 array(
                     'get_callback'    => array( $this, 'get_authors' ),
@@ -134,6 +142,14 @@ class Jacobin_Rest_API_Fields {
                 'cover_artist',
                 array(
                     'get_callback'    => array( $this, 'get_author' ),
+                    'update_callback' => null,
+                    'schema'          => null,
+                )
+            );
+            register_rest_field( 'issue',
+                'featured_image_secondary',
+                array(
+                    'get_callback'    => array( $this, 'get_featured_image_secondary' ),
                     'update_callback' => null,
                     'schema'          => null,
                 )

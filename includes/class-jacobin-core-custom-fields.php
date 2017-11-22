@@ -1320,6 +1320,26 @@
             'delay' => 0,
           ),
           array (
+      			'key' => 'field_footnotes',
+      			'label' => __( 'Footnotes', 'jacobin-core' ),
+      			'name' => 'footnotes',
+      			'type' => 'wysiwyg',
+      			'value' => NULL,
+      			'instructions' => '',
+      			'required' => 0,
+      			'conditional_logic' => 0,
+      			'wrapper' => array (
+      				'width' => '',
+      				'class' => '',
+      				'id' => '',
+      			),
+      			'default_value' => '',
+      			'tabs' => 'all',
+      			'toolbar' => 'basic',
+      			'media_upload' => 0,
+      			'delay' => 0,
+      		),
+          array (
             'key' => 'field_57dc2f429f3be',
             'label' => __( 'Translator', 'jacobin-core' ),
             'name' => 'translator',
@@ -1750,7 +1770,6 @@
         * Post Content Custom Fields
         */
 
-
        /**
         * Post Secondary Image
         */
@@ -1783,15 +1802,22 @@
        			'mime_types' => '',
        		),
        	),
-       	'location' => array (
-       		array (
-       			array (
-       				'param' => 'post_type',
-       				'operator' => '==',
-       				'value' => 'post',
-       			),
-       		),
-       	),
+        'location' => array (
+      		array (
+      			array (
+      				'param' => 'post_type',
+      				'operator' => '==',
+      				'value' => 'post',
+      			),
+      		),
+      		array (
+      			array (
+      				'param' => 'post_type',
+      				'operator' => '==',
+      				'value' => 'issue',
+      			),
+      		),
+      	),
        	'menu_order' => 500,
        	'position' => 'side',
        	'style' => 'default',
