@@ -28,6 +28,8 @@ This section describes how to install the plugin and get it working.
 ### 0.4.7 November 22, 2017
 * #389 Added footnotes field to posts @link https://github.com/positiondev/jacobin/issues/389
 * #390 Added second feature image to issues @link https://github.com/positiondev/jacobin/issues/390
+* #392 Fixed issue resulting in error in version 3 @link https://github.com/positiondev/jacobin/issues/392
+  * Added condition to get the version
 
 ### 0.4.6 October 16, 2017
 * #353 Added back featured media to listed works @link https://github.com/positiondev/jacobin/issues/343#issuecomment-337048244

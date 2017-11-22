@@ -20,11 +20,22 @@ class Jacobin_Rest_API_Fields {
     public $post_types;
 
     /**
+     * API Version
+     *
+     * @since 0.4.7
+     *
+     * @var string
+     */
+    public $version;
+
+    /**
      * Initialize all the things
      *
      * @since 0.1.0
      */
     function __construct () {
+
+      $this->version = get_option( 'acf_to_rest_api_request_version' );
 
       /**
        * Modify Responses
@@ -44,8 +55,13 @@ class Jacobin_Rest_API_Fields {
        * Filter ACF_To_REST_API Response
        *
        * @since 0.3.8
+       * @since 0.4.7
        */
-      add_filter( 'acf/rest_api/post/get_fields', array( $this, 'filter_issue_acf_response' ), 10, 3 );
+      if( '2' == $this->version  ) {
+        add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'filter_issue_acf_response_v2' ), 10, 3 );
+      } else {
+        add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'filter_issue_acf_response' ), 10, 2 );
+      }
 
     }
 
@@ -271,6 +287,34 @@ class Jacobin_Rest_API_Fields {
      *
      * @link https://github.com/airesvsg/acf-to-rest-api/issues/9
      *
+     * @since 0.4.7
+     *
+     * @param obj $data
+     * @param obj $response
+     * @return obj $data
+     */
+    public function filter_issue_acf_response( $data, $response ) {
+      if ( $response instanceof WP_REST_Response ) {
+          $data = $response->get_data();
+      }
+
+      if( isset( $data['acf']['article_issue_relationship'][0] ) ) {
+        $issue_id = $data['acf']['article_issue_relationship'][0]->ID;
+        if( $issue_id ) {
+          $data['acf']['article_issue_relationship'][0]->issue_number = (int) get_post_meta( $issue_id, 'issue_number', true );
+          $data['acf']['article_issue_relationship'][0]->issue_season = get_post_meta( $issue_id, 'issue_season', true );
+        }
+      }
+
+      return $data;
+    }
+
+    /**
+     * Add Meta to Issue Response
+     * Modify response from ACF_To_REST_API v2
+     *
+     * @link https://github.com/airesvsg/acf-to-rest-api/issues/9
+     *
      * @since 0.3.8
      *
      * @param obj $data
@@ -278,7 +322,7 @@ class Jacobin_Rest_API_Fields {
      * @param obj $response
      * @return obj $data
      */
-    public function filter_issue_acf_response( $data, $request, $response ) {
+    public function filter_issue_acf_response_v2( $data, $request, $response ) {
       if ( $response instanceof WP_REST_Response ) {
           $data = $response->get_data();
       }
