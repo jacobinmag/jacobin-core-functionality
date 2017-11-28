@@ -53,14 +53,15 @@ class Jacobin_Rest_API_Fields {
 
       /**
        * Filter ACF_To_REST_API Response
+       * Add to the `acf` property in the posts endpoint
        *
        * @since 0.3.8
        * @since 0.4.7
        */
       if( '2' == $this->version  ) {
-        add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'filter_issue_acf_response_v2' ), 10, 3 );
+        add_filter( 'acf/rest_api/post/get_fields', array( $this, 'filter_issue_acf_response_v2' ), 10, 3 );
       } else {
-        add_filter( 'acf/rest_api/issue/get_fields', array( $this, 'filter_issue_acf_response' ), 10, 2 );
+        add_filter( 'acf/rest_api/post/get_fields', array( $this, 'filter_issue_acf_response' ), 10, 2 );
       }
 
     }
