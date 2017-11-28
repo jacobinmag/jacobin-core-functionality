@@ -30,6 +30,7 @@ This section describes how to install the plugin and get it working.
 * #390 Added second feature image to issues @link https://github.com/positiondev/jacobin/issues/390
 * #392 Fixed issue resulting in error in version 3 @link https://github.com/positiondev/jacobin/issues/392
   * Added condition to get the version
+* #394 Modified `acf` response for related issue to return `volume_number` @link https://github.com/positiondev/jacobin/issues/394
 
 ### 0.4.6 October 16, 2017
 * #353 Added back featured media to listed works @link https://github.com/positiondev/jacobin/issues/343#issuecomment-337048244
