@@ -302,9 +302,9 @@ class Jacobin_Rest_API_Fields {
       if( isset( $data['acf']['article_issue_relationship'][0] ) ) {
         $issue_id = $data['acf']['article_issue_relationship'][0]->ID;
         if( $issue_id ) {
-          $data['acf']['article_issue_relationship'][0]->issue_number = (int) get_post_meta( $issue_id, 'issue_number', true );
+          $data['acf']['article_issue_relationship'][0]->issue_number = get_post_meta( $issue_id, 'issue_number', true );
           $data['acf']['article_issue_relationship'][0]->issue_season = get_post_meta( $issue_id, 'issue_season', true );
-          $data['acf']['article_issue_relationship'][0]->volume_number = (int) get_post_meta( $issue_id, 'volume_number', true );
+          $data['acf']['article_issue_relationship'][0]->volume_number = get_post_meta( $issue_id, 'volume_number', true );
         }
       }
 
@@ -332,9 +332,9 @@ class Jacobin_Rest_API_Fields {
       if( isset( $data['acf']['article_issue_relationship'][0] ) ) {
         $issue_id = $data['acf']['article_issue_relationship'][0]->ID;
         if( $issue_id ) {
-          $data['acf']['article_issue_relationship'][0]->issue_number = (int) get_post_meta( $issue_id, 'issue_number', true );
+          $data['acf']['article_issue_relationship'][0]->issue_number = get_post_meta( $issue_id, 'issue_number', true );
           $data['acf']['article_issue_relationship'][0]->issue_season = get_post_meta( $issue_id, 'issue_season', true );
-          $data['acf']['article_issue_relationship'][0]->volume_number = (int) get_post_meta( $issue_id, 'volume_number', true );
+          $data['acf']['article_issue_relationship'][0]->volume_number = get_post_meta( $issue_id, 'volume_number', true );
         }
       }
 
