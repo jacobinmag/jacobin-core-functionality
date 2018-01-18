@@ -33,33 +33,55 @@ function jacobin_core_clean_meta( $site = null, $args = array() ) {
 
   $posts = get_posts( $post_args );
 
-  echo count( $posts ) . ' posts found.';
-
   if( !empty( $posts ) && !is_wp_error( $posts ) ) {
+
+    echo count( $posts ) . ' posts found.<br />--------------<br />';
+
     foreach( $posts as $post ) {
 
       if( function_exists( 'get_fields' ) ) {
         $fields = get_fields( $post->ID );
 
-        echo count( $fields ) . ' fields found.';
+        echo "Post {$post->ID} - {$post->post_title}<br />------<br />";
 
         if( $fields ) {
+
+          $count = 0;
+
           foreach( $fields as $key => $value ) {
 
-            $field_obj = get_field_object( $key, $post->ID );
+            if( !empty( $value ) ) {
 
-            if( 'wysiwyg' == $field_obj['type'] ) {
-              $filtered_value = str_replace( array( '"\&quot;', '\&quot;"', '"&quot;', '&quot;"', '\"' ), '"', str_replace( array( "\n", "\t", "\r", '\\' ), '', $value ) );
+              $field_obj = get_field_object( $key, $post->ID );
 
-              //var_dump( $value );
+              if( 'wysiwyg' == $field_obj['type'] ) {
 
-              update_field( $key, $filtered_value, $post->ID );
+                $count++;
+
+                echo "{$key} to be updated.<br />";
+
+                $filtered_value = str_replace( array( '"\&quot;', '\&quot;"', '"&quot;', '&quot;"', '\"' ), '"', str_replace( array( "\n", "\t", "\r", '\\' ), '', $value ) );
+
+                //update_field( $key, $filtered_value, $post->ID );
+
+              }
+
             }
 
           }
+
         }
+
+        echo $count . " fields found for post {$post->ID}.<br /><br />";
+
       }
 
+    }
+  } else {
+    if( !is_wp_error( $posts ) ) {
+      print_r( $posts->get_error_message() );
+    } else {
+      echo 'There were no posts.';
     }
   }
 
