@@ -62,7 +62,7 @@ function jacobin_core_clean_meta( $site = null, $args = array() ) {
 
                 $filtered_value = str_replace( array( '"\&quot;', '\&quot;"', '"&quot;', '&quot;"', '\"' ), '"', str_replace( array( "\n", "\t", "\r", '\\' ), '', $value ) );
 
-                update_field( $key, $filtered_value, $post->ID );
+                //update_field( $key, $filtered_value, $post->ID );
 
               }
 
@@ -76,6 +76,12 @@ function jacobin_core_clean_meta( $site = null, $args = array() ) {
 
       }
 
+    }
+  } else {
+    if( !is_wp_error( $posts ) ) {
+      print_r( $posts->get_error_message() );
+    } else {
+      echo 'There were no posts.';
     }
   }
 
