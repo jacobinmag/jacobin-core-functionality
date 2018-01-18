@@ -56,13 +56,16 @@ function jacobin_core_clean_meta( $site = null, $args = array() ) {
 
               if( 'wysiwyg' == $field_obj['type'] ) {
 
-                $count++;
-
-                echo "{$key} to be updated.<br />";
-
                 $filtered_value = str_replace( array( '"\&quot;', '\&quot;"', '"&quot;', '&quot;"', '\"' ), '"', str_replace( array( "\n", "\t", "\r", '\\' ), '', $value ) );
 
-                //update_field( $key, $filtered_value, $post->ID );
+                if( 0 !== strcmp( $value, $filtered_value ) ) {
+
+                  $count++;
+
+                  echo "{$key} to be updated.<br />";
+
+                  update_field( $key, $filtered_value, $post->ID );
+                }
 
               }
 
@@ -78,10 +81,10 @@ function jacobin_core_clean_meta( $site = null, $args = array() ) {
 
     }
   } else {
-    if( !is_wp_error( $posts ) ) {
+    if( is_wp_error( $posts ) ) {
       print_r( $posts->get_error_message() );
     } else {
-      echo 'There were no posts.';
+      echo __( 'There were no posts.', 'jacobin-core' );
     }
   }
 
