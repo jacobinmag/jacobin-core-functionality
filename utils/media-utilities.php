@@ -22,11 +22,6 @@ function jacobin_core_clean_post_images_init( $site = null, $args = array() ) {
     switch_to_blog( $site );
   }
 
-  // Get all the posts
-  // Find `[caption]` shortcode or image tag in `post_content`
-  // If no featured image assigned, assign first image in `post_content`
-  // Remove first image in `post_content` - set marker
-
   $paged = 1;
 
   $defaults = array(
@@ -50,6 +45,10 @@ function jacobin_core_clean_post_images_init( $site = null, $args = array() ) {
       echo "\nSTEP {$paged}/{$max_num_pages}:\n";
 
       foreach( $query->posts as $post ) {
+
+        // Find `[caption]` shortcode or image tag in `post_content`
+        // If no featured image assigned, assign first image in `post_content`
+        // Remove first image in `post_content` - set marker
 
         var_dump( $post->ID );
 
