@@ -2,8 +2,8 @@
 Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
-Tested up to: 4.9.0
-Version: 0.4.8
+Tested up to: 4.9.2
+Version: 0.4.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,10 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+### 0.4.9 January 25, 2017
+* Added media cleanup utility
+* Removed unused image sizes
 
 ### 0.4.8 January 17, 2017
 * Added string cleanup utility function

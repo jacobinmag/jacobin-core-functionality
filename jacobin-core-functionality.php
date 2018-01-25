@@ -26,6 +26,7 @@ define( 'JACOBIN_CORE_DIR', dirname( __FILE__ ) );
 define( 'JACOBIN_CORE_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 require_once( 'includes/helpers.php' );
+require_once( 'includes/customizations.php' );
 
 // Load plugin libraries
 require_once( 'includes/lib/class-jacobin-core-post-type.php' );
@@ -45,6 +46,7 @@ require_once( 'admin/class-jacobin-core-admin.php' );
 
 // Load utility files
 require_once( 'utils/copy-content.php' );
+require_once( 'utils/media-utilities.php' );
 
 
 
