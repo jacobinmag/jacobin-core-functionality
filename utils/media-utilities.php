@@ -22,41 +22,53 @@ function jacobin_core_clean_post_images_init( $site = null, $args = array() ) {
     switch_to_blog( $site );
   }
 
-  $paged = 1;
+  if( $posts = jacobin_core_posts_without_featured_image( $args ) ) {
+    $total = count( $posts );
 
-  $defaults = array(
-    'post_type'       => 'post',
-    'posts_per_page'  => 50,
-    'paged'           => $paged
-  );
+    echo "\n-----\n{$total} without featured images were found.\n-----\n";
 
-  $args = wp_parse_args( $args, $defaults );
+    foreach( $posts as $post_id ) {
 
-  $query = new WP_Query( $args );
+      echo "\n----------\n";
+      echo "Results for {$post_id}.\n";
 
-  $max_num_pages = $query->max_num_pages;
+      if( $url = jacobin_core_find_media_in_post_content( $post_id ) ) {
 
-  if( $query->have_posts() ) {
+        echo "Image {$url} was found in post {$post_id}.\n";
 
-    echo "{$query->found_posts} posts were found.\n\n";
+        if( $attachment_id = attachment_url_to_postid( $url ) ) {
 
-    while( $query->have_posts() && $max_num_pages > $paged ) {
+          //set_post_thumbnail( $post_id, $attachment_id );
 
-      echo "\nSTEP {$paged}/{$max_num_pages}:\n";
+          echo "{$url}'s attachment id is {$attachment_id}\n";
 
-      foreach( $query->posts as $post ) {
+        } else {
 
-        // Find `[caption]` shortcode or image tag in `post_content`
-        // If no featured image assigned, assign first image in `post_content`
-        // Remove first image in `post_content` - set marker
+          echo "No attachment id was found for {$url} .\n";
 
-        var_dump( $post->ID );
+          continue;
+
+        }
+
+      } else {
+
+        echo "Post {$post_id} has no image tag.\n";
+
+        continue;
 
       }
 
-      $paged++;
+      echo "\n----------\n";
 
     }
+
+    echo "\n----------\n";
+    echo "{$total} posts were processed.";
+    echo "\n----------\n";
+
+  } else {
+
+    wp_die( 'No posts without featured images were found.' );
 
   }
 
@@ -67,47 +79,145 @@ function jacobin_core_clean_post_images_init( $site = null, $args = array() ) {
 }
 
 /**
+ * Find the Posts with No Featured Image
+ * Limits search to post ID for
+ *
+ * @param  array  $args
+ * @return mixed array of post ids || false
+ */
+function jacobin_core_posts_without_featured_image( $args = array() ) {
+
+  $defaults = array(
+    'post_type'       => 'post',
+    'posts_per_page'  => -1,
+    'fields'         => 'ids',
+    'meta_query' => array(
+       array(
+         'key' => '_thumbnail_id',
+         'value' => '?',
+         'compare' => 'NOT EXISTS'
+       )
+    ),
+  );
+
+  $args = wp_parse_args( $args, $defaults );
+
+  $query = new WP_Query( $args );
+
+  if( $query->have_posts() ) {
+
+    $posts = array();
+
+    while( $query->have_posts() ) {
+
+      return $query->posts;
+
+    }
+
+  }
+
+  return false;
+
+}
+
+/**
  * Find First Media Item in Post Content
+ *
+ * @uses DOMDocument class
+ * @link http://php.net/manual/en/class.domdocument.php
+ *
  * @param  obj $post
  * @return string $url
  */
-function jacobin_core_find_media_in_post_content( $post ) {
-  //Look for caption
-  //Look for image tag
-  //Return image url
+function jacobin_core_find_media_in_post_content( $post_id ) {
+  $content = get_post_field( 'post_content', $post_id );
+
+  if( class_exists( 'DomDocument' ) ) {
+    // Set error level
+    $internalErrors = libxml_use_internal_errors( true );
+
+    $dom = new DomDocument();
+    $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+    $images = $dom->getElementsByTagName( 'img' );
+
+    if( empty( $images ) ) {
+
+      return false;
+    }
+
+    $image = $images[0];
+
+    if( empty( $image ) ) {
+
+      echo "The first image tag in post {$post_id} doesn't seem to have a `src` attribute.\n";
+
+      return false;
+    }
+
+    $url = $image->getAttribute('src');
+
+    // Reset error level
+    libxml_use_internal_errors( $internalErrors );
+
+    return $url;
+  }
+
+  echo "Finding an image tag requires DomDocument";
+
+  return;
 }
 
-/**
- * Find Attachment ID for Media Item
- *
- * @param  string $url
- * @return int $attachment_id
- */
-function jacobin_core_find_attachment_id( $url ) {
-  //See if there is an attachment post for url
-  //Return attachment ID
-}
-
-/**
- * Attach Media Item to Post
- *
- * @param  obj $post
- * @param  int $attachment_id
- * @return void
- */
-function jacobin_core_attach_featured_image( $post, $attachment_id ) {
-  //Check if post has featured image
-  //If no featured image, attach to post
-}
-
-/**
- * Delete First Media Item in Post Content
- *
- * @param  obj $post
- * @return void
- */
-function jacobin_core_delete_first_media_in_post_content( $post ) {
-  //Check if already deleted flag is set (we only want to do this once!)
-  //If there is a caption shortcode, delete the first one, set flag and stop
-  //If there is an image tag, delete the first one, set flag and stop
-}
+// /**
+//  * Find Attachment ID for Media Item
+//  *
+//  * @param  string $url
+//  * @return int $attachment_id
+//  */
+// function jacobin_core_find_attachment_id( $url ) {
+//   //See if there is an attachment post for url
+//   //Return attachment ID
+// }
+//
+// /**
+//  * Attach Media Item to Post
+//  *
+//  * @param  obj $post
+//  * @param  int $attachment_id
+//  * @return void
+//  */
+// function jacobin_core_attach_featured_image( $post, $attachment_id ) {
+//
+//   if( ! has_post_thumbnail( $post ) ) {
+//
+//     set_post_thumbnail( $post, $attachment_id );
+//
+//     echo "Featured image was added for {$post->ID}";
+//
+//     return;
+//
+//   }
+//
+// }
+//
+// /**
+//  * Delete First Media Item in Post Content
+//  *
+//  * @param  obj $post
+//  * @return void
+//  */
+// function jacobin_core_delete_first_media_in_post_content( $post ) {
+//   //Check if already deleted flag is set (we only want to do this once!)
+//   if( get_post_meta( $post->ID, '_first_image_deleted', true ) ) {
+//     return;
+//   }
+//
+//   $content = $post->content;
+//
+//   if( has_shortcode( $content, 'caption' ) ) {
+//
+//   }
+//   //Look for caption
+//   //If there is a caption shortcode, delete the first one, set flag and stop
+//   //If there is an image tag, delete the first one, set flag and stop
+// }
