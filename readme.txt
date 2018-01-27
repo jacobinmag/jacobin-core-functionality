@@ -28,6 +28,7 @@ This section describes how to install the plugin and get it working.
 ### 0.4.9 January 25, 2017
 * Added media cleanup utility
 * Removed unused image sizes
+* Added WP-CLI integration
 
 ### 0.4.8 January 17, 2017
 * Added string cleanup utility function

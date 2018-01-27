@@ -12,13 +12,19 @@
  * Clean Up Post Media
  * Removes first image in post content, adds as featured image (if none exists) and deletes first image tag
  *
+ * @since      0.4.9
+ *
+ * @uses jacobin_core_posts_without_featured_image()
+ * @uses jacobin_core_find_media_in_post_content()
+ * @uses jacobin_core_add_attachment_post()
+ * @uses attachment_url_to_postid()
+ * @uses set_post_thumbnail()
+ *
  * @param  int $site
  * @param  array  $args
  * @return void
  */
 function jacobin_core_clean_post_images_init( $site = null, $args = array() ) {
-
-  var_dump( $site, $args );
 
   if( is_multisite() && $site ) {
     switch_to_blog( $site );
@@ -29,7 +35,6 @@ function jacobin_core_clean_post_images_init( $site = null, $args = array() ) {
 
     $total = count( $posts );
     $count = 0;
-    $start = wp_count_posts( 'attachment' );
     $no_image = 0;
 
     if ( defined( 'WP_CLI' ) && WP_CLI ) {
@@ -105,9 +110,6 @@ function jacobin_core_clean_post_images_init( $site = null, $args = array() ) {
       }
 
     }
-
-    $end = wp_count_posts( 'attachment' );
-    $new = $end->inherit - $start->inherit;
 
     if ( defined( 'WP_CLI' ) && WP_CLI ) {
       WP_CLI::log( "\n----------\nPosts processed: {$count} - Posts without images: {$no_image}\n----------\n" );
