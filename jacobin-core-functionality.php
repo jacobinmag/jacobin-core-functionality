@@ -47,6 +47,7 @@ require_once( 'admin/class-jacobin-core-admin.php' );
 // Load utility files
 require_once( 'utils/copy-content.php' );
 require_once( 'utils/media-utilities.php' );
+require_once( 'integrations/wp-cli.php' );
 
 
 
