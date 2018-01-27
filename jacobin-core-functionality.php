@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.4.8
+ * Version:         0.4.9
  *
  * @package         Core_Functionality
  */
@@ -26,6 +26,7 @@ define( 'JACOBIN_CORE_DIR', dirname( __FILE__ ) );
 define( 'JACOBIN_CORE_DIR_URL', plugin_dir_url( __FILE__ ) );
 
 require_once( 'includes/helpers.php' );
+require_once( 'includes/customizations.php' );
 
 // Load plugin libraries
 require_once( 'includes/lib/class-jacobin-core-post-type.php' );
@@ -45,6 +46,8 @@ require_once( 'admin/class-jacobin-core-admin.php' );
 
 // Load utility files
 require_once( 'utils/copy-content.php' );
+require_once( 'utils/media-utilities.php' );
+require_once( 'integrations/wp-cli.php' );
 
 
 
@@ -55,7 +58,7 @@ require_once( 'utils/copy-content.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.4.8' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.4.9' );
 
 	return $instance;
 }
