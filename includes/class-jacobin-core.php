@@ -1,7 +1,7 @@
 <?php
 /**
  * Jacobin Core
- * 
+ *
  * @package    Jacobin_Core
  * @subpackage Jacobin_Core\Includes
  * @since      0.1.0
@@ -112,7 +112,7 @@ class Jacobin_Core {
 		// Handle localisation
 		$this->load_plugin_textdomain();
 		add_action( 'init', array( $this, 'load_localisation' ), 0 );
-	
+
 	} // End __construct ()
 
 	/**
@@ -227,6 +227,6 @@ class Jacobin_Core {
 	 */
 	private function _log_version_number () {
 		update_option( $this->_token . '_version', $this->_version );
-	} // End _log_version_number ()	
+	} // End _log_version_number ()
 
 }

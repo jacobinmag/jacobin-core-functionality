@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.9.2
-Version: 0.4.9
+Version: 0.4.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,12 +25,28 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
-### 0.4.9 January 25, 2017
+### 0.4.10 February 1, 2018
+* Fixed issue causing error when trying to access `/wp-json/wp/v2/posts?status=draft`
+  `Jacobin_Core_Taxonomy` was setting `rest_base` to strtolower( $this->plural ). So, our custom taxonomy 'internal-status', which has the plural label 'Status' was colliding with the built-in Status taxonomy. Changing the `rest_base` to something unique solved the problem.
+```json
+{
+  "code": "rest_invalid_param",
+  "message": "Invalid parameter(s): status",
+  "data": {
+    "status": 400,
+    "params": {
+      "status": "status[0] is not of type integer."
+    }
+  }
+}
+```
+
+### 0.4.9 January 25, 2018
 * Added media cleanup utility
 * Removed unused image sizes
 * Added WP-CLI integration
 
-### 0.4.8 January 17, 2017
+### 0.4.8 January 17, 2018
 * Added string cleanup utility function
 
 ### 0.4.7 November 22, 2017
