@@ -35,3 +35,33 @@ function jacobin_core_cli_add_featured_images( $args = array(), $assoc_args = ar
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	WP_CLI::add_command( 'add-featured-images', 'jacobin_core_cli_add_featured_images' );
 }
+
+/**
+ * Run Delete Users Command
+ *
+ * Usage: `wp delete-users --site={id} --role={role} --reassign={user_id}`
+ *
+ * @uses jacobin_core_user_delete_init()
+ * @uses WP_CLI
+ *
+ * @param array $args
+ * @param array $assoc_args
+ * @return void
+ */
+function jacobin_core_cli_delete_users( $args = array(), $assoc_args = array() ) {
+
+  $defaults = array(
+    'site'      => null,
+    'role'      => null,
+    'reassign'  => null
+  );
+
+  $assoc_args = wp_parse_args( $assoc_args, $defaults );
+
+  jacobin_core_user_delete_init( $assoc_args['site'], $assoc_args['role'], $assoc_args['reassign'] );
+
+}
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	WP_CLI::add_command( 'delete-users', 'jacobin_core_cli_delete_users' );
+}
