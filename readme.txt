@@ -28,6 +28,9 @@ This section describes how to install the plugin and get it working.
 ### 0.4.12 February 14, 2018
 * Added DB performance functions
 
+### 0.4.11.1 February 15, 2018
+* Added function to delete first image from posts
+
 ### 0.4.11 February 12, 2018
 * User utilities to remove users based on role from network
 

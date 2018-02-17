@@ -172,6 +172,148 @@ function jacobin_core_posts_without_featured_image( $args = array() ) {
 }
 
 /**
+ * Initialize Delete Post Media Items
+ *
+ * @since 0.4.11.1
+ *
+ * @uses jacobin_core_delete_media_in_post_content()
+ *
+ * @param  int $site
+ * @param  array  $args
+ * @return void
+ */
+function jacobin_core_delete_media_init( $site = null, $args = array() ) {
+
+  if( is_multisite() && $site ) {
+    switch_to_blog( $site );
+  }
+
+  // Check Marker
+  if( !get_option( 'jacobin_core_post_image_deleted' ) ) {
+
+    $defaults = array(
+      'post_type'       => 'post',
+      'posts_per_page'  => -1,
+      'fields'         => 'ids',
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+
+    $query = new WP_Query( $args );
+
+    if( $query->have_posts() ) {
+
+      foreach( $query->get_posts() as $post_id ) {
+        jacobin_core_delete_media_in_post_content( $post_id );
+      }
+
+      add_option( 'jacobin_core_post_image_deleted', true );
+
+    } else {
+
+      return;
+
+    }
+  }
+
+  if( is_multisite() && $site ) {
+    restore_current_blog();
+  }
+
+}
+
+/**
+ * Delete 1st Image in Post Content
+ *
+ * 0.4.11.1
+ *
+ * @uses DOMDocument class
+ * @link http://php.net/manual/en/class.domdocument.php
+ *
+ * @param  int $post_id
+ * @return void
+ */
+function jacobin_core_delete_media_in_post_content( $post_id ) {
+  $content = get_post_field( 'post_content', $post_id );
+
+  $pattern = '(\[caption).+(\[\/caption\])';
+
+  if( preg_match( $pattern , $content ) ) {
+
+    $post_content = preg_replace( $pattern, '', $content );
+
+    $post = wp_update_post( $post_content, true );
+
+    if ( is_wp_error( $post ) ) {
+    	$errors = $post->get_error_messages();
+      echo "There was an error repacing the caption.";
+
+    	foreach ( $errors as $error ) {
+    		return $error;
+    	}
+
+      return new WP_Error( 'Error', __( "Failed to replace caption", "jacobin-core" ) );
+
+    }
+
+    return true;
+
+  } elseif( class_exists( 'DomDocument' ) ) {
+    // Set error level
+    $internalErrors = libxml_use_internal_errors( true );
+
+    $dom = new DomDocument();
+    $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
+
+    $images = $dom->getElementsByTagName( 'img' );
+
+    if( empty( $images ) ) {
+
+      echo "No images found.";
+      return false;
+    } else
+
+    $image = $images[0];
+
+    var_dump( $image );
+
+    if( empty( $image ) ) {
+      echo "No image found.";
+
+      return false;
+    }
+
+    $image->parentNode->removeChild( $image );
+
+    $content = $dom->saveHTML();
+
+    $post_content = array(
+      'ID'           => $post_id,
+      'post_content' => $dom->saveHTML(),
+     );
+
+    $post = wp_update_post( $post_content, true );
+
+    if ( is_wp_error( $post ) ) {
+
+      return new WP_Error( 'Error', __( "Failed to replace image", "jacobin-core" ) );
+
+    }
+
+    // Reset error level
+    libxml_use_internal_errors( $internalErrors );
+
+    return;
+
+  } else {
+
+    return false;
+    
+  }
+
+}
+
+/**
  * Find First Media Item in Post Content
  *
  * @uses DOMDocument class

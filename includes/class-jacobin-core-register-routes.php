@@ -234,6 +234,7 @@ class Jacobin_Rest_API_Routes {
                 $post_data->{"slug"} = $post->post_name;
                 $post_data->{"authors"} = jacobin_get_authors_array( $post_id );
                 $post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
+                $post_data->{"categories"} = jacobin_get_post_terms( $post_id, 'category' );
 
                 $image_id = get_post_thumbnail_id( $post_id );
                 $post_data->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
