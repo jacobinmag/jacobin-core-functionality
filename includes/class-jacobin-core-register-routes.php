@@ -158,6 +158,7 @@ class Jacobin_Rest_API_Routes {
      * Get Featured Content
      *
      * @since 0.1.14
+     * @since 0.4.12
      *
      * @param array $request
      * @return array|WP_Error

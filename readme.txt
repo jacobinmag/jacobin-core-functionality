@@ -27,6 +27,7 @@ This section describes how to install the plugin and get it working.
 
 ### 0.4.12 February 14, 2018
 * Added DB performance functions
+* Included post categories in response for featured content
 
 ### 0.4.11.1 February 15, 2018
 * Added function to delete first image from posts

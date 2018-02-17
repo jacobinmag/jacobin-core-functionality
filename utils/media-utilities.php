@@ -202,18 +202,42 @@ function jacobin_core_delete_media_init( $site = null, $args = array() ) {
     $query = new WP_Query( $args );
 
     if( $query->have_posts() ) {
-
+      $count = 0;
       foreach( $query->get_posts() as $post_id ) {
-        jacobin_core_delete_media_in_post_content( $post_id );
+
+        if( jacobin_core_delete_media_in_post_content( $post_id ) ) {
+          $count++;
+
+          if ( defined( 'WP_CLI' ) && WP_CLI ) {
+            WP_CLI::line( "Media found and stripped out: {$post_id}" );
+          } else {
+            echo "Media found and stripped out: {$post_id}\n";
+          }
+        }
+
       }
 
+      // Add marker
       add_option( 'jacobin_core_post_image_deleted', true );
+
+      if ( defined( 'WP_CLI' ) && WP_CLI ) {
+        WP_CLI::success( "Process Complete: Media was stripped out of {$count} posts." );
+      } else {
+        echo "Process Complete: Media was stripped out of {$count} posts.\n";
+      }
 
     } else {
 
-      return;
+      if ( defined( 'WP_CLI' ) && WP_CLI ) {
+        WP_CLI::warning( "Process Complete: No posts were found." );
+      } else {
+        echo "Process Complete: No posts were found.\n";
+      }
 
     }
+
+    wp_die( 'This process can only be run once.' );
+
   }
 
   if( is_multisite() && $site ) {
@@ -236,80 +260,36 @@ function jacobin_core_delete_media_init( $site = null, $args = array() ) {
 function jacobin_core_delete_media_in_post_content( $post_id ) {
   $content = get_post_field( 'post_content', $post_id );
 
-  $pattern = '(\[caption).+(\[\/caption\])';
+  $caption_pattern = '/'. get_shortcode_regex( array( 'caption' ) ) .'/s';
+  $image_pattern = '/<img[^>]+\>/i';
 
-  if( preg_match( $pattern , $content ) ) {
-
-    $post_content = preg_replace( $pattern, '', $content );
-
-    $post = wp_update_post( $post_content, true );
-
-    if ( is_wp_error( $post ) ) {
-    	$errors = $post->get_error_messages();
-      echo "There was an error repacing the caption.";
-
-    	foreach ( $errors as $error ) {
-    		return $error;
-    	}
-
-      return new WP_Error( 'Error', __( "Failed to replace caption", "jacobin-core" ) );
-
-    }
-
-    return true;
-
-  } elseif( class_exists( 'DomDocument' ) ) {
-    // Set error level
-    $internalErrors = libxml_use_internal_errors( true );
-
-    $dom = new DomDocument();
-    $dom->loadHTML( mb_convert_encoding( $content, 'HTML-ENTITIES', 'UTF-8' ) );
-
-    $images = $dom->getElementsByTagName( 'img' );
-
-    if( empty( $images ) ) {
-
-      echo "No images found.";
-      return false;
-    } else
-
-    $image = $images[0];
-
-    var_dump( $image );
-
-    if( empty( $image ) ) {
-      echo "No image found.";
-
-      return false;
-    }
-
-    $image->parentNode->removeChild( $image );
-
-    $content = $dom->saveHTML();
-
-    $post_content = array(
-      'ID'           => $post_id,
-      'post_content' => $dom->saveHTML(),
-     );
-
-    $post = wp_update_post( $post_content, true );
-
-    if ( is_wp_error( $post ) ) {
-
-      return new WP_Error( 'Error', __( "Failed to replace image", "jacobin-core" ) );
-
-    }
-
-    // Reset error level
-    libxml_use_internal_errors( $internalErrors );
-
-    return;
-
-  } else {
-
-    return false;
-    
+  /* Look for `[caption]` shortcode */
+  if( preg_match( $caption_pattern, $content, $result ) ) {
+    $pattern = $caption_pattern;
   }
+  /* Look for `<img>` tag */
+  else if( preg_match( $image_pattern, $content, $result )  ) {
+    $pattern = $image_pattern;
+  }
+  else {
+    return false;
+  }
+
+  $post_content = preg_replace( $pattern, '', $content, 1 );
+
+  $post_updates = array(
+    'ID'            => $post_id,
+    'post_content'  => $post_content
+  );
+  $post = wp_update_post( $post_updates, true );
+
+  if ( is_wp_error( $post ) ) {
+    $errors = $post->get_error_messages();
+    echo "There was an error stripping the caption or image.";
+    return $errors;
+  }
+
+  return true;
 
 }
 
