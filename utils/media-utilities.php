@@ -172,6 +172,128 @@ function jacobin_core_posts_without_featured_image( $args = array() ) {
 }
 
 /**
+ * Initialize Delete Post Media Items
+ *
+ * @since 0.4.11.1
+ *
+ * @uses jacobin_core_delete_media_in_post_content()
+ *
+ * @param  int $site
+ * @param  array  $args
+ * @return void
+ */
+function jacobin_core_delete_media_init( $site = null, $args = array() ) {
+
+  if( is_multisite() && $site ) {
+    switch_to_blog( $site );
+  }
+
+  // Check Marker
+  if( !get_option( 'jacobin_core_post_image_deleted' ) ) {
+
+    $defaults = array(
+      'post_type'       => 'post',
+      'posts_per_page'  => -1,
+      'fields'         => 'ids',
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+
+    $query = new WP_Query( $args );
+
+    if( $query->have_posts() ) {
+      $count = 0;
+      foreach( $query->get_posts() as $post_id ) {
+
+        if( jacobin_core_delete_media_in_post_content( $post_id ) ) {
+          $count++;
+
+          if ( defined( 'WP_CLI' ) && WP_CLI ) {
+            WP_CLI::line( "Media found and stripped out: {$post_id}" );
+          } else {
+            echo "Media found and stripped out: {$post_id}\n";
+          }
+        }
+
+      }
+
+      // Add marker
+      add_option( 'jacobin_core_post_image_deleted', true );
+
+      if ( defined( 'WP_CLI' ) && WP_CLI ) {
+        WP_CLI::success( "Process Complete: Media was stripped out of {$count} posts." );
+      } else {
+        echo "Process Complete: Media was stripped out of {$count} posts.\n";
+      }
+
+    } else {
+
+      if ( defined( 'WP_CLI' ) && WP_CLI ) {
+        WP_CLI::warning( "Process Complete: No posts were found." );
+      } else {
+        echo "Process Complete: No posts were found.\n";
+      }
+
+    }
+
+    wp_die( 'This process can only be run once.' );
+
+  }
+
+  if( is_multisite() && $site ) {
+    restore_current_blog();
+  }
+
+}
+
+/**
+ * Delete 1st Image in Post Content
+ *
+ * 0.4.11.1
+ *
+ * @uses DOMDocument class
+ * @link http://php.net/manual/en/class.domdocument.php
+ *
+ * @param  int $post_id
+ * @return void
+ */
+function jacobin_core_delete_media_in_post_content( $post_id ) {
+  $content = get_post_field( 'post_content', $post_id );
+
+  $caption_pattern = '/'. get_shortcode_regex( array( 'caption' ) ) .'/s';
+  $image_pattern = '/<img[^>]+\>/i';
+
+  /* Look for `[caption]` shortcode */
+  if( preg_match( $caption_pattern, $content, $result ) ) {
+    $pattern = $caption_pattern;
+  }
+  /* Look for `<img>` tag */
+  else if( preg_match( $image_pattern, $content, $result )  ) {
+    $pattern = $image_pattern;
+  }
+  else {
+    return false;
+  }
+
+  $post_content = preg_replace( $pattern, '', $content, 1 );
+
+  $post_updates = array(
+    'ID'            => $post_id,
+    'post_content'  => $post_content
+  );
+  $post = wp_update_post( $post_updates, true );
+
+  if ( is_wp_error( $post ) ) {
+    $errors = $post->get_error_messages();
+    echo "There was an error stripping the caption or image.";
+    return $errors;
+  }
+
+  return true;
+
+}
+
+/**
  * Find First Media Item in Post Content
  *
  * @uses DOMDocument class

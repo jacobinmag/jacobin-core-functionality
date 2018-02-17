@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.9.2
-Version: 0.4.11
+Version: 0.4.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,13 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+### 0.4.12 February 14, 2018
+* Added DB performance functions
+* Included post categories in response for featured content
+
+### 0.4.11.1 February 15, 2018
+* Added function to delete first image from posts
 
 ### 0.4.11 February 12, 2018
 * User utilities to remove users based on role from network
