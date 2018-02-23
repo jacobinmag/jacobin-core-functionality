@@ -159,9 +159,10 @@ class Jacobin_Rest_API_Routes {
      *
      * @since 0.1.14
      * @since 0.4.12
+     * @since 0.4.13
      *
      * @param array $request
-     * @return array|WP_Error
+     * @return array || WP_Error
      */
     public function get_featured_content( $request ) {
 
@@ -231,7 +232,7 @@ class Jacobin_Rest_API_Routes {
                 $post_data->{"date"} = $post->post_date;
                 $post_data->{"title"}["rendered"] = get_the_title( $post_id );
                 $post_data->{"subhead"} = apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) );
-                $post_data->{"excerpt"}["rendered"] = esc_attr( $post->post_excerpt );
+                $post_data->{"excerpt"}["rendered"] = jacobin_core_custom_excerpt( $post );
                 $post_data->{"slug"} = $post->post_name;
                 $post_data->{"authors"} = jacobin_get_authors_array( $post_id );
                 $post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );

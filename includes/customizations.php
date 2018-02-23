@@ -24,3 +24,22 @@ function jacobin_core_remove_image_sizes() {
   remove_image_size( 'guest-author-128' );
 }
 add_action( 'init', 'jacobin_core_remove_image_sizes' );
+
+/**
+ * Custom Get Excerpt
+ *
+ * @since 0.4.13
+ *
+ * @param  int $post_id
+ * @return string $excerpt
+ */
+function jacobin_core_custom_excerpt( $post ) {
+
+  if( !empty( $post->post_excerpt ) ) {
+    return $post->post_excerpt;
+  }
+  $excerpt = $post->post_content;
+  $excerpt = apply_filters( 'get_the_excerpt', $excerpt );
+
+  return $excerpt;
+}
