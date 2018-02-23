@@ -108,7 +108,7 @@ class Jacobin_Core_Taxonomy {
             'show_admin_column'     => true,
             'update_count_callback' => '',
             'show_in_rest'          => true,
-            'rest_base'             => strtolower( $this->taxonomy ),
+            'rest_base'             => strtolower( $this->plural ),
             'rest_controller_class' => 'WP_REST_Terms_Controller',
             'query_var'             => $this->taxonomy,
             'rewrite'               => true,

@@ -2,8 +2,8 @@
 Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
-Tested up to: 4.9.2
-Version: 0.4.12
+Tested up to: 4.9.4
+Version: 0.4.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,10 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+### 0.4.13 February 23, 2018
+* Fixed excerpt in featured content response @link https://github.com/positiondev/jacobin/issues/438
+* Fixed custom taxonomy responses. Reverted changes made in 0.4.10 and instead modified `status-internal` rest $args @link https://github.com/positiondev/jacobin/issues/439
 
 ### 0.4.12 February 14, 2018
 * Added DB performance functions

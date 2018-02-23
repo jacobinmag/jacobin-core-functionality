@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.4.12
+ * Version:         0.4.13
  *
  * @package         Core_Functionality
  */
@@ -60,7 +60,7 @@ require_once( 'integrations/wp-cli.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.4.12' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.4.13' );
 
 	return $instance;
 }
@@ -100,21 +100,30 @@ Jacobin_Core()->register_taxonomy(
     'department',
     __( 'Departments', 'jacobin-core' ),
     __( 'Department', 'jacobin-core' ),
-    'post'
+    'post',
+		array(
+			'rest_base'		 => 'departments',
+		)
 );
 
 Jacobin_Core()->register_taxonomy(
     'format',
     __( 'Formats', 'jacobin-core' ),
     __( 'Format', 'jacobin-core' ),
-    'post'
+    'post',
+		array(
+			'rest_base'		 => 'formats',
+		)
 );
 
 Jacobin_Core()->register_taxonomy(
     'location',
     __( 'Locations', 'jacobin-core' ),
     __( 'Location', 'jacobin-core' ),
-    'post'
+    'post',
+		array(
+			'rest_base'		 => 'locations',
+		)
 );
 
 Jacobin_Core()->register_taxonomy(
@@ -125,8 +134,7 @@ Jacobin_Core()->register_taxonomy(
 );
 
 /**
- * Register Internal Status Class
- * @var [type]
+ * Register Internal Status Taxonomy
  */
 Jacobin_Core()->register_taxonomy(
     'status-internal',
@@ -135,5 +143,10 @@ Jacobin_Core()->register_taxonomy(
     array(
 			'post',
 			'issue'
+		),
+		array(
+			'show_in_rest' => false,
+			'rest_base'		 => 'statuses-internal',
+			'public'			 => false
 		)
 );
