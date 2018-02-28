@@ -25,9 +25,13 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+### 0.4.14 Febrary 27, 2018
+* #443 Added shortcode for non-admin users to embed scripts. @link https://github.com/positiondev/jacobin/issues/443
+  @link https://codex.wordpress.org/Roles_and_Capabilities#unfiltered_html
+
 ### 0.4.13 February 23, 2018
-* Fixed excerpt in featured content response @link https://github.com/positiondev/jacobin/issues/438
-* Fixed custom taxonomy responses. Reverted changes made in 0.4.10 and instead modified `status-internal` rest $args @link https://github.com/positiondev/jacobin/issues/439
+* #438 Fixed excerpt in featured content response @link https://github.com/positiondev/jacobin/issues/438
+* #439 Fixed custom taxonomy responses. Reverted changes made in 0.4.10 and instead modified `status-internal` rest $args @link https://github.com/positiondev/jacobin/issues/439
 
 ### 0.4.12 February 14, 2018
 * Added DB performance functions
