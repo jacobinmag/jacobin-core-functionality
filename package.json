@@ -1,29 +1,8 @@
-
 {
   "name": "jacobin-core-functionality",
-  "version": "0.1.0",
-  "main": "Gruntfile.js",
+  "version": "0.5.0",
+  "main": "gulpfile.js",
   "author": "Pea <pea@misfist.com>",
-  "devDependencies": {
-    "grunt": "~0.4.5",
-    "grunt-wp-i18n": "~0.5.0",
-    "grunt-wp-readme-to-markdown": "~1.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/misfist/center-valley-animal-rescue.git"
-  },
-  "license": [
-    {
-      "type": "GPL-3.0",
-      "url": "https://opensource.org/licenses/GPL-3.0"
-    }
-  ],
-  "scripts": {},
-  "engines": {
-    "node": ">= 0.12.0",
-    "npm": ">=2.1.5"
-  },
   "devDependencies": {
     "autoprefixer": "^6.3.3",
     "css-mqpacker": "^4.0.0",
@@ -44,5 +23,23 @@
     "gulp-watch": "^4.3.5",
     "gulp-wp-pot": "^1.1.1",
     "sprity": "^1.0.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/positiondev/jacobin.git"
+  },
+  "license": [
+    {
+      "type": "GPL-3.0",
+      "url": "https://opensource.org/licenses/GPL-3.0"
+    }
+  ],
+  "scripts": {},
+  "engines": {
+    "node": ">= 0.12.0",
+    "npm": ">=2.1.5"
+  },
+  "dependencies": {
+    "gulp-concat-js": "^0.1.0"
   }
 }

@@ -29,12 +29,12 @@ var dest = './assets/';
 var paths = {
     /* Source paths */
     styles: src + 'sass/**/*.scss',
-
     scripts: src + 'js/*.js',
+    scriptsAdmin: './admin/js/**/*.js',
 
     /* Output paths */
     stylesOutput: dest + 'css/',
-    scriptsOutput: dest + 'js/',
+    scriptsOutput: dest + 'js/'
 };
 
 
@@ -68,10 +68,27 @@ gulp.task('scripts', function(){
       .pipe( notify( { message: 'Script task complete' } ) );
 });
 
+gulp.task('scripts-admin', function () {
+    return gulp.src(paths.scriptsAdmin)
+        .pipe(sourcemaps.init())
+          .pipe(concat({
+              "target": "admin.js"
+          }))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest(paths.scriptsOutput));
+});
+
+// gulp.task('scripts-admin', function(){
+//   return gulp.src(paths.scriptsAdmin)
+//       .pipe(sourcemaps.write())
+//       .pipe(gulp.dest(paths.scriptsOutput + 'admin.js'))
+//       .pipe( notify( { message: 'Script task complete' } ) );
+// });
+
 gulp.task( 'watch', function() {
     livereload.listen();
     gulp.watch( paths.styles, [ 'styles' ] );
     gulp.watch( paths.scripts, [ 'scripts' ] );
 ``} );
 
-gulp.task( 'default', [ 'watch', 'styles', 'scripts' ], function() {});
+gulp.task( 'default', [ 'watch', 'styles', 'scripts', 'scripts-admin' ], function() {});

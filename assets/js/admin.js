@@ -7,7 +7,7 @@
 	'use strict';
 
 	// Make sure `acf` is defined
-	if( 'undefined' !== acf ) {
+	if( typeof acf !== 'undefined' ) {
 
 		/* Post Edit Screen */
 		// Move post edit screen elements
