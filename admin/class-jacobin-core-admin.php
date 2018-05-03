@@ -67,8 +67,6 @@ class Jacobin_Core_Admin {
 		add_action( 'admin_menu', array( $this, 'add_options_page' ) );
 		add_action( 'admin_menu', array( $this, 'remove_meta_boxes' ) );
 
-		//add_action( 'acf/input/admin_head', array( $this, 'modify_interview_question_field_height' ) );
-
 		/**
 		 * Add JS to admin head for ACF
 		 */
@@ -95,6 +93,12 @@ class Jacobin_Core_Admin {
 		 */
 		add_action( 'admin_init', array( $this, 'modify_editor_role_capabilities' ) );
 
+		/**
+		 * Initialize Guest Author Export
+		 * @since 0.5.0
+		 */
+		$this->init_export_guest_authors();
+
 	}
 
 	/**
@@ -115,6 +119,18 @@ class Jacobin_Core_Admin {
 				'position' 		=> 50,
 				'redirect'		=> false
 			) );
+		}
+	}
+
+	/**
+	 * Initialize Export Guest Authors
+	 *
+	 * @since 0.5.0
+	 * @return void
+	 */
+	public function init_export_guest_authors() {
+		if( class_exists( 'CoAuthors_Plus' ) ) {
+			include( JACOBIN_CORE_DIR . '/admin/class-jacobin-core-export-guest-authors.php' );
 		}
 	}
 
