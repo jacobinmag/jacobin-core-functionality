@@ -45,6 +45,7 @@ function jacobin_get_post_data( $post_id ) {
         ),
         'subhead'   => apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) ),
         'authors'   => jacobin_get_authors_array( $post_id ),
+        'categories' => jacobin_get_post_terms( $post_id, 'category' ),
         'departments' => jacobin_get_post_terms( $post_id, 'department' ),
     );
 

@@ -27,6 +27,7 @@ This section describes how to install the plugin and get it working.
 
 ### 0.5.0 April 30, 2018
 * #454 Added Guest Author export function. @link https://github.com/positiondev/jacobin/issues/454
+* #456 Added `categories` to `related_articles`@link https://github.com/positiondev/jacobin/issues/456
 
 ### 0.4.14 Febrary 27, 2018
 * #443 Added shortcode for non-admin users to embed scripts. @link https://github.com/positiondev/jacobin/issues/443
