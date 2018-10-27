@@ -74,7 +74,7 @@ class Jacobin_Rest_API_Fields {
     function register_fields () {
         if ( function_exists( 'register_rest_field' ) ) {
 
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'subhead',
                 array(
                     'get_callback'    => array( $this, 'get_field' ),
@@ -82,7 +82,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'antescript',
                 array(
                     'get_callback'    => array( $this, 'get_field' ),
@@ -90,7 +90,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'postscript',
                 array(
                     'get_callback'    => array( $this, 'get_field' ),
@@ -98,7 +98,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'footnotes',
                 array(
                     'get_callback'    => array( $this, 'get_field' ),
@@ -106,7 +106,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'authors',
                 array(
                     'get_callback'    => array( $this, 'get_authors' ),
@@ -114,7 +114,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'translator',
                 array(
                     'get_callback'    => array( $this, 'get_guest_authors' ),
@@ -122,7 +122,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'interviewer',
                 array(
                     'get_callback'    => array( $this, 'get_guest_authors' ),
@@ -130,7 +130,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'featured_image_secondary',
                 array(
                     'get_callback'    => array( $this, 'get_featured_image_secondary' ),
@@ -138,7 +138,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'post',
+            register_rest_field( array( 'post', 'revision' ),
                 'related_articles',
                 array(
                     'get_callback'    => array( $this, 'get_related_articles' ),
@@ -147,7 +147,7 @@ class Jacobin_Rest_API_Fields {
                 )
             );
 
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
                 'authors',
                 array(
                     'get_callback'    => array( $this, 'get_authors' ),
@@ -155,7 +155,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
                 'cover_artist',
                 array(
                     'get_callback'    => array( $this, 'get_author' ),
@@ -163,7 +163,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
                 'featured_image_secondary',
                 array(
                     'get_callback'    => array( $this, 'get_featured_image_secondary' ),
@@ -171,7 +171,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
                 'articles',
                 array(
                     'get_callback'    => array( $this, 'get_issue_articles' ),
@@ -179,7 +179,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
                 'featured_article',
                 array(
                     'get_callback'    => array( $this, 'get_featured_post_post' ),
@@ -187,7 +187,7 @@ class Jacobin_Rest_API_Fields {
                     'schema'          => null,
                 )
             );
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
               'issue_number',
               array(
                 'get_callback'      => array( $this, 'get_field' ),
@@ -195,7 +195,7 @@ class Jacobin_Rest_API_Fields {
                 'schema'            => null
               )
             );
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
               'issue_season',
               array(
                 'get_callback'      => array( $this, 'get_field' ),
@@ -203,7 +203,7 @@ class Jacobin_Rest_API_Fields {
                 'schema'            => null
               )
             );
-            register_rest_field( 'issue',
+            register_rest_field( array( 'issue', 'revision' ),
               'volume_number',
               array(
                 'get_callback'      => array( $this, 'get_field' ),
@@ -260,7 +260,7 @@ class Jacobin_Rest_API_Fields {
      */
     public function register_featured_image() {
 
-      $post_types = get_post_types( array( 'public' => true ), 'objects' );
+      $post_types = get_post_types( array( 'public' => false ), 'objects' );
 
       foreach( $post_types as $post_type ) {
         $post_type_name     = $post_type->name;

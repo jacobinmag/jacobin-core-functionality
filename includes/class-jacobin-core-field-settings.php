@@ -66,6 +66,14 @@ class Jacobin_Field_Settings {
          */
         add_filter( 'acf/format_value/type=text', array( $this, 'format_text_field' ), 10, 3 );
 
+        /**
+         * Filter to include ACF fields for revisions
+         * @since 0.5.1
+         */
+        if( function_exists( 'get_fields' ) ) {
+          add_filter( 'rest_prepare_revision', array( $this, 'rest_prepare_revision' ), 10, 2 );
+        }
+
      }
 
     /**
@@ -140,6 +148,24 @@ class Jacobin_Field_Settings {
 
         return $no_value_message;
     }
+
+    /**
+     * Include ACF Fields
+     * Add ACF fields to revision post data
+     *
+     * @since 0.5.1
+     *
+     * @param  obj $response [description]
+     * @param  obj $post     [description]
+     * @return obj $data
+     */
+    function rest_prepare_revision( $response, $post ) {
+      $data = $response->get_data();
+      $data['acf'] = get_fields( $post->ID );
+
+      return rest_ensure_response( $data );
+    }
+
 
 }
 
