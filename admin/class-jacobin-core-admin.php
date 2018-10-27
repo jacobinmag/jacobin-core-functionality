@@ -94,6 +94,13 @@ class Jacobin_Core_Admin {
 		add_action( 'admin_init', array( $this, 'modify_editor_role_capabilities' ) );
 
 		/**
+		 * Modify Preview Button Link
+		 *
+		 * @since 0.5.1
+		 */
+		add_filter( 'preview_post_link', array( $this, 'preview_page_link' ) );
+
+		/**
 		 * Initialize Guest Author Export
 		 * @since 0.5.0
 		 */
@@ -339,6 +346,24 @@ class Jacobin_Core_Admin {
 	function modify_editor_role_capabilities() {
 		$role = get_role( 'editor' );
 		$role->add_cap( 'list_users' );
+	}
+
+	/**
+	 * Modify Preview Button Link
+	 *
+	 * @since 0.5.1
+	 *
+	 * @param  string $link
+	 * @return string $link
+	 */
+	function preview_page_link( $link ) {
+		$id = get_the_ID();
+		$nonce = wp_create_nonce( 'wp_rest' );
+		$home_url = get_option( 'home' );
+
+		$link = $home_url . '/editor/posts/'. $id . '/?_wpnonce=' . $nonce;
+
+		return $link;
 	}
 
 }
