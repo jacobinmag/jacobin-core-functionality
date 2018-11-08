@@ -1,6 +1,6 @@
 <?php
 /**
- * Jacobin Core Field Settings
+ * Jacobin Core Admin Functions
  *
  * @package    Jacobin_Core
  * @subpackage Jacobin_Core\Admin
@@ -101,10 +101,26 @@ class Jacobin_Core_Admin {
 		add_filter( 'preview_post_link', array( $this, 'preview_page_link' ) );
 
 		/**
+		 * Modify View  Links
+		 *
+		 * @since 0.5.3
+		 */
+		add_filter( 'post_link', array( $this, 'post_link' ), 10, 3 );
+		add_filter( 'page_link', array( $this, 'post_link' ), 10, 3 );
+		add_filter( 'post_type_link', array( $this, 'post_link' ), 10, 2 );
+
+		/**
 		 * Initialize Guest Author Export
 		 * @since 0.5.0
 		 */
 		$this->init_export_guest_authors();
+
+		/**
+		 * Init Settings
+		 *
+		 * @since 0.5.3
+		 */
+		$this->init_settings();
 
 	}
 
@@ -139,6 +155,15 @@ class Jacobin_Core_Admin {
 		if( class_exists( 'CoAuthors_Plus' ) ) {
 			include( JACOBIN_CORE_DIR . '/admin/class-jacobin-core-export-guest-authors.php' );
 		}
+	}
+
+	/**
+	 * Include Settings
+	 *
+	 * @since 0.5.3
+	 */
+	public function init_settings() {
+		include( JACOBIN_CORE_DIR . '/admin/class-jacobin-core-settings.php' );
 	}
 
 	/**
@@ -357,13 +382,41 @@ class Jacobin_Core_Admin {
 	 * @return string $link
 	 */
 	function preview_page_link( $link ) {
-		$id = get_the_ID();
+		$post_id = get_the_ID();
 		$nonce = wp_create_nonce( 'wp_rest' );
-		$home_url = get_option( 'home' );
+		$revisions = wp_get_post_revisions( $post_id, array( 'posts_per_page' => 1 ) );
+		$revision_id = key( $revisions );
+		$frontend_url = get_option( 'frontend_url', 'https://jacobinmag.com' );
+		$frontend_token = get_option( 'frontend_token', 'zXwzsAOnIB8aG1X6XOIh' );
 
-		$link = $home_url . '/editor/posts/'. $id . '/?_wpnonce=' . $nonce;
+		$link = sprintf( '%s/revisions/%d/%d?token=%s',
+			rtrim( $frontend_url, '/' ),
+			$post_id,
+			$revision_id,
+			$frontend_token
+		);
 
 		return $link;
+	}
+
+	/**
+	 * Modify View Link
+	 *
+	 * @since 0.5.3
+	 *
+	 * @link https://developer.wordpress.org/reference/hooks/post_link/
+	 *
+	 * @param  string  $url
+	 * @param  obj  $post
+	 * @param  boolean $leavename
+	 * @return string $url
+	 */
+	function post_link( $url, $post, $leavename = true ) {
+		$home_url = get_option( 'home' );
+		$frontend_url = get_option( 'frontend_url', 'https://jacobinmag.com' );
+		$url = str_replace( $home_url, $frontend_url, $url );
+
+		return $url;
 	}
 
 }
