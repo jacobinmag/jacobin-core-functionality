@@ -75,7 +75,8 @@
 				 'type' 				=> 'url',
 				 'placeholder' 	=> esc_attr( 'https://jacobinmag.com' ),
 				 // 'helper' 				=> 'Does this help?',
-				 'supplemental' 	=> __( 'The URL at which visitors see your site.', 'jacobin-core' ),
+				 'supplemental' => __( 'The URL at which visitors see your site.', 'jacobin-core' ),
+         'default'      => esc_attr( 'https://jacobinmag.com' ),
 			 ),
 			 array(
 				 'uid' 					=> 'frontend_token',
@@ -84,6 +85,7 @@
 				 'type' 				=> 'text',
 				 'placeholder' 	=> esc_attr( 'r4nd0MstR1n6' ),
 				 'supplemental' => __( 'The token used to retrieve draft posts and revisions.', 'jacobin-core' ),
+         'default'      => esc_attr( 'zXwzsAOnIB8aG1X6XOIh' ),
 			 ),
 		 );
 
