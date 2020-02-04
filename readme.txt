@@ -3,7 +3,7 @@ Contributors: misfist
 Tags: custom post type, custom taxonomy, rest api
 Requires at least: 4.7
 Tested up to: 4.9.4
-Version: 0.5.1
+Version: 0.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,6 +24,9 @@ This section describes how to install the plugin and get it working.
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Changelog ==
+
+### 0.5.4 Febrary 3, 2020
+* Added search endpoint for new Relevanssi search (usage: /wp-json/relevanssi/v1/search?s=query)
 
 ### 0.5.1 October 25, 2018
 * Modified preview link in admin to point to `$home_url` . '/editor/posts/'. `$id` . '/?_wpnonce=' . `$nonce` so that posts can be previewed.

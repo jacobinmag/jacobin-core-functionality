@@ -111,7 +111,12 @@ class Jacobin_Rest_API_Routes {
     				}
     			),
     		),
-    	) );
+      ) );
+      
+      register_rest_route( $this->namespace, 'search', array(
+        'methods'  => WP_REST_Server::READABLE,
+        'callback' => array( $this, 'get_search' ),
+      ) );
 
     }
 
@@ -129,7 +134,7 @@ class Jacobin_Rest_API_Routes {
     }
 
     /**
-     * Get Featured Content
+     * Get Home Featured Content
      *
      * @since 0.1.14
      *
@@ -162,7 +167,7 @@ class Jacobin_Rest_API_Routes {
      * @since 0.4.13
      *
      * @param array $request
-     * @return array || WP_Error
+     * @return mixed array || WP_Error
      */
     public function get_featured_content( $request ) {
 
@@ -256,7 +261,7 @@ class Jacobin_Rest_API_Routes {
      * @since 0.2.5
      *
      * @uses jacobin_get_coauthor_meta()
-     *
+     * 
      * @param obj $request
      * @return array coauthor_meta
      */
@@ -303,6 +308,60 @@ class Jacobin_Rest_API_Routes {
       return jacobin_get_coauthor_meta( $author_id  );
     }
 
-}
+    /**
+     * Guest Relevanssi Search
+     * 
+     * @uses relevanssi_do_query()
+     * 
+     * @link https://www.relevanssi.com/knowledge-base/relevanssi_do_query/
+     *
+     * Usage:   /wp-json/relevanssi/v1/search?s=query
+     *          /wp-json/relevanssi/v1/search?s=query&posts_per_page=5
+     *
+     * @param obj $request
+     * @return mixed array || WP_Error
+     */
+    public function get_search( $request ) {
+      $parameters = $request->get_query_params();
 
+      $posts_per_page = get_option( 'posts_per_page' );
+
+      if ( isset( $parameters['posts_per_page'] ) && ( (int) $parameters['posts_per_page'] >= 1 && (int) $filter['posts_per_page'] <= $posts_per_page ) ) {
+        $posts_per_page = intval( $parameters['posts_per_page'] );
+      } else {
+        $posts_per_page = $posts_per_page;
+      }
+    
+      $args = array(
+        's'               =>  $parameters['s'],
+        'posts_per_page'  =>  $posts_per_page,
+      );
+
+      if( function_exists( 'relevanssi_do_query' ) ) {
+        $search_query = new WP_Query();
+        $search_query->parse_query( $args );
+
+        relevanssi_do_query( $search_query );
+      } else {
+        $search_query = new WP_Query( $args );
+      }
+  
+      $controller = new WP_REST_Posts_Controller( 'post' );
+      $posts = array();
+  
+      while ( $search_query->have_posts() ) { 
+        $search_query->the_post();
+        $data    = $controller->prepare_item_for_response( $search_query->post, $request );
+        $posts[] = $controller->prepare_response_for_collection( $data );
+      };
+    
+      if( !empty( $posts ) ) {
+        return new WP_REST_Response( $posts, 200 );
+      } else {
+        return new WP_Error( 'No results', 'Nothing found' );
+      }
+    
+    }
+
+}
 new Jacobin_Rest_API_Routes();
