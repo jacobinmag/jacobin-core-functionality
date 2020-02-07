@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.5.4
+ * Version:         0.5.5
  *
  * @package         Core_Functionality
  */

@@ -44,12 +44,11 @@ class Jacobin_Rest_API_Fields {
       add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
       add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
 
-      add_action( 'init', array( $this, 'register_featured_image' ), 12 );
-
       /**
        * Register Fields
        */
       add_action( 'rest_api_init', array( $this, 'register_fields' ) );
+      add_action( 'rest_api_init', array( $this, 'register_featured_image' ), 12 );
 
       /**
        * Filter ACF_To_REST_API Response
@@ -260,26 +259,25 @@ class Jacobin_Rest_API_Fields {
      */
     public function register_featured_image() {
 
-      $post_types = get_post_types( array( 'public' => false ), 'objects' );
+      $post_types = get_post_types( 
+          array( 
+            'public'        => true,
+            'show_in_rest'  => true,
+            '_builtin'      => true
+          ),
+          'objects' 
+        );
 
-      foreach( $post_types as $post_type ) {
-        $post_type_name     = $post_type->name;
-    		$show_in_rest       = ( isset( $post_type->show_in_rest ) && $post_type->show_in_rest ) ? true : false;
-    		$supports_thumbnail = post_type_supports( $post_type_name, 'thumbnail' );
-
-        if( $show_in_rest && $supports_thumbnail ) {
-
-          register_rest_field( $post_type_name,
-              'featured_image',
-              array(
-                  'get_callback'    => array( $this, 'get_featured_image' ),
-                  'update_callback' => null,
-                  'schema'          => null,
-              )
+        foreach( $post_types as $post_type ) {
+          register_rest_field( $post_type->name,
+            'featured_image',
+            array(
+              'get_callback'    => array( $this, 'get_featured_image' ),
+              'update_callback' => null,
+              'schema'          => null,
+            )
           );
         }
-      }
-
     }
 
     /**
