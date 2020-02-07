@@ -263,7 +263,6 @@ class Jacobin_Rest_API_Fields {
           array( 
             'public'        => true,
             'show_in_rest'  => true,
-            '_builtin'      => true
           ),
           'objects' 
         );
