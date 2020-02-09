@@ -338,35 +338,44 @@ class Jacobin_Rest_API_Routes {
       }
 
       if( function_exists( 'relevanssi_do_query' ) ) {
-        $search_query = new WP_Query();
-        $search_query->parse_query( $args );
+        $query = new WP_Query();
+        $query->parse_query( $args );
 
-        relevanssi_do_query( $search_query );
+        relevanssi_do_query( $query );
       } else {
-        $search_query = new WP_Query( $args );
+        $query = new WP_Query( $args );
       }
+
+      /**
+       * No posts
+       */
+      if( empty( $query->posts ) ) {
+        return new WP_Error( 'no_posts', __( 'No post found', 'core-functionality' ) , array( 'status' => 404 ) );
+      }
+
+      $max_pages = $query->max_num_pages;
+      $total = $query->found_posts;
 
       /**
        * If page number requested is greater than the total number of pages, bail
        */
-      if( isset( $parameters['page'] ) && $parameters['page'] > $search_query->max_num_pages ) {
-        return new WP_Error( 'rest_post_invalid_page_number', esc_attr( 'The page number requested is larger than the number of pages available.' ), array( 'status' => 400 ) );
+      if( isset( $parameters['page'] ) && $parameters['page'] > $max_pages ) {
+        return new WP_Error( 'rest_post_invalid_page_number', __( 'The page number requested is larger than the number of pages available.', 'core-functionality' ), array( 'status' => 400 ) );
       }
-  
+
+      $posts = $query->posts;
       $controller = new WP_REST_Posts_Controller( 'post' );
-      $posts = array();
   
-      while ( $search_query->have_posts() ) { 
-        $search_query->the_post();
-        $data    = $controller->prepare_item_for_response( $search_query->post, $request );
-        $posts[] = $controller->prepare_response_for_collection( $data );
+      foreach ( $posts as $post ) { 
+        $response = $controller->prepare_item_for_response( $post, $request );
+        $data[] = $controller->prepare_response_for_collection( $response );
       };
     
-      if( !empty( $posts ) ) {
-        return new WP_REST_Response( $posts, 200 );
-      } else {
-        return new WP_Error( 'No results', 'Nothing found', array( 'status' => 404 ) );
-      }
+      $response = new WP_REST_Response( $data, 200 );
+      $response->header( 'X-WP-Total', $total );
+      $response->header( 'X-WP-TotalPages', $max_pages );
+
+      return $response;
     
     }
 
