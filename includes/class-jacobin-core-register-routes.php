@@ -309,14 +309,16 @@ class Jacobin_Rest_API_Routes {
     }
 
     /**
-     * Guest Relevanssi Search
+     * Relevanssi Search
+     * Custom endpoint do search using Relevanssi search plugin
      * 
      * @uses relevanssi_do_query()
      * 
      * @link https://www.relevanssi.com/knowledge-base/relevanssi_do_query/
      *
-     * Usage:   /wp-json/relevanssi/v1/search?s=query
-     *          /wp-json/relevanssi/v1/search?s=query&posts_per_page=5
+     * Usage:   /wp-json/jacobin/search/?s=sanders
+     *          /wp-json/jacobin/search/?s=sanders&per_page=5
+     *          /wp-json/jacobin/search/?s=sanders&per_page=5&page=2
      *
      * @param obj $request
      * @return mixed array || WP_Error
@@ -324,18 +326,16 @@ class Jacobin_Rest_API_Routes {
     public function get_search( $request ) {
       $parameters = $request->get_query_params();
 
-      $posts_per_page = get_option( 'posts_per_page' );
-
-      if ( isset( $parameters['posts_per_page'] ) && ( (int) $parameters['posts_per_page'] >= 1 && (int) $filter['posts_per_page'] <= $posts_per_page ) ) {
-        $posts_per_page = intval( $parameters['posts_per_page'] );
-      } else {
-        $posts_per_page = $posts_per_page;
-      }
+      $posts_per_page = ( isset( $parameters['per_page'] ) ) ? (int) $parameters['per_page'] : get_option( 'posts_per_page' );
     
       $args = array(
-        's'               =>  $parameters['s'],
-        'posts_per_page'  =>  $posts_per_page,
+        's'               => $parameters['s'],
+        'posts_per_page'  => $posts_per_page
       );
+
+      if( isset( $parameters['page'] ) ) {
+        $args['paged'] = (int) $parameters['page'];
+      }
 
       if( function_exists( 'relevanssi_do_query' ) ) {
         $search_query = new WP_Query();
@@ -344,6 +344,13 @@ class Jacobin_Rest_API_Routes {
         relevanssi_do_query( $search_query );
       } else {
         $search_query = new WP_Query( $args );
+      }
+
+      /**
+       * If page number requested is greater than the total number of pages, bail
+       */
+      if( isset( $parameters['page'] ) && $parameters['page'] > $search_query->max_num_pages ) {
+        return new WP_Error( 'rest_post_invalid_page_number', esc_attr( 'The page number requested is larger than the number of pages available.' ), array( 'status' => 400 ) );
       }
   
       $controller = new WP_REST_Posts_Controller( 'post' );
@@ -358,7 +365,7 @@ class Jacobin_Rest_API_Routes {
       if( !empty( $posts ) ) {
         return new WP_REST_Response( $posts, 200 );
       } else {
-        return new WP_Error( 'No results', 'Nothing found' );
+        return new WP_Error( 'No results', 'Nothing found', array( 'status' => 404 ) );
       }
     
     }
