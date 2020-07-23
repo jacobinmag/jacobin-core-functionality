@@ -350,7 +350,15 @@ class Jacobin_Rest_API_Routes {
        * No posts
        */
       if( empty( $query->posts ) ) {
-        return new WP_Error( 'no_posts', __( 'No post found', 'core-functionality' ) , array( 'status' => 404 ) );
+        /**
+         * Return empty array if no posts found
+         * 
+         * @since 0.5.9
+         */
+        $data = $query->posts;
+        // return new WP_Error( 'no_posts', __( 'No post found', 'core-functionality' ) , array( 'status' => 404 ) );
+        $response = new WP_REST_Response( $data, 200 );
+        return $response;
       }
 
       $max_pages = $query->max_num_pages;
