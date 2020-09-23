@@ -593,7 +593,8 @@ class Jacobin_Rest_API_Fields {
 
         $args = array(
             'post__in'        => $meta,
-            'posts_per_page'  => 20
+            'posts_per_page'  => 60,
+            'orderby'         => 'post__in'
         );
 
         $posts = get_posts( $args );
