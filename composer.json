@@ -2,6 +2,7 @@
     "name": "misfist/jacobin-core-functionality",
     "description": "Core functionality plugin for Jacobin Magazine WordPress CMS.",
     "type": "wordpress-plugin",
+    "version": "0.5.11",
     "require-dev": {
         "phpunit/phpunit": "^5.4"
     },
