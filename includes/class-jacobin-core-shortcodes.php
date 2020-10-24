@@ -24,7 +24,7 @@ class Jacobin_Register_Shortcodes {
      */
     function __construct() {
 
-        add_action( 'init', array( $this, 'detect_shortcode_ui' ) );
+        // add_action( 'init', array( $this, 'detect_shortcode_ui' ) );
         add_action( 'init', array( $this, 'register_shortcodes' ) );
         add_action( 'init', array( $this, 'register_shortcode_ui' ) );
 

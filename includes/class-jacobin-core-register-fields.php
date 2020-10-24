@@ -387,7 +387,7 @@ class Jacobin_Rest_API_Fields {
      *
      * @return {array} $data
      */
-     function modify_post_response_taxonomy ( $response, $post, $request ) {
+     function modify_post_response_taxonomy( $response, $post, $request ) {
          $_data = $response->data;
 
          $taxonomies = get_taxonomies( array( 'public' => true ), 'objects' );
@@ -444,7 +444,7 @@ class Jacobin_Rest_API_Fields {
      * @return string meta
      *
      */
-    public function get_field ( $object, $field_name, $request ) {
+    public function get_field( $object, $field_name, $request ) {
       if( function_exists( 'get_field_object' ) ) {
         $field_object = get_field_object( $field_name, $object['id'] );
         if( 'wysiwyg' === $field_object['type'] ) {
@@ -515,7 +515,7 @@ class Jacobin_Rest_API_Fields {
      * @param array $request
      * @return array image meta || false
      */
-    public function get_featured_image_secondary ( $object, $field_name, $request ) {
+    public function get_featured_image_secondary( $object, $field_name, $request ) {
         $image_id = get_post_meta( $object['id'], $field_name, true );
         return ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
     }
@@ -587,7 +587,7 @@ class Jacobin_Rest_API_Fields {
      * @return {array} $articles
      *
      */
-    public function get_issue_articles ( $object, $field_name, $request ) {
+    public function get_issue_articles( $object, $field_name, $request ) {
         $meta = get_post_meta( $object['id'], 'article_issue_relationship', true );
         $articles = [];
 
@@ -626,7 +626,7 @@ class Jacobin_Rest_API_Fields {
      * @return {array} $articles
      *
      */
-    public function get_related_articles ( $object, $field_name, $request ) {
+    public function get_related_articles( $object, $field_name, $request ) {
         $meta = get_post_meta( $object['id'], 'related_articles', true );
         $articles = [];
 
@@ -659,7 +659,7 @@ class Jacobin_Rest_API_Fields {
      * @return {array} $authors
      *
      */
-    public function get_authors ( $object, $field_name, $request ) {
+    public function get_authors( $object, $field_name, $request ) {
         return jacobin_get_authors_array( $object['id'] );
     }
 
