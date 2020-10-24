@@ -195,7 +195,7 @@ function jacobin_featured_images_get_field( $image_id ) {
  *
  * @return array $meta || false
  */
-function jacobin_get_coauthor_meta( $author_id  ) {
+function jacobin_get_coauthor_meta( $author_id ) {
 
     $user_id = (int) $author_id;
 
@@ -205,6 +205,7 @@ function jacobin_get_coauthor_meta( $author_id  ) {
         'id'            => $user_id,
         'slug'          => get_post_meta( $user_id, 'cap-user_login', true ),
         'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
+        'display_name'  => get_post_meta( $user_id, 'cap-display_name', true ),
         'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
         'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
         'nickname'      => get_post_meta( $user_id, 'cap-nickname', true ),
@@ -285,6 +286,7 @@ function jacobin_get_author_meta( $author_id ) {
     $meta = array(
         'id'            => $author_id,
         'name'          => $user_meta->display_name,
+        'display_name'  => $user_meta->display_name,
         'first_name'    => $user_meta->first_name,
         'last_name'     => $user_meta->last_name,
         'description'   => $user_meta->description,

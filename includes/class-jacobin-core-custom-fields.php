@@ -1359,7 +1359,7 @@
             ),
             'allow_null' => 0,
             'multiple' => 1,
-            'return_format' => 'id',
+            'return_format' => 'object',
             'ui' => 1,
           ),
           array (

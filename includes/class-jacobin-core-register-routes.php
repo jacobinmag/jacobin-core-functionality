@@ -118,6 +118,24 @@ class Jacobin_Rest_API_Routes {
         'callback' => array( $this, 'get_search' ),
       ) );
 
+      /**
+       * Article Contributors
+       * 
+       * @since 0.5.12
+       */
+      register_rest_route( $this->namespace, '/post-contributors/(?P<id>\d+)', array(
+    		'methods'     => 'GET',
+    		'callback'    => array( $this, 'get_contributors' ),
+        'args' => array(
+    			'id' => array(
+    				'validate_callback' => function( $param, $request, $key ) {
+    					return is_numeric( $param );
+            },
+            'required' => true
+    			),
+    		),
+      ) );
+
     }
 
     /**
@@ -385,6 +403,61 @@ class Jacobin_Rest_API_Routes {
 
       return $response;
     
+    }
+
+    /**
+     * Article Contributors
+     * Get the articles contributors
+     * 
+     * Usage:   /wp-json/jacobin/post-contributors/{:id}
+     * 
+     * @since 0.5.12
+     * 
+     * @param obj $request
+     * @return array $response
+     */
+    public function get_contributors( $request ) {
+      if( !function_exists( 'get_coauthors' ) ) {
+        return $response = new WP_REST_Response( [], 200 );
+      }
+
+      $return_data = [];
+
+      $parameters = $request->get_params();
+
+      $post_id = intval( $parameters['id'] );
+
+      if( $authors_data = get_coauthors( $post_id ) ) {
+        $authors = wp_list_pluck( $authors_data, 'display_name' );
+
+        foreach( $authors as $author ) {
+          $return_data[$author][] = 'author';
+        }
+      }
+
+      if( $interviewer_ids = get_post_meta( (int) $post_id, 'interviewer', true ) ) {
+        $interviewers_data = jacobin_get_guest_author_meta_for_field( $post_id, 'interviewer' );
+        $interviewers = wp_list_pluck( $interviewers_data, 'display_name' );
+
+        foreach( $interviewers as $interviewer ) {
+          $return_data[$interviewer][] = 'interviewer';
+        }
+      }
+
+      if( $translator_ids = get_post_meta( (int) $post_id, 'translator', true ) ) {
+        $translators_data = jacobin_get_guest_author_meta_for_field( $post_id, 'translator' );
+        $translators = wp_list_pluck( $translators_data, 'display_name' );
+
+        foreach( $translators as $translator ) {
+          $return_data[$translator][] = 'translator';
+        }
+      }
+  
+      return $return_data;
+
+      $response = new WP_REST_Response( $return_data, 200 );
+
+      return $response;
     }
 
 }
