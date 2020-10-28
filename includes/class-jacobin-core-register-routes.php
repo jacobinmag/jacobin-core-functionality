@@ -17,448 +17,550 @@
  */
 class Jacobin_Rest_API_Routes {
 
-    /**
-     * Namespace
-     *
-     * @since 0.2.7
-     *
-     * @var string
-     */
-    private $namespace = 'jacobin';
+	/**
+	 * Namespace
+	 *
+	 * @since 0.2.7
+	 *
+	 * @var string
+	 */
+	private $namespace = 'jacobin';
 
-    /**
-     * Initialize all the things
-     *
-     * @since 0.1.14
-     */
-    function __construct () {
-        add_action( 'rest_api_init', array( $this, 'register_routes' ) );
-    }
+	/**
+	 * Initialize all the things
+	 *
+	 * @since 0.1.14
+	 */
+	function __construct () {
+		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+	}
 
-    /**
-     * Register Routes
-     *
-     * @uses register_rest_route()
-     * @link https://developer.wordpress.org/reference/functions/register_rest_route/
-     * @return void
-     */
-    public function register_routes () {
+	/**
+	 * Register Routes
+	 *
+	 * @uses register_rest_route()
+	 * @link https://developer.wordpress.org/reference/functions/register_rest_route/
+	 * @return void
+	 */
+	public function register_routes () {
 
-      register_rest_route( $this->namespace, '/featured-content', array(
-    		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_featured_content' ),
-        'args'                => array(
-          'slug'    => array(
-            'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
-            'type'        => 'string',
-            'enum'        => array(
-              'home-content',
-              'editors-picks',
-              'section-topics',
-            ),
-            'required'    => true
-          ),
-        ),
-    	) );
+	  register_rest_route( $this->namespace, '/featured-content', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_featured_content' ),
+		'args'                => array(
+		  'slug'    => array(
+			'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
+			'type'        => 'string',
+			'enum'        => array(
+			  'home-content',
+			  'editors-picks',
+			  'section-topics',
+			),
+			'required'    => true
+		  ),
+		),
+		) );
 
-      register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
-    		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_featured_content' ),
-        'args' => array(
-    			'slug' => array(
-    				'validate_callback' => function( $param, $request, $key ) {
-    					return ( is_string( $param ) );
-    				}
-    			),
-    		),
-    	) );
+	  register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_featured_content' ),
+		'args' => array(
+				'slug' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_string( $param ) );
+					}
+				),
+			),
+		) );
 
-      register_rest_route( $this->namespace, '/guest-author', array(
-    		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_guest_author' ),
-        'args' => array(
-    			'slug' => array(
-            'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
-            'type'        => 'string',
-    				'validate_callback' => function( $param, $request, $key ) {
-    					return ( is_string( $param ) );
-    				}
-    			),
-          'term_id' => array(
-            'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
-            'type'        => 'number',
-    				'validate_callback' => function( $param, $request, $key ) {
-    					return ( is_numeric( $param ) );
-    				}
-    			),
-          'id' => array(
-            'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
-            'type'        => 'number',
-    				'validate_callback' => function( $param, $request, $key ) {
-    					return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
-    				}
-    			),
-    		),
-    	) );
+	  register_rest_route( $this->namespace, '/guest-author', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_guest_author' ),
+		'args' => array(
+				'slug' => array(
+			'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
+			'type'        => 'string',
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_string( $param ) );
+					}
+				),
+		  'term_id' => array(
+			'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
+			'type'        => 'number',
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_numeric( $param ) );
+					}
+				),
+		  'id' => array(
+			'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
+			'type'        => 'number',
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
+					}
+				),
+			),
+		) );
 
-      register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
-    		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_guest_author' ),
-        'args' => array(
-    			'term_id' => array(
-    				'validate_callback' => function( $param, $request, $key ) {
-    					return ( is_numeric( $param ) );
-    				}
-    			),
-    		),
-      ) );
-      
-      register_rest_route( $this->namespace, 'search', array(
-        'methods'  => WP_REST_Server::READABLE,
-        'callback' => array( $this, 'get_search' ),
-      ) );
+	  register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_guest_author' ),
+		'args' => array(
+				'term_id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_numeric( $param ) );
+					}
+				),
+			),
+	  ) );
+	  
+	  register_rest_route( $this->namespace, 'search', array(
+		'methods'  => WP_REST_Server::READABLE,
+		'callback' => array( $this, 'get_search' ),
+	  ) );
 
-      /**
-       * Article Contributors
-       * 
-       * @since 0.5.12
-       */
-      register_rest_route( $this->namespace, '/post-contributors/(?P<id>\d+)', array(
-    		'methods'     => 'GET',
-    		'callback'    => array( $this, 'get_contributors' ),
-        'args' => array(
-    			'id' => array(
-    				'validate_callback' => function( $param, $request, $key ) {
-    					return is_numeric( $param );
-            },
-            'required' => true
-    			),
-    		),
-      ) );
+	  /**
+	   * Article Contributors
+	   * 
+	   * @since 0.5.12
+	   */
+	  register_rest_route( $this->namespace, '/post-contributors/(?P<id>\d+)', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_contributors' ),
+		'args' => array(
+				'id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return is_numeric( $param );
+			},
+			'required' => true
+				),
+			),
+	  ) );
 
-    }
+	  /**
+	   * Contributor's Posts
+	   * 
+	   * @since 0.5.13
+	   */
+	  register_rest_route( $this->namespace, '/contributor-posts/(?P<id>\d+)', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_contributor_posts' ),
+		'args' => array(
+				'id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return is_numeric( $param );
+			},
+			'required' => true
+				),
+			),
+	  ) );
 
-    /**
-     * Get Editor's Picks
-     *
-     * @since 0.1.14
-     *
-     * @uses Jacobin_Rest_API_Routes::get_featured_content()
-     *
-     * @return array $posts
-     */
-    public function get_editors_picks() {
-        return $this->get_featured_content( 'options_editors_pick' );
-    }
+	}
 
-    /**
-     * Get Home Featured Content
-     *
-     * @since 0.1.14
-     *
-     * @uses Jacobin_Rest_API_Routes::get_featured_content()
-     *
-     * @return array $posts
-       */
-    public function get_home_feature() {
-        return $this->get_featured_content( 'options_featured_article' );
-    }
+	/**
+	 * Get Editor's Picks
+	 *
+	 * @since 0.1.14
+	 *
+	 * @uses Jacobin_Rest_API_Routes::get_featured_content()
+	 *
+	 * @return array $posts
+	 */
+	public function get_editors_picks() {
+		return $this->get_featured_content( 'options_editors_pick' );
+	}
 
-    /**
-     * Get Home Content
-     *
-     * @since 0.1.16
-     *
-     * @uses Jacobin_Rest_API_Routes::get_featured_content()
-     *
-     * @return array $posts
-     */
-    public function get_home_content( $request ) {
-        return $this->get_featured_content( 'options_home_content' );
-    }
+	/**
+	 * Get Home Featured Content
+	 *
+	 * @since 0.1.14
+	 *
+	 * @uses Jacobin_Rest_API_Routes::get_featured_content()
+	 *
+	 * @return array $posts
+	   */
+	public function get_home_feature() {
+		return $this->get_featured_content( 'options_featured_article' );
+	}
 
-    /**
-     * Get Featured Content
-     *
-     * @since 0.1.14
-     * @since 0.4.12
-     * @since 0.4.13
-     *
-     * @param array $request
-     * @return mixed array || WP_Error
-     */
-    public function get_featured_content( $request ) {
+	/**
+	 * Get Home Content
+	 *
+	 * @since 0.1.16
+	 *
+	 * @uses Jacobin_Rest_API_Routes::get_featured_content()
+	 *
+	 * @return array $posts
+	 */
+	public function get_home_content( $request ) {
+		return $this->get_featured_content( 'options_home_content' );
+	}
 
-        $slug  = $request->get_param( 'slug' );
-        $posts_per_page = $request->get_param( 'per_page' );
-        $page = $request->get_param( 'page' );
+	/**
+	 * Get Featured Content
+	 *
+	 * @since 0.1.14
+	 * @since 0.4.12
+	 * @since 0.4.13
+	 *
+	 * @param array $request
+	 * @return mixed array || WP_Error
+	 */
+	public function get_featured_content( $request ) {
 
-        $options = array(
-          'home-content'      => 'options_home_content',
-          'editors-picks'     => 'options_editors_pick',
-          'section-topics'    => 'options_section_topics'
-        );
+		$slug  = $request->get_param( 'slug' );
+		$posts_per_page = $request->get_param( 'per_page' );
+		$page = $request->get_param( 'page' );
 
-        /* Response at /wp-json/jacobin/featured-content/home-content */
-        if( 'options_section_topics' === $options[$slug] ) {
+		$options = array(
+		  'home-content'      => 'options_home_content',
+		  'editors-picks'     => 'options_editors_pick',
+		  'section-topics'    => 'options_section_topics'
+		);
 
-          $response['home_content_1'] = wp_kses_post( get_option( 'options_home_content_1' ) );
-          $response['home_content_2'] = wp_kses_post( get_option( 'options_home_content_2' ) );
-          $response['home_content_3'] = wp_kses_post( get_option( 'options_home_content_3' ) );
-          $response['home_content_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_tag' ) ), 'post_tag' );
-          $response['home_content_category'] = get_term_by( 'id', intval( get_option( 'options_home_content_category' ) ), 'category' );
-          $response['home_content_series'] = get_term_by( 'id', intval( get_option( 'options_home_content_series' ) ), 'series' );
+		/* Response at /wp-json/jacobin/featured-content/home-content */
+		if( 'options_section_topics' === $options[$slug] ) {
 
-          return $response;
+		  $response['home_content_1'] = wp_kses_post( get_option( 'options_home_content_1' ) );
+		  $response['home_content_2'] = wp_kses_post( get_option( 'options_home_content_2' ) );
+		  $response['home_content_3'] = wp_kses_post( get_option( 'options_home_content_3' ) );
+		  $response['home_content_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_tag' ) ), 'post_tag' );
+		  $response['home_content_category'] = get_term_by( 'id', intval( get_option( 'options_home_content_category' ) ), 'category' );
+		  $response['home_content_series'] = get_term_by( 'id', intval( get_option( 'options_home_content_series' ) ), 'series' );
 
-        }
+		  return $response;
 
-        $option = get_option( $options[$slug] );
+		}
 
-        if( empty( $option ) || is_wp_error( $option ) ) {
-            return new WP_Error( 'rest_no_posts_set', __( 'No posts were set', 'jacobin-core' ), array( 'status' => 404 ) );
-        }
+		$option = get_option( $options[$slug] );
 
-        $posts_ids = array_map(
-            function( $value ) {
-                return (int) $value;
-            },
-            $option
-        );
+		if( empty( $option ) || is_wp_error( $option ) ) {
+			return new WP_Error( 'rest_no_posts_set', __( 'No posts were set', 'jacobin-core' ), array( 'status' => 404 ) );
+		}
 
-        $args = array(
-          'post__in'    => $posts_ids,
-          'orderby'     => 'post__in'
-        );
+		$posts_ids = array_map(
+			function( $value ) {
+				return (int) $value;
+			},
+			$option
+		);
 
-        if( isset( $posts_per_page ) ) {
-          $args['posts_per_page'] = $posts_per_page;
-        }
+		$args = array(
+		  'post__in'    => $posts_ids,
+		  'orderby'     => 'post__in'
+		);
 
-        if( isset( $page ) ) {
-          $args['paged'] = $page;
-        }
+		if( isset( $posts_per_page ) ) {
+		  $args['posts_per_page'] = $posts_per_page;
+		}
 
-        $posts = get_posts( $args );
+		if( isset( $page ) ) {
+		  $args['paged'] = $page;
+		}
 
-        if( empty( $posts ) ) {
-          return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
-        }
+		$posts = get_posts( $args );
 
-        $response = array_map(
-            function( $post ) {
-                $post_id = $post->ID;
+		if( empty( $posts ) ) {
+		  return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
+		}
 
-                $post_data = new stdClass();
+		$response = array_map(
+			function( $post ) {
+				$post_id = $post->ID;
 
-                $post_data->{"id"} = $post->ID;
-                $post_data->{"date"} = $post->post_date;
-                $post_data->{"title"}["rendered"] = get_the_title( $post_id );
-                $post_data->{"subhead"} = apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) );
-                $post_data->{"excerpt"}["rendered"] = jacobin_core_custom_excerpt( $post );
-                $post_data->{"slug"} = $post->post_name;
-                $post_data->{"authors"} = jacobin_get_authors_array( $post_id );
-                $post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
-                $post_data->{"categories"} = jacobin_get_post_terms( $post_id, 'category' );
+				$post_data = new stdClass();
 
-                $image_id = get_post_thumbnail_id( $post_id );
-                $post_data->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+				$post_data->{"id"} = $post->ID;
+				$post_data->{"date"} = $post->post_date;
+				$post_data->{"title"}["rendered"] = get_the_title( $post_id );
+				$post_data->{"subhead"} = apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) );
+				$post_data->{"excerpt"}["rendered"] = jacobin_core_custom_excerpt( $post );
+				$post_data->{"slug"} = $post->post_name;
+				$post_data->{"authors"} = jacobin_get_authors_array( $post_id );
+				$post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
+				$post_data->{"categories"} = jacobin_get_post_terms( $post_id, 'category' );
 
-                return $post_data;
-            },
-            $posts
-        );
+				$image_id = get_post_thumbnail_id( $post_id );
+				$post_data->{"featured_image"} = ( !empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
 
-        return $response;
-    }
+				return $post_data;
+			},
+			$posts
+		);
 
-    /**
-     * Get Guest Author Meta
-     * Retrieves Guest Author by slug, id or term_id (associated `author` term id)
-     *
-     * @since 0.2.5
-     *
-     * @uses jacobin_get_coauthor_meta()
-     * 
-     * @param obj $request
-     * @return array coauthor_meta
-     */
-    public function get_guest_author( $request ) {
+		return $response;
+	}
 
-      $author_id = $request->get_param( 'id' );
+	/**
+	 * Get Guest Author Meta
+	 * Retrieves Guest Author by slug, id or term_id (associated `author` term id)
+	 *
+	 * @since 0.2.5
+	 *
+	 * @uses jacobin_get_coauthor_meta()
+	 * 
+	 * @param obj $request
+	 * @return array coauthor_meta
+	 */
+	public function get_guest_author( $request ) {
 
-      if( $author_id ) {
-        return jacobin_get_coauthor_meta( $author_id  );
-      }
+	  $author_id = $request->get_param( 'id' );
 
-      $term_id = $request->get_param( 'term_id' );
-      $slug = $request->get_param( 'slug' );
+	  if( $author_id ) {
+		return jacobin_get_coauthor_meta( $author_id  );
+	  }
 
-      $args = array(
-        'posts_per_page' => 1,
-        'post_type' => 'guest-author',
-      );
+	  $term_id = $request->get_param( 'term_id' );
+	  $slug = $request->get_param( 'slug' );
 
-      if( $term_id ) {
+	  $args = array(
+		'posts_per_page' => 1,
+		'post_type' => 'guest-author',
+	  );
 
-        $args['tax_query'][] = array(
-          'taxonomy'  => 'author',
-          'terms'     => intval( $term_id ),
-          'field'     => 'term_id'
-        );
+	  if( $term_id ) {
 
-      } elseif( $slug ) {
+		$args['tax_query'][] = array(
+		  'taxonomy'  => 'author',
+		  'terms'     => intval( $term_id ),
+		  'field'     => 'term_id'
+		);
 
-        $args['name'] = $slug;
+	  } elseif( $slug ) {
 
-      } else {
-        return new WP_Error( 'rest_param_invalid', __( 'No valid parameter provided.', 'jacobin-core' ), array( 'status' => 400 ) );
-      }
+		$args['name'] = $slug;
 
-      $author_post = get_posts( $args );
+	  } else {
+		return new WP_Error( 'rest_param_invalid', __( 'No valid parameter provided.', 'jacobin-core' ), array( 'status' => 400 ) );
+	  }
 
-      if( empty( $author_post ) ) {
-        return new WP_Error( 'rest_no_posts', __( 'No guest author with this term_id or slug was found.', 'jacobin-core' ), array( 'status' => 404 ) );
-      }
+	  $author_post = get_posts( $args );
 
-      $author_id = $author_post[0]->ID;
+	  if( empty( $author_post ) ) {
+		return new WP_Error( 'rest_no_posts', __( 'No guest author with this term_id or slug was found.', 'jacobin-core' ), array( 'status' => 404 ) );
+	  }
 
-      return jacobin_get_coauthor_meta( $author_id  );
-    }
+	  $author_id = $author_post[0]->ID;
 
-    /**
-     * Relevanssi Search
-     * Custom endpoint do search using Relevanssi search plugin
-     * 
-     * @uses relevanssi_do_query()
-     * 
-     * @link https://www.relevanssi.com/knowledge-base/relevanssi_do_query/
-     *
-     * Usage:   /wp-json/jacobin/search/?s=sanders
-     *          /wp-json/jacobin/search/?s=sanders&per_page=5
-     *          /wp-json/jacobin/search/?s=sanders&per_page=5&page=2
-     *
-     * @param obj $request
-     * @return mixed array || WP_Error
-     */
-    public function get_search( $request ) {
-      $parameters = $request->get_query_params();
+	  return jacobin_get_coauthor_meta( $author_id  );
+	}
 
-      $posts_per_page = ( isset( $parameters['per_page'] ) ) ? (int) $parameters['per_page'] : get_option( 'posts_per_page' );
-    
-      $args = array(
-        's'               => $parameters['s'],
-        'posts_per_page'  => $posts_per_page
-      );
+	/**
+	 * Relevanssi Search
+	 * Custom endpoint do search using Relevanssi search plugin
+	 * 
+	 * @uses relevanssi_do_query()
+	 * 
+	 * @link https://www.relevanssi.com/knowledge-base/relevanssi_do_query/
+	 *
+	 * Usage:   /wp-json/jacobin/search/?s=sanders
+	 *          /wp-json/jacobin/search/?s=sanders&per_page=5
+	 *          /wp-json/jacobin/search/?s=sanders&per_page=5&page=2
+	 *
+	 * @param obj $request
+	 * @return mixed array || WP_Error
+	 */
+	public function get_search( $request ) {
+	  $parameters = $request->get_query_params();
 
-      if( isset( $parameters['page'] ) ) {
-        $args['paged'] = (int) $parameters['page'];
-      }
+	  $posts_per_page = ( isset( $parameters['per_page'] ) ) ? (int) $parameters['per_page'] : get_option( 'posts_per_page' );
+	
+	  $args = array(
+		's'               => $parameters['s'],
+		'posts_per_page'  => $posts_per_page
+	  );
 
-      if( function_exists( 'relevanssi_do_query' ) ) {
-        $query = new WP_Query();
-        $query->parse_query( $args );
+	  if( isset( $parameters['page'] ) ) {
+		$args['paged'] = (int) $parameters['page'];
+	  }
 
-        relevanssi_do_query( $query );
-      } else {
-        $query = new WP_Query( $args );
-      }
+	  if( function_exists( 'relevanssi_do_query' ) ) {
+		$query = new WP_Query();
+		$query->parse_query( $args );
 
-      /**
-       * No posts
-       */
-      if( empty( $query->posts ) ) {
-        /**
-         * Return empty array if no posts found
-         * 
-         * @since 0.5.9
-         */
-        $data = $query->posts;
-        // return new WP_Error( 'no_posts', __( 'No post found', 'core-functionality' ) , array( 'status' => 404 ) );
-        $response = new WP_REST_Response( $data, 200 );
-        return $response;
-      }
+		relevanssi_do_query( $query );
+	  } else {
+		$query = new WP_Query( $args );
+	  }
 
-      $max_pages = $query->max_num_pages;
-      $total = $query->found_posts;
+	  /**
+	   * No posts
+	   */
+	  if( empty( $query->posts ) ) {
+		/**
+		 * Return empty array if no posts found
+		 * 
+		 * @since 0.5.9
+		 */
+		$data = $query->posts;
+		// return new WP_Error( 'no_posts', __( 'No post found', 'core-functionality' ) , array( 'status' => 404 ) );
+		$response = new WP_REST_Response( $data, 200 );
+		return $response;
+	  }
 
-      /**
-       * If page number requested is greater than the total number of pages, bail
-       */
-      if( isset( $parameters['page'] ) && $parameters['page'] > $max_pages ) {
-        return new WP_Error( 'rest_post_invalid_page_number', __( 'The page number requested is larger than the number of pages available.', 'core-functionality' ), array( 'status' => 400 ) );
-      }
+	  $max_pages = $query->max_num_pages;
+	  $total = $query->found_posts;
 
-      $posts = $query->posts;
-      $controller = new WP_REST_Posts_Controller( 'post' );
+	  /**
+	   * If page number requested is greater than the total number of pages, bail
+	   */
+	  if( isset( $parameters['page'] ) && $parameters['page'] > $max_pages ) {
+		return new WP_Error( 'rest_post_invalid_page_number', __( 'The page number requested is larger than the number of pages available.', 'core-functionality' ), array( 'status' => 400 ) );
+	  }
+
+	  $posts = $query->posts;
+	  $controller = new WP_REST_Posts_Controller( 'post' );
   
-      foreach ( $posts as $post ) { 
-        $response = $controller->prepare_item_for_response( $post, $request );
-        $data[] = $controller->prepare_response_for_collection( $response );
-      };
-    
-      $response = new WP_REST_Response( $data, 200 );
-      $response->header( 'X-WP-Total', $total );
-      $response->header( 'X-WP-TotalPages', $max_pages );
+	  foreach ( $posts as $post ) { 
+		$response = $controller->prepare_item_for_response( $post, $request );
+		$data[] = $controller->prepare_response_for_collection( $response );
+	  };
+	
+	  $response = new WP_REST_Response( $data, 200 );
+	  $response->header( 'X-WP-Total', $total );
+	  $response->header( 'X-WP-TotalPages', $max_pages );
 
-      return $response;
-    
-    }
+	  return $response;
+	
+	}
 
-    /**
-     * Article Contributors
-     * Get the articles contributors
-     * 
-     * Usage:   /wp-json/jacobin/post-contributors/{:id}
-     * 
-     * @since 0.5.12
-     * 
-     * @param obj $request
-     * @return array $response
-     */
-    public function get_contributors( $request ) {
-      if( !function_exists( 'get_coauthors' ) ) {
-        return $response = new WP_REST_Response( [], 200 );
-      }
+	/**
+	 * Article Contributors
+	 * Get the articles contributors
+	 * 
+	 * Usage:   /wp-json/jacobin/post-contributors/{:id}
+	 * 
+	 * @since 0.5.12
+	 * 
+	 * @param obj $request
+	 * @return array $response
+	 */
+	public function get_contributors( $request ) {
+	  if( !function_exists( 'get_coauthors' ) ) {
+		return $response = new WP_REST_Response( [], 200 );
+	  }
 
-      $return_data = [];
+	  $return_data = [];
 
-      $parameters = $request->get_params();
+	  $parameters = $request->get_params();
 
-      $post_id = intval( $parameters['id'] );
+	  $post_id = intval( $parameters['id'] );
+	  
+	  if( $authors_data = get_coauthors( $post_id ) ) {
+		$authors = wp_list_pluck( $authors_data, 'display_name' );
 
-      if( $authors_data = get_coauthors( $post_id ) ) {
-        $authors = wp_list_pluck( $authors_data, 'display_name' );
+		foreach( $authors as $author ) {
+		  $return_data[$author][] = 'author';
+		}
+	  }
 
-        foreach( $authors as $author ) {
-          $return_data[$author][] = 'author';
-        }
-      }
+	  if( $interviewer_ids = get_post_meta( (int) $post_id, 'interviewer', true ) ) {
+		$interviewers_data = jacobin_get_guest_author_meta_for_field( $post_id, 'interviewer' );
+		$interviewers = wp_list_pluck( $interviewers_data, 'display_name' );
 
-      if( $interviewer_ids = get_post_meta( (int) $post_id, 'interviewer', true ) ) {
-        $interviewers_data = jacobin_get_guest_author_meta_for_field( $post_id, 'interviewer' );
-        $interviewers = wp_list_pluck( $interviewers_data, 'display_name' );
+		foreach( $interviewers as $interviewer ) {
+		  $return_data[$interviewer][] = 'interviewer';
+		}
+	  }
 
-        foreach( $interviewers as $interviewer ) {
-          $return_data[$interviewer][] = 'interviewer';
-        }
-      }
+	  if( $translator_ids = get_post_meta( (int) $post_id, 'translator', true ) ) {
+		$translators_data = jacobin_get_guest_author_meta_for_field( $post_id, 'translator' );
+		$translators = wp_list_pluck( $translators_data, 'display_name' );
 
-      if( $translator_ids = get_post_meta( (int) $post_id, 'translator', true ) ) {
-        $translators_data = jacobin_get_guest_author_meta_for_field( $post_id, 'translator' );
-        $translators = wp_list_pluck( $translators_data, 'display_name' );
-
-        foreach( $translators as $translator ) {
-          $return_data[$translator][] = 'translator';
-        }
-      }
+		foreach( $translators as $translator ) {
+		  $return_data[$translator][] = 'translator';
+		}
+	  }
   
-      return $return_data;
+	  $response = new WP_REST_Response( $return_data, 200 );
 
-      $response = new WP_REST_Response( $return_data, 200 );
+	  return $response;
+	}
 
-      return $response;
-    }
+	/**
+	 * Contributor posts
+	 * Get the contributor's articles
+	 * 
+	 * Usage:   /wp-json/jacobin/contributor-posts/{:id}
+	 *          /wp-json/jacobin/contributor-posts/{:id}?per_page=5
+	 *          /wp-json/jacobin/contributor-posts/{:id}?per_page=5&page=2
+	 * 
+	 * @since 0.5.13
+	 * 
+	 * @param obj $request
+	 * @return array $response
+	 */
+	public function get_contributor_posts( $request ) {
+	  if( !function_exists( 'get_coauthors' ) ) {
+		return $response = new WP_REST_Response( [], 200 );
+	  }
+
+	  global $coauthors_plus;
+
+	  $return_data = [];
+
+	  $parameters = $request->get_params();
+
+	  $user_id = intval( $parameters['id'] );
+
+	  $coauthor_data = $coauthors_plus->get_coauthor_by( 'id', $user_id );
+	  $author_name = $coauthor_data->user_nicename;
+
+	  $defaults = array(
+		'post_type'       => 'post',
+		'posts_per_page'  => 500,
+		'fields'          => 'ids'
+	  );
+
+	  $author_args = array_merge( $defaults, [ 'author_name' => $author_name ] );
+
+	  // Get post ID for which $user_id is author
+	  $author_query = new WP_Query( $author_args );
+
+	  $meta_query = array(
+		'relation' => 'OR',
+		array(
+		  'key'     => 'interviewer',
+		  'value'   => $user_id,
+		  'compare' => 'LIKE'
+		),
+		array(
+		  'key'     => 'translator',
+		  'value'   => $user_id,
+		  'compare' => 'LIKE'
+		),
+	  );
+
+	  // Get post IDs for which $user_id is `translator` or `interviewer`
+	  $contributor_args = array_merge( $defaults, [ 'meta_query' => $meta_query ] );
+
+	  $contributor_query = new WP_Query( $contributor_args );
+
+	  // Merge the ID and remove duplicates
+	  $post_ids = array_unique( array_merge( $author_query->posts, $contributor_query->posts ) );
+
+	  /**
+	   * Get all the posts
+	   */
+	  $posts_per_page = ( isset( $parameters['per_page'] ) ) ? (int) $parameters['per_page'] : get_option( 'posts_per_page' );
+
+	  $args = array(
+		  'post__in'		=> $post_ids,
+		  'posts_per_page'	=> $posts_per_page
+	  );
+
+	  if( isset( $parameters['page'] ) ) {
+		$args['paged'] = (int) $parameters['page'];
+	  }
+
+	  $posts_query = new WP_Query( $args );
+
+	  $return_data = $posts_query->posts;
+
+	  $response = new WP_REST_Response( $return_data, 200 );
+
+	  return $response;
+
+	}
 
 }
 new Jacobin_Rest_API_Routes();

@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.5.12
+ * Version:         0.5.13
  *
  * @package         Core_Functionality
  */
@@ -60,7 +60,7 @@ require_once( 'integrations/wp-cli.php' );
  * @return object Jacobin_Core
  */
 function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.5.12' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.5.13' );
 
 	return $instance;
 }
