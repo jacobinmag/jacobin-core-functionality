@@ -324,7 +324,7 @@ function jacobin_get_authors_array( $object_id ) {
 
           $user_id = $coauthor->ID;
 
-          if( array_key_exists( 'data', $coauthor ) && ( isset( $coauthor->data->type ) && 'wpuser' == $coauthor->data->type ) ) {
+          if( property_exists( $coauthor, 'data' ) && ( isset( $coauthor->data->type ) && 'wpuser' == $coauthor->data->type ) ) {
 
               return jacobin_get_author_meta( $user_id );
 
@@ -483,6 +483,7 @@ function jacobin_get_post_terms( $post_id = null, $taxonomy ) {
         $term = get_term( $id, $taxonomy );
 
         $parent_term = get_term( (int) $term->parent, $taxonomy );
+        $term->{'id'} = $term->term_id;
         $term->{'parent_slug'} = ( !is_wp_error( $parent_term ) ) ? $parent_term->slug: false;
 
         return $term;
