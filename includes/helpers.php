@@ -33,12 +33,14 @@ function jacobin_get_post_data( $post_id ) {
         return false;
     }
 
+    $date_format = 'Y-m-d\TH:i:s';
+
     $post_data = array(
         'id'        => $post_id,
         'title'     => array(
             'rendered'  => get_the_title( $post->ID ),
         ),
-        'date'      => $post->post_date,
+        'date'      => date( $date_format, strtotime( $post->post_date ) ),
         'slug'      => $post->post_name,
         'excerpt'   => array(
             'rendered'    => jacobin_the_excerpt( $post_id ),

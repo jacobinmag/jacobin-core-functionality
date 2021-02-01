@@ -44,56 +44,108 @@ class Jacobin_Rest_API_Routes {
 	 */
 	public function register_routes () {
 
-	  register_rest_route( $this->namespace, '/featured-content', array(
-			'methods'     => 'GET',
-			'callback'    => array( $this, 'get_featured_content' ),
-			'args'                => array(
-			'slug'    => array(
-				'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
-				'type'        => 'string',
-				'enum'        => array(
-				'home-content',
-				'editors-picks',
-				'section-topics',
-				),
-				'required'    => true
-			),
+		register_rest_route( $this->namespace, '/featured-content', array(
+			  'methods'     => 'GET',
+			  'callback'    => array( $this, 'get_featured_content' ),
+			  'args'                => array(
+			  'slug'    => array(
+				  'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
+				  'type'        => 'string',
+				  'enum'        => array(
+				  'home-content',
+				  'editors-picks',
+				  'section-topics',
+				  ),
+				  'required'    => true
+			  ),
 			),
 		) );
-
-	  register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
+  
+		register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_featured_content' ),
 			'args' => array(
-					'slug' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return ( is_string( $param ) );
-						}
-					),
+				'slug' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_string( $param ) );
+					}
 				),
+			),
 		) );
-
-	  register_rest_route( $this->namespace, '/guest-author', array(
+  
+		register_rest_route( $this->namespace, '/guest-author', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_guest_author' ),
 			'args' => array(
-					'slug' => array(
-				'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
-				'type'        => 'string',
-						'validate_callback' => function( $param, $request, $key ) {
-							return ( is_string( $param ) );
-						}
-					),
-			'term_id' => array(
-				'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
-				'type'        => 'number',
+				'slug' => array(
+					'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
+					'type'        => 'string',
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_string( $param ) );
+					}
+				),
+				'term_id' => array(
+					'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
+					'type'        => 'number',
 						'validate_callback' => function( $param, $request, $key ) {
 							return ( is_numeric( $param ) );
 						}
 					),
-			'id' => array(
-				'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
-				'type'        => 'number',
+				'id' => array(
+					'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
+					'type'        => 'number',
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
+					}
+				),
+			),
+		) );
+  
+		register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_guest_author' ),
+			'args' => array(
+				'term_id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_numeric( $param ) );
+					}
+				),
+			),
+		) );
+
+		register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_featured_content' ),
+			'args' => array(
+					'slug' => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return ( is_string( $param ) );
+						}
+					),
+				),
+		) );
+
+		register_rest_route( $this->namespace, '/guest-author', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_guest_author' ),
+			'args' => array(
+				'slug' => array(
+					'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
+					'type'        => 'string',
+						'validate_callback' => function( $param, $request, $key ) {
+							return ( is_string( $param ) );
+						}
+				),
+				'term_id' => array(
+					'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
+					'type'        => 'number',
+						'validate_callback' => function( $param, $request, $key ) {
+							return ( is_numeric( $param ) );
+						}
+					),
+				'id' => array(
+					'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
+					'type'        => 'number',
 						'validate_callback' => function( $param, $request, $key ) {
 							return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
 						}
@@ -101,7 +153,7 @@ class Jacobin_Rest_API_Routes {
 				),
 		) );
 
-	  register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
+		register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_guest_author' ),
 			'args' => array(
@@ -111,19 +163,19 @@ class Jacobin_Rest_API_Routes {
 						}
 					),
 				),
-	  ) );
+		) );
 	  
-	  register_rest_route( $this->namespace, 'search', array(
-		'methods'  => WP_REST_Server::READABLE,
-		'callback' => array( $this, 'get_search' ),
-	  ) );
+		register_rest_route( $this->namespace, 'search', array(
+			'methods'  => WP_REST_Server::READABLE,
+			'callback' => array( $this, 'get_search' ),
+		) );
 
 	  /**
 	   * Article Contributors
 	   * 
 	   * @since 0.5.12
 	   */
-	  register_rest_route( $this->namespace, '/post-contributors/(?P<id>\d+)', array(
+		register_rest_route( $this->namespace, '/post-contributors/(?P<id>\d+)', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_contributors' ),
 			'args' => array(
@@ -141,18 +193,18 @@ class Jacobin_Rest_API_Routes {
 	   * 
 	   * @since 0.5.13
 	   */
-	  register_rest_route( $this->namespace, '/contributor-posts/(?P<id>\d+)', array(
+		register_rest_route($this->namespace, '/contributor-posts/(?P<id>\d+)', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_contributor_posts' ),
 			'args' => array(
-					'id' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return is_numeric( $param );
-				},
-				'required' => true
-					),
+				'id' => array(
+					'validate_callback' => function ($param, $request, $key) {
+						return is_numeric($param);
+					},
+					'required' => true
 				),
-	  ) );
+			),
+		));
 
 	}
 
@@ -212,22 +264,22 @@ class Jacobin_Rest_API_Routes {
 		$page = $request->get_param( 'page' );
 
 		$options = array(
-		  'home-content'      => 'options_home_content',
-		  'editors-picks'     => 'options_editors_pick',
-		  'section-topics'    => 'options_section_topics'
+			'home-content'      => 'options_home_content',
+			'editors-picks'     => 'options_editors_pick',
+			'section-topics'    => 'options_section_topics'
 		);
 
 		/* Response at /wp-json/jacobin/featured-content/home-content */
 		if( 'options_section_topics' === $options[$slug] ) {
 
-		  $response['home_content_1'] = wp_kses_post( get_option( 'options_home_content_1' ) );
-		  $response['home_content_2'] = wp_kses_post( get_option( 'options_home_content_2' ) );
-		  $response['home_content_3'] = wp_kses_post( get_option( 'options_home_content_3' ) );
-		  $response['home_content_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_tag' ) ), 'post_tag' );
-		  $response['home_content_category'] = get_term_by( 'id', intval( get_option( 'options_home_content_category' ) ), 'category' );
-		  $response['home_content_series'] = get_term_by( 'id', intval( get_option( 'options_home_content_series' ) ), 'series' );
+			$response['home_content_1'] = wp_kses_post( get_option( 'options_home_content_1' ) );
+			$response['home_content_2'] = wp_kses_post( get_option( 'options_home_content_2' ) );
+			$response['home_content_3'] = wp_kses_post( get_option( 'options_home_content_3' ) );
+			$response['home_content_tag'] = get_term_by( 'id', intval( get_option( 'options_home_content_tag' ) ), 'post_tag' );
+			$response['home_content_category'] = get_term_by( 'id', intval( get_option( 'options_home_content_category' ) ), 'category' );
+			$response['home_content_series'] = get_term_by( 'id', intval( get_option( 'options_home_content_series' ) ), 'series' );
 
-		  return $response;
+			return $response;
 
 		}
 
@@ -263,6 +315,8 @@ class Jacobin_Rest_API_Routes {
 		  return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
 		}
 
+		$date_format = 'Y-m-d\TH:i:s';
+
 		$response = array_map(
 			function( $post ) {
 				$post_id = $post->ID;
@@ -270,7 +324,7 @@ class Jacobin_Rest_API_Routes {
 				$post_data = new stdClass();
 
 				$post_data->{"id"} = $post->ID;
-				$post_data->{"date"} = $post->post_date;
+				$post_data->{"date"} = date( $date_format, strtotime( $post->post_date ) );
 				$post_data->{"title"}["rendered"] = get_the_title( $post_id );
 				$post_data->{"subhead"} = apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) );
 				$post_data->{"excerpt"}["rendered"] = jacobin_core_custom_excerpt( $post );
