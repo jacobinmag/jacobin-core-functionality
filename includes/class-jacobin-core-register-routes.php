@@ -27,6 +27,15 @@ class Jacobin_Rest_API_Routes {
 	private $namespace = 'jacobin';
 
 	/**
+	 * Date format
+	 * 
+	 * @since 0.5.18
+	 *
+	 * @var string
+	 */
+	public $date_format = 'Y-m-d\TH:i:s';
+
+	/**
 	 * Initialize all the things
 	 *
 	 * @since 0.1.14
@@ -315,8 +324,6 @@ class Jacobin_Rest_API_Routes {
 		  return new WP_Error( 'rest_no_posts', __( 'No posts were found', 'jacobin-core' ), array( 'status' => 404 ) );
 		}
 
-		$date_format = 'Y-m-d\TH:i:s';
-
 		$response = array_map(
 			function( $post ) {
 				$post_id = $post->ID;
@@ -324,7 +331,7 @@ class Jacobin_Rest_API_Routes {
 				$post_data = new stdClass();
 
 				$post_data->{"id"} = $post->ID;
-				$post_data->{"date"} = date( $date_format, strtotime( $post->post_date ) );
+				$post_data->{"date"} = date( $this->date_format, strtotime( $post->post_date ) );
 				$post_data->{"title"}["rendered"] = get_the_title( $post_id );
 				$post_data->{"subhead"} = apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) );
 				$post_data->{"excerpt"}["rendered"] = jacobin_core_custom_excerpt( $post );
@@ -633,7 +640,7 @@ class Jacobin_Rest_API_Routes {
 				$post_data = new stdClass();
 
 				$post_data->{"id"} = $post->ID;
-				$post_data->{"date"} = $post->post_date;
+				$post_data->{"date"} = date( $this->date_format, strtotime( $post->post_date ) );
 				$post_data->{"title"}["rendered"] = get_the_title( $post_id );
 				$post_data->{"subhead"} = apply_filters( 'meta_content', get_post_meta( $post_id, 'subhead', true ) );
 				$post_data->{"excerpt"}["rendered"] = jacobin_core_custom_excerpt( $post );
