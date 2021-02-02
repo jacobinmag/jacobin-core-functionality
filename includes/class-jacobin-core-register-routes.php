@@ -644,11 +644,11 @@ class Jacobin_Rest_API_Routes {
 				$post_data->{"tags"} = jacobin_get_post_terms( $post_id, 'post_tag' );
 				$post_data->{"formats"} = jacobin_get_post_terms( $post_id, 'format' );
 
-				$post_data->{"translator"} = [];
-				$post_data->{"interviewer"} = [];
+				$post_data->{"interviewer"} = false;
+				$post_data->{"translator"} = false;
 				
 				if( $interviewer_ids = get_post_meta( (int) $post_id, 'interviewer', true ) ) {
-					$post_data->{"translator"} = jacobin_get_guest_author_meta_for_field( $post_id, 'interviewer' );
+					$post_data->{"interviewer"} = jacobin_get_guest_author_meta_for_field( $post_id, 'interviewer' );
 				}
 			
 				if( $translator_ids = get_post_meta( (int) $post_id, 'translator', true ) ) {

@@ -237,13 +237,11 @@ function jacobin_get_coauthor_meta( $author_id ) {
  * @return array of meta || false
  */
 function jacobin_get_guest_author_meta_for_field( $post_id, $field ) {
-  $author_ids = get_post_meta( (int) $post_id, $field );
+  $author_ids = get_post_meta( (int) $post_id, $field, true );
 
   if( empty( $author_ids ) ) {
     return false;
   }
-
-  $author_ids = $author_ids[0];
 
   if( is_array( $author_ids ) ) {
 
