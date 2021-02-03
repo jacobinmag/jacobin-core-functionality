@@ -647,7 +647,8 @@ class Jacobin_Rest_API_Routes {
 				$post_data->{"excerpt"}["rendered"] = jacobin_core_custom_excerpt( $post );
 				$post_data->{"slug"} = $post->post_name;
 				$post_data->{"authors"} = jacobin_get_authors_array( $post_id );
-				// $post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
+				$post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
+				$post_data->{"locations"} = jacobin_get_post_terms( $post_id, 'locations' );
 				$post_data->{"categories"} = jacobin_get_post_terms( $post_id, 'category' );
 				$post_data->{"tags"} = jacobin_get_post_terms( $post_id, 'post_tag' );
 				$post_data->{"formats"} = jacobin_get_post_terms( $post_id, 'format' );
