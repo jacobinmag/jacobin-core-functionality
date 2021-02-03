@@ -202,7 +202,7 @@ class Jacobin_Rest_API_Routes {
 	   * 
 	   * @since 0.5.13
 	   */
-		register_rest_route($this->namespace, '/contributor-posts/(?P<id>\d+)', array(
+		register_rest_route( $this->namespace, '/contributor-posts/(?P<id>\d+)', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_contributor_posts' ),
 			'args' => array(
@@ -500,7 +500,7 @@ class Jacobin_Rest_API_Routes {
 		return $response = new WP_REST_Response( [], 200 );
 	  }
 
-	  $return_data = [];
+	  $response_data = [];
 
 	  $parameters = $request->get_params();
 
@@ -510,7 +510,7 @@ class Jacobin_Rest_API_Routes {
 		$authors = wp_list_pluck( $authors_data, 'display_name' );
 
 		foreach( $authors as $author ) {
-		  $return_data[$author][] = 'author';
+		  $response_data[$author][] = 'author';
 		}
 	  }
 
@@ -519,7 +519,7 @@ class Jacobin_Rest_API_Routes {
 		$interviewers = wp_list_pluck( $interviewers_data, 'display_name' );
 
 		foreach( $interviewers as $interviewer ) {
-		  $return_data[$interviewer][] = 'interviewer';
+		  $response_data[$interviewer][] = 'interviewer';
 		}
 	  }
 
@@ -528,11 +528,11 @@ class Jacobin_Rest_API_Routes {
 		$translators = wp_list_pluck( $translators_data, 'display_name' );
 
 		foreach( $translators as $translator ) {
-		  $return_data[$translator][] = 'translator';
+		  $response_data[$translator][] = 'translator';
 		}
 	  }
   
-	  $response = new WP_REST_Response( $return_data, 200 );
+	  $response = new WP_REST_Response( $response_data, 200 );
 
 	  return $response;
 	}
@@ -571,8 +571,6 @@ class Jacobin_Rest_API_Routes {
 	  if( !isset( $coauthors_plus ) ) {
 		return $response = new WP_REST_Response( [], 200 );
 	  }
-
-	  $return_data = [];
 
 	  $parameters = $request->get_params();
 
@@ -630,6 +628,9 @@ class Jacobin_Rest_API_Routes {
 
 	  $posts_query = new WP_Query( $args );
 
+	  $max_pages = $posts_query->max_num_pages;
+	  $total = $posts_query->found_posts;
+
 	  $response_data = [];
 
 	  if( !empty( $posts_query->posts ) ) {
@@ -672,6 +673,8 @@ class Jacobin_Rest_API_Routes {
 	  }
 
 	  $response = new WP_REST_Response( $response_data, 200 );
+	  $response->header( 'X-WP-Total', (int) $total );
+	  $response->header( 'X-WP-TotalPages', (int) $max_pages );
 
 	  return $response;
 
