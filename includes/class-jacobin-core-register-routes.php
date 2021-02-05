@@ -640,6 +640,7 @@ class Jacobin_Rest_API_Routes {
 
 				$post_data = new stdClass();
 
+				$post_data->{"coauthor"} = $coauthor_data;
 				$post_data->{"id"} = $post->ID;
 				$post_data->{"date"} = date( $this->date_format, strtotime( $post->post_date ) );
 				$post_data->{"title"}["rendered"] = get_the_title( $post_id );
@@ -648,7 +649,7 @@ class Jacobin_Rest_API_Routes {
 				$post_data->{"slug"} = $post->post_name;
 				$post_data->{"authors"} = jacobin_get_authors_array( $post_id );
 				$post_data->{"departments"} = jacobin_get_post_terms( $post_id, 'department' );
-				$post_data->{"locations"} = jacobin_get_post_terms( $post_id, 'locations' );
+				$post_data->{"locations"} = jacobin_get_post_terms( $post_id, 'location' );
 				$post_data->{"categories"} = jacobin_get_post_terms( $post_id, 'category' );
 				$post_data->{"tags"} = jacobin_get_post_terms( $post_id, 'post_tag' );
 				$post_data->{"formats"} = jacobin_get_post_terms( $post_id, 'format' );
