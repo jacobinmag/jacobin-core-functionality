@@ -590,17 +590,19 @@ class Jacobin_Rest_API_Routes {
 	  // Get post ID for which $user_id is author
 	  $author_query = new WP_Query( $author_args );
 
+	  $pattern =  sprintf( ':"%d";', $user_id );
+
 	  $meta_query = array(
 		'relation' => 'OR',
 		array(
-		  'key'     => 'interviewer',
-		  'value'   => $user_id,
-		  'compare' => 'LIKE'
+			'key'     => 'interviewer',
+			'value'   => $pattern,
+			'compare' => 'LIKE',
 		),
 		array(
-		  'key'     => 'translator',
-		  'value'   => $user_id,
-		  'compare' => 'LIKE'
+			'key'     => 'translator',
+			'value'   => $pattern,
+			'compare' => 'LIKE',
 		),
 	  );
 
