@@ -17,6 +17,6 @@ jobs:
           SOURCE: "./"
           REMOTE_HOST: ${{ secrets.SSH_HOST }}
           REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_PORT: "18765"
           TARGET: ${{ secrets.WORK_DIR }}staging.editor.jacobin.com/public_html/wp-content/plugins/core-functionality
           EXCLUDE: ".*,*lock,*~,phpcs.xml.dist,postcss.config.js,webpack.*.js,.*/,node_modules/"
-          SSH_CMD_ARGS: "-p 18765"
