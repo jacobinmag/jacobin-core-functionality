@@ -26,11 +26,17 @@
       */
      function __construct() {
 
-         if( function_exists( 'register_field_group' ) ) {
-           $this->register_clone_fields();
-           $this->register_field_groups();
-           $this->register_settings_fields();
-         }
+      /**
+       * Register Fields
+       * 
+       * @link https://www.advancedcustomfields.com/resources/register-fields-via-php/#add-within-an-action
+       * 
+       * 
+       * @since 0.5.21
+       */
+         add_action( 'acf/init', array( $this, 'register_clone_fields' ) );
+         add_action( 'acf/init', array( $this, 'register_field_groups' ) );
+         add_action( 'acf/init', array( $this, 'register_settings_fields' ) );
 
          add_filter( 'coauthors_guest_author_fields', array( $this, 'add_guest_author_fields' ), 10, 2 );
 
