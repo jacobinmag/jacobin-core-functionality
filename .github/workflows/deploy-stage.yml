@@ -10,12 +10,12 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Deploy to Server
-          uses: easingthemes/ssh-deploy@main
-          env:
-            SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-            ARGS: "-rlgoDzvc -i --delete"
-            SOURCE: "./"
-            REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
-            REMOTE_USER: ${{ secrets.REMOTE_USER }}
-            TARGET: ${{ secrets.WORK_DIR }}staging.editor.jacobin.com/public_html/wp-content/plugins/core-functionality
-            EXCLUDE: ".*,*lock,*~,phpcs.xml.dist,postcss.config.js,webpack.*.js,.*/,node_modules/"
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "./"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: ${{ secrets.REMOTE_USER }}
+          TARGET: ${{ secrets.WORK_DIR }}staging.editor.jacobin.com/public_html/wp-content/plugins/core-functionality
+          EXCLUDE: ".*,*lock,*~,phpcs.xml.dist,postcss.config.js,webpack.*.js,.*/,node_modules/"
