@@ -39,7 +39,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 /**
  * Run Delete Featured Images Command
  *
- * Usage: `wp add-featured-images --site={id} --before={date}`
+ * Usage: `delete-featured-images --site={id} --before={date}`
  * 
  * @since 0.5.22
  *
