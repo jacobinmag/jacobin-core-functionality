@@ -74,7 +74,7 @@ function jacobin_get_attachment_link_attributes( $args, $id ) : array {
  * @return array  $attr
  */
 function jacobin_get_attachment_image_attributes( $attr, $attachment ) : array {
-  $attr['id'] = $attachment->ID;
+  $attr['id'] = sprintf( 'wp-image-%s', $attachment->ID );
   return $attr;
 }
 add_filter( 'wp_get_attachment_image_attributes', 'jacobin_get_attachment_image_attributes', 10, 2 );
