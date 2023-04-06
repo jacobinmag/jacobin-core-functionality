@@ -45,6 +45,11 @@ class Jacobin_Rest_API_Fields {
       add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
 
       /**
+       * @since 0.5.22
+       */
+      add_filter( 'rest_prepare_user', array( $this, 'modify_user_response' ), 10, 3 );
+
+      /**
        * Register Fields
        */
       add_action( 'rest_api_init', array( $this, 'register_fields' ) );
@@ -432,6 +437,31 @@ class Jacobin_Rest_API_Fields {
 
        return $response;
      }
+
+    /**
+     * Modify `users` endpoint response
+     * 
+     * @since 0.5.22
+     * 
+     * @link https://developer.wordpress.org/reference/hooks/rest_prepare_user/
+     *
+     * @param \WP_REST_Response $response
+     * @param \WP_User $user
+     * @param \WP_REST_Request $request
+     * @return \WP_REST_Response $response
+     */
+    public function modify_user_response( $response, $user, $request ) {
+      $_data = $response->data;
+      $user_id = $user->data->ID;
+
+      $_data['email'] = $user->data->user_email;
+      $_data['first_name'] = get_user_meta( $user_id, 'first_name', true );
+      $_data['last_name'] = get_user_meta( $user_id, 'last_name', true );
+
+      $response->data = $_data;
+
+      return $response;
+    }
 
     /**
      * Get post meta
