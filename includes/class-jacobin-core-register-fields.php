@@ -40,6 +40,7 @@ class Jacobin_Rest_API_Fields {
       /**
        * Modify Responses
        */
+      add_action( 'rest_api_init', array( $this, 'rest_prepare_taxonomies' ), 10 );
       add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_taxonomy' ), 10, 3 );
       add_filter( 'rest_prepare_post', array( $this, 'modify_post_response_department' ), 10, 3 );
       add_filter( 'rest_prepare_guest-author', array( $this, 'modify_guest_author_response' ), 10, 3 );
@@ -343,6 +344,30 @@ class Jacobin_Rest_API_Fields {
       return $data;
     }
 
+	/**
+	 * Register Rest Prepare for Taxonomies
+	 * 
+	 * @since 0.5.22
+	 * 
+	 * @link https://developer.wordpress.org/reference/hooks/rest_prepare_this-taxonomy/
+	 *
+	 * @return void
+	 */
+    public function rest_prepare_taxonomies() {
+      $args = array(
+		'hierarchical' => true,
+		'public' => true,
+	  );
+      $taxonomies = get_taxonomies( $args, 'names' );
+
+      if( ! empty( $taxonomies ) && ! is_wp_error( $taxonomies ) ) {
+        foreach( $taxonomies as $taxonomy ) {
+			add_filter( "rest_prepare_{$taxonomy}", array( $this, 'modify_taxonomy_response' ), 10, 3 );
+		}
+      }
+
+    }
+
     /**
      * Modify Response Data Returned for Department
      * By default the REST API returns only the taxonomy ID in the post response.
@@ -462,6 +487,39 @@ class Jacobin_Rest_API_Fields {
 
       return $response;
     }
+
+	/**
+	 * Modify Term Response
+	 * 
+	 * @since 0.5.22
+	 * 
+	 * @link https://developer.wordpress.org/reference/hooks/rest_prepare_this-taxonomy/
+	 * 
+	 *
+     * @param \WP_REST_Response $response
+     * @param WP_Term $term
+     * @param \WP_REST_Request $request
+     * @return \WP_REST_Response $response
+	 */
+	public function modify_taxonomy_response( $response, $term, $request ) {
+		$_data = $response->data;
+		
+		if( $term->parent ) {
+			$parent = get_term( $term->parent );
+			$_data['parent_obj'] = array();
+			$_data['parent_obj']['id'] = $parent->term_id;
+			$_data['parent_obj']['name'] = $parent->name;
+			$_data['parent_obj']['description'] = $parent->description;
+			$_data['parent_obj']['slug'] = $parent->slug;
+			$_data['parent_obj']['taxonomy'] = $parent->taxonomy;
+			$_data['parent_obj']['count'] = $parent->count;
+			$_data['parent_obj']['parent'] = $parent->parent;
+			$_data['parent_obj']['link'] = get_term_link( $parent->term_id );
+		}
+
+		$response->data = $_data;
+		return $response;
+	}
 
     /**
      * Get post meta
