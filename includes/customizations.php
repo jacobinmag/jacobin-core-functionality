@@ -43,3 +43,38 @@ function jacobin_core_custom_excerpt( $post ) {
 
   return $excerpt;
 }
+
+/**
+ * Modify Image Link Output
+ * 
+ * @since 0.5.22
+ * 
+ * @link https://developer.wordpress.org/reference/hooks/wp_get_attachment_link_attributes/
+ *
+ * @param array $args
+ * @param int $id
+ * @return array $args
+ */
+function jacobin_get_attachment_link_attributes( $args, $id ) : array {
+  $args['id'] = sprintf( '%s', $id );
+  return $args;
+}
+// add_filter( 'wp_get_attachment_link_attributes', 'jacobin_get_attachment_link_attributes', 11, 2 );
+
+/**
+ * Modify Image Markup
+ * Add `id` to `img` tag
+ * 
+ * @since 0.5.22
+ * 
+ * @link https://developer.wordpress.org/reference/hooks/wp_get_attachment_image_attributes/
+ *
+ * @param string[] $attr
+ * @param \WP_Post $attachment
+ * @return array  $attr
+ */
+function jacobin_get_attachment_image_attributes( $attr, $attachment ) : array {
+  $attr['id'] = $attachment->ID;
+  return $attr;
+}
+add_filter( 'wp_get_attachment_image_attributes', 'jacobin_get_attachment_image_attributes', 10, 2 );
