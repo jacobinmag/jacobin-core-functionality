@@ -37,6 +37,37 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
 }
 
 /**
+ * Run Delete Featured Images Command
+ *
+ * Usage: `wp add-featured-images --site={id} --before={date}`
+ * 
+ * @since 0.5.22
+ *
+ * @uses jacobin_core_delete_media_featured_image_init()
+ * @uses WP_CLI
+ *
+ * @param array $args
+ * @param array $assoc_args
+ * @return void
+ */
+function jacobin_core_cli_delete_featured_images( $assoc_args = array() ) {
+
+  $defaults = array(
+    'site'    => null
+  );
+
+  $assoc_args = wp_parse_args( $assoc_args, $defaults );
+
+  jacobin_core_delete_media_featured_image_init( $assoc_args['site'], $assoc_args );
+
+}
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	WP_CLI::add_command( 'delete-featured-images', 'jacobin_core_cli_delete_featured_images' );
+}
+
+
+/**
  * Run Delete Media from Post Content Command
  *
  * Usage: `wp delete-post-media --site={id}`

@@ -199,6 +199,17 @@ function jacobin_core_delete_media_init( $site = null, $args = array() ) {
 
     $args = wp_parse_args( $args, $defaults );
 
+	if( $args['before'] ) {
+		$args['date_query'][] = array(
+			'before'    => $args['before']
+		);
+	}
+	if( $args['after'] ) {
+		$args['date_query'][] = array(
+			'after'    => $args['after']
+		);
+	}
+
     $query = new WP_Query( $args );
 
     if( $query->have_posts() ) {
@@ -291,6 +302,129 @@ function jacobin_core_delete_media_in_post_content( $post_id ) {
 
   return true;
 
+}
+
+/**
+ * Initialize Delete Featured Image
+ *
+ * @since 0.5.22
+ *
+ * @uses jacobin_core_delete_media_in_post_content()
+ *
+ * @param  int $site
+ * @param  array  $args
+ * @return void
+ */
+function jacobin_core_delete_media_featured_image_init( $site = null, $args = array() ) {
+
+  if( is_multisite() && $site ) {
+    switch_to_blog( $site );
+  }
+
+  // Check Marker
+  if( !get_option( 'jacobin_core_post_featured_image_deleted' ) ) {
+
+    $defaults = array(
+      'post_type'       => 'post',
+      'posts_per_page'  => -1,
+      'fields'         => 'ids',
+    );
+
+    $args = wp_parse_args( $args, $defaults );
+
+	if( $args['before'] ) {
+		$args['date_query'][] = array(
+			'before'    => $args['before']
+		);
+	}
+	if( $args['after'] ) {
+		$args['date_query'][] = array(
+			'after'    => $args['after']
+		);
+	}
+
+    $query = new WP_Query( $args );
+
+    if( $query->have_posts() ) {
+      $found = 0;
+      $deleted = 0;
+
+      foreach( $query->get_posts() as $post_id ) {
+
+        if( has_post_thumbnail( $post_id ) ) {
+          $found++;
+
+          if ( defined( 'WP_CLI' ) && WP_CLI ) {
+            WP_CLI::line( "Featured image found: {$post_id}" );
+          } else {
+            echo "Featured image found: {$post_id}\n";
+          }
+
+          if( jacobin_core_delete_featured_image( $post_id ) ) {
+            $deleted++;
+  
+            if ( defined( 'WP_CLI' ) && WP_CLI ) {
+              WP_CLI::line( "Featured image deleted: {$post_id}" );
+            } else {
+              echo "Featured image delected: {$post_id}\n";
+            }
+          }
+
+        }
+
+      }
+
+      add_option( 'jacobin_core_post_featured_image_deleted', true );
+
+      if( $found ) {
+        if ( defined( 'WP_CLI' ) && WP_CLI ) {
+          WP_CLI::log( "Featured Images Found: Featured image found in {$found} posts." );
+        } else {
+          echo "Featured Images Found: Featured image found in {$found} posts..\n";
+        }
+      } else {
+        if ( defined( 'WP_CLI' ) && WP_CLI ) {
+          WP_CLI::log( "Process Complete: No posts were found." );
+        } else {
+          echo "Process Complete: No posts were found.\n";
+        }
+      }
+
+      if( $deleted ) {
+        if ( defined( 'WP_CLI' ) && WP_CLI ) {
+          WP_CLI::success( "Process Complete: Featured image was removed from {$deleted} posts." );
+        } else {
+          echo "Process Complete: Featured image was removed from {$deleted} posts.\n";
+        }
+      } else {
+        if ( defined( 'WP_CLI' ) && WP_CLI ) {
+          WP_CLI::warning( "Process Complete: No featured images were removed." );
+        } else {
+          echo "Process Complete: No featured images were removed.\n";
+        }
+      }
+    
+    }
+	wp_die( 'This process can only be run once.' );
+  }
+
+  if( is_multisite() && $site ) {
+    restore_current_blog();
+  }
+
+}
+
+/**
+ * Delete Featured Image
+ *
+ * @since 0.5.22
+ *
+ * @param  int $post_id
+ * @return bool True on success, false on failure.
+ */
+function jacobin_core_delete_featured_image( $post_id ) {
+  $return = delete_post_thumbnail( $post_id );
+  return $return;
 }
 
 /**
