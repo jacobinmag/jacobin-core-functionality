@@ -321,16 +321,13 @@ function jacobin_core_delete_media_featured_image_init( $site = null, $args = ar
     switch_to_blog( $site );
   }
 
-  // Check Marker
-  if( !get_option( 'jacobin_core_post_featured_image_deleted' ) ) {
+	$defaults = array(
+		'post_type'       => 'post',
+		'posts_per_page'  => -1,
+		'fields'         => 'ids',
+	);
 
-    $defaults = array(
-      'post_type'       => 'post',
-      'posts_per_page'  => -1,
-      'fields'         => 'ids',
-    );
-
-    $args = wp_parse_args( $args, $defaults );
+	$args = wp_parse_args( $args, $defaults );
 
 	if( $args['before'] ) {
 		$args['date_query'][] = array(
@@ -343,74 +340,70 @@ function jacobin_core_delete_media_featured_image_init( $site = null, $args = ar
 		);
 	}
 
-    $query = new WP_Query( $args );
+	$query = new WP_Query( $args );
 
-    if( $query->have_posts() ) {
-      $found = 0;
-      $deleted = 0;
+	if( $query->have_posts() ) {
+		$found = 0;
+		$deleted = 0;
 
-      foreach( $query->get_posts() as $post_id ) {
+		foreach( $query->get_posts() as $post_id ) {
 
-        if( has_post_thumbnail( $post_id ) ) {
-          $found++;
+			if( has_post_thumbnail( $post_id ) ) {
+				$found++;
 
-          if ( defined( 'WP_CLI' ) && WP_CLI ) {
-            WP_CLI::line( "Featured image found: {$post_id}" );
-          } else {
-            echo "Featured image found: {$post_id}\n";
-          }
+				if ( defined( 'WP_CLI' ) && WP_CLI ) {
+					WP_CLI::line( "Featured image found: {$post_id}" );
+					} else {
+					echo "Featured image found: {$post_id}\n";
+					}
 
-          if( jacobin_core_delete_featured_image( $post_id ) ) {
-            $deleted++;
-  
-            if ( defined( 'WP_CLI' ) && WP_CLI ) {
-              WP_CLI::line( "Featured image deleted: {$post_id}" );
-            } else {
-              echo "Featured image delected: {$post_id}\n";
-            }
-          }
+					if( jacobin_core_delete_featured_image( $post_id ) ) {
+					$deleted++;
 
-        }
+					if ( defined( 'WP_CLI' ) && WP_CLI ) {
+						WP_CLI::line( "Featured image deleted: {$post_id}" );
+					} else {
+						echo "Featured image delected: {$post_id}\n";
+					}
+				}
 
-      }
+			}
 
-      add_option( 'jacobin_core_post_featured_image_deleted', true );
+		}
 
-      if( $found ) {
-        if ( defined( 'WP_CLI' ) && WP_CLI ) {
-          WP_CLI::log( "Featured Images Found: Featured image found in {$found} posts." );
-        } else {
-          echo "Featured Images Found: Featured image found in {$found} posts..\n";
-        }
-      } else {
-        if ( defined( 'WP_CLI' ) && WP_CLI ) {
-          WP_CLI::log( "Process Complete: No posts were found." );
-        } else {
-          echo "Process Complete: No posts were found.\n";
-        }
-      }
+		if( $found ) {
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				WP_CLI::log( "Featured Images Found: Featured image found in {$found} posts." );
+			} else {
+				echo "Featured Images Found: Featured image found in {$found} posts..\n";
+			}
+		} else {
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				WP_CLI::log( "Process Complete: No posts were found." );
+			} else {
+				echo "Process Complete: No posts were found.\n";
+			}
+		}
 
-      if( $deleted ) {
-        if ( defined( 'WP_CLI' ) && WP_CLI ) {
-          WP_CLI::success( "Process Complete: Featured image was removed from {$deleted} posts." );
-        } else {
-          echo "Process Complete: Featured image was removed from {$deleted} posts.\n";
-        }
-      } else {
-        if ( defined( 'WP_CLI' ) && WP_CLI ) {
-          WP_CLI::warning( "Process Complete: No featured images were removed." );
-        } else {
-          echo "Process Complete: No featured images were removed.\n";
-        }
-      }
-    
-    }
-	wp_die( 'This process can only be run once.' );
-  }
+		if( $deleted ) {
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				WP_CLI::success( "Process Complete: Featured image was removed from {$deleted} posts." );
+			} else {
+				echo "Process Complete: Featured image was removed from {$deleted} posts.\n";
+			}
+			} else {
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				WP_CLI::warning( "Process Complete: No featured images were removed." );
+			} else {
+				echo "Process Complete: No featured images were removed.\n";
+			}
+		}
 
-  if( is_multisite() && $site ) {
-    restore_current_blog();
-  }
+	}
+
+	if( is_multisite() && $site ) {
+		restore_current_blog();
+	}
 
 }
 
