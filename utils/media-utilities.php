@@ -318,12 +318,12 @@ function jacobin_core_delete_media_featured_image_init( $site = null, $args = ar
 
 	$args = wp_parse_args( $args, $defaults );
 
-	if ( $args['before'] ) {
+	if ( isset( $args['before'] ) && ! empty( $args['before'] ) ) {
 		$args['date_query'][] = array(
 			'before' => $args['before'],
 		);
 	}
-	if ( $args['after'] ) {
+	if ( isset( $args['after'] ) && ! empty( $args['after'] ) ) {
 		$args['date_query'][] = array(
 			'after' => $args['after'],
 		);
@@ -531,31 +531,18 @@ function jacobin_core_delete_attachments_init( $site = null, $args = array() ) {
 
 	$args = wp_parse_args( $args, $defaults );
 
-	if ( $args['before'] ) {
+	if ( isset( $args['before'] ) && ! empty( $args['before'] ) ) {
 		$args['date_query'][] = array(
 			'before' => $args['before'],
 		);
 	}
-	if ( $args['after'] ) {
+	if ( isset( $args['after'] ) && ! empty( $args['after'] ) ) {
 		$args['date_query'][] = array(
 			'after' => $args['after'],
 		);
 	}
-
-	$query = new WP_Query( $args );
-
-	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		WP_CLI::success( sprintf( 'Args: %s', json_encode( $args ) ) );
-	} else {
-		printf( 'Attachment Posts Found: %s\n', json_encode( $args ) );
-	}
-
 	
-	if ( defined( 'WP_CLI' ) && WP_CLI ) {
-		WP_CLI::success( sprintf( 'Attachment Posts Found: %s', count( $query->get_posts() ) ) );
-	} else {
-		printf( 'Attachment Posts Found: %s\n', count( $query->get_posts() ) );
-	}
+	$query = new WP_Query( $args );
 
 	if ( $query->have_posts() ) {
 		$deleted = 0;
