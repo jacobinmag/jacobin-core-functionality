@@ -67,6 +67,7 @@ class Jacobin_Rest_API_Routes {
 				  ),
 				  'required'    => true
 			  ),
+			  'permission_callback' => '__return_true',
 			),
 		) );
   
@@ -80,6 +81,7 @@ class Jacobin_Rest_API_Routes {
 					}
 				),
 			),
+			'permission_callback' => '__return_true',
 		) );
   
 		register_rest_route( $this->namespace, '/guest-author', array(
@@ -108,6 +110,7 @@ class Jacobin_Rest_API_Routes {
 					}
 				),
 			),
+			'permission_callback' => '__return_true',
 		) );
   
 		register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
@@ -120,6 +123,7 @@ class Jacobin_Rest_API_Routes {
 					}
 				),
 			),
+			'permission_callback' => '__return_true',
 		) );
 
 		register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
@@ -151,32 +155,35 @@ class Jacobin_Rest_API_Routes {
 						'validate_callback' => function( $param, $request, $key ) {
 							return ( is_numeric( $param ) );
 						}
-					),
+				),
 				'id' => array(
 					'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
 					'type'        => 'number',
 						'validate_callback' => function( $param, $request, $key ) {
 							return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
 						}
-					),
 				),
+			),
+			'permission_callback' => '__return_true',
 		) );
 
 		register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_guest_author' ),
 			'args' => array(
-					'term_id' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return ( is_numeric( $param ) );
-						}
-					),
+				'term_id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return ( is_numeric( $param ) );
+					}
 				),
+			),
+			'permission_callback' => '__return_true',
 		) );
 	  
 		register_rest_route( $this->namespace, 'search', array(
 			'methods'  => WP_REST_Server::READABLE,
 			'callback' => array( $this, 'get_search' ),
+			'permission_callback' => '__return_true',
 		) );
 
 	  /**
@@ -188,13 +195,14 @@ class Jacobin_Rest_API_Routes {
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_contributors' ),
 			'args' => array(
-					'id' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return is_numeric( $param );
-				},
-				'required' => true
-					),
+				'id' => array(
+					'validate_callback' => function( $param, $request, $key ) {
+						return is_numeric( $param );
+			},
+			'required' => true
 				),
+			),
+			'permission_callback' => '__return_true',
 	  ) );
 
 	  /**
@@ -213,6 +221,7 @@ class Jacobin_Rest_API_Routes {
 					'required' => true
 				),
 			),
+			'permission_callback' => '__return_true',
 		));
 
 	}

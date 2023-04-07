@@ -1,0 +1,22 @@
+name: deploy-live
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Deploy to Server
+        uses: easingthemes/ssh-deploy@main
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          ARGS: "-rlgoDzvc -i --delete"
+          SOURCE: "./"
+          REMOTE_HOST: ${{ secrets.SSH_HOST }}
+          REMOTE_USER: ${{ secrets.SSH_USER }}
+          REMOTE_PORT: "18765"
+          TARGET: ${{ secrets.WORK_DIR }}editor.jacobin.com/public_html/wp-content/plugins/core-functionality
+          EXCLUDE: ".*,*lock,*~,phpcs.xml.dist,postcss.config.js,webpack.*.js,.*/,node_modules/"
