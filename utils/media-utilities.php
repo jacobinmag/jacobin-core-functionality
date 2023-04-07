@@ -339,7 +339,7 @@ function jacobin_core_delete_media_featured_image_init( $site = null, $args = ar
 
 			if ( has_post_thumbnail( $post_id ) ) {
 
-				if( $args['dry-run'] ) {
+				if ( $args['dry-run'] ) {
 					$found++;
 					if ( defined( 'WP_CLI' ) && WP_CLI ) {
 						WP_CLI::line( "Featured image found: {$post_id}" );
@@ -542,22 +542,23 @@ function jacobin_core_delete_attachments_init( $site = null, $args = array() ) {
 			'after' => $args['after'],
 		);
 	}
-	
+
 	$query = new WP_Query( $args );
 
 	if ( $query->have_posts() ) {
 		$deleted = 0;
-		$found = 0;
+		$found   = 0;
 
 		foreach ( $query->get_posts() as $post_id ) {
 
-			if( $args['dry-run'] ) {
+			if ( $args['dry-run'] ) {
 				$found++;
-			} elseif ( jacobin_core_delete_attachment( $post_id ) ) {
+			}
+			elseif ( jacobin_core_delete_attachment( $post_id ) ) {
 				$deleted++;
 
 				if ( defined( 'WP_CLI' ) && WP_CLI ) {
-					WP_CLI::line( "Featured image deleted: {$post_id}" );
+					WP_CLI::log( "Featured image deleted: {$post_id}" );
 				} else {
 					echo "Featured image delected: {$post_id}\n";
 				}
@@ -599,7 +600,7 @@ function jacobin_core_delete_attachments_init( $site = null, $args = array() ) {
  * @param int $post_id
  * @return WP_Post|false|null
  */
-function jacobin_core_delete_attachment( $post_id  ) {
+function jacobin_core_delete_attachment( $post_id ) {
 	$return = wp_delete_attachment( $post_id, true );
 	return $return;
 }
