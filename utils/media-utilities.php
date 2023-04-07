@@ -577,6 +577,14 @@ function jacobin_core_delete_attachments_init( $site = null, $args = array() ) {
 				echo "Process Complete: No images were removed.\n";
 			}
 		}
+
+		if ( $found ) {
+			if ( defined( 'WP_CLI' ) && WP_CLI ) {
+				WP_CLI::success( "Process Complete: Images {$found} found." );
+			} else {
+				echo "Process Complete: Images {$found} found.\n";
+			}
+		}
 	}
 
 	if ( is_multisite() && $site ) {
