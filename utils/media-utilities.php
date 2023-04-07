@@ -339,7 +339,7 @@ function jacobin_core_delete_media_featured_image_init( $site = null, $args = ar
 
 			if ( has_post_thumbnail( $post_id ) ) {
 
-				if ( $args['dry-run'] ) {
+				if ( isset( $args['dry-run'] ) && ! empty( $args['dry-run'] )  ) {
 					$found++;
 					if ( defined( 'WP_CLI' ) && WP_CLI ) {
 						WP_CLI::line( "Featured image found: {$post_id}" );
@@ -551,7 +551,7 @@ function jacobin_core_delete_attachments_init( $site = null, $args = array() ) {
 
 		foreach ( $query->get_posts() as $post_id ) {
 
-			if ( $args['dry-run'] ) {
+			if ( isset( $args['dry-run'] ) && ! empty( $args['dry-run'] )  ) {
 				$found++;
 			}
 			elseif ( jacobin_core_delete_attachment( $post_id ) ) {
