@@ -22,13 +22,13 @@
  */
 function jacobin_core_cli_add_featured_images( $args = array(), $assoc_args = array() ) {
 
-  $defaults = array(
-    'site'    => null
-  );
+	$defaults = array(
+		'site' => null,
+	);
 
-  $assoc_args = wp_parse_args( $assoc_args, $defaults );
+	$assoc_args = wp_parse_args( $assoc_args, $defaults );
 
-  jacobin_core_clean_post_images_init( $assoc_args['site'], $args );
+	jacobin_core_clean_post_images_init( $assoc_args['site'], $args );
 
 }
 
@@ -40,7 +40,7 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  * Run Delete Featured Images Command
  *
  * Usage: `delete-featured-images --site={id} --before={date}`
- * 
+ *
  * @since 0.5.22
  *
  * @uses jacobin_core_delete_media_featured_image_init()
@@ -50,15 +50,15 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  * @param array $assoc_args
  * @return void
  */
-function jacobin_core_cli_delete_featured_images( $assoc_args = array() ) {
+function jacobin_core_cli_delete_featured_images( $args, $assoc_args = array() ) {
 
-  $defaults = array(
-    'site'    => null
-  );
+	$defaults = array(
+		'site' => null,
+	);
 
-  $assoc_args = wp_parse_args( $assoc_args, $defaults );
+	$assoc_args = wp_parse_args( $assoc_args, $defaults );
 
-  jacobin_core_delete_media_featured_image_init( $assoc_args['site'], $assoc_args );
+	jacobin_core_delete_media_featured_image_init( $assoc_args['site'], $assoc_args );
 
 }
 
@@ -83,18 +83,47 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  */
 function jacobin_core_cli_delete_post_media( $args = array(), $assoc_args = array() ) {
 
-  $defaults = array(
-    'site'      => null,
-  );
+	$defaults = array(
+		'site' => null,
+	);
 
-  $assoc_args = wp_parse_args( $assoc_args, $defaults );
+	$assoc_args = wp_parse_args( $assoc_args, $defaults );
 
-  jacobin_core_delete_media_init( $assoc_args['site'] );
+	jacobin_core_delete_media_init( $assoc_args['site'] );
 
 }
 
 if ( defined( 'WP_CLI' ) && WP_CLI ) {
 	WP_CLI::add_command( 'delete-post-media', 'jacobin_core_cli_delete_post_media' );
+}
+
+/**
+ * Run Delete Attachments Command
+ *
+ * Usage: `wp delete-attachments --site={id}`
+ *
+ * @since 1.4.12
+ *
+ * @uses jacobin_core_delete_attachments_init()
+ * @uses WP_CLI
+ *
+ * @param array $args
+ * @param array $assoc_args
+ * @return void
+ */
+function jacobin_core_cli_delete_attachments( $args = array(), $assoc_args = array() ) {
+
+	$defaults = array(
+		'site' => null,
+	);
+
+	$assoc_args = wp_parse_args( $assoc_args, $defaults );
+
+	jacobin_core_delete_attachments_init( $assoc_args['site'], $assoc_args );
+}
+
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	WP_CLI::add_command( 'delete-attachments', 'jacobin_core_cli_delete_attachments' );
 }
 
 /**
@@ -111,15 +140,15 @@ if ( defined( 'WP_CLI' ) && WP_CLI ) {
  */
 function jacobin_core_cli_delete_users( $args = array(), $assoc_args = array() ) {
 
-  $defaults = array(
-    'site'      => null,
-    'role'      => null,
-    'reassign'  => null
-  );
+	$defaults = array(
+		'site'     => null,
+		'role'     => null,
+		'reassign' => null,
+	);
 
-  $assoc_args = wp_parse_args( $assoc_args, $defaults );
+	$assoc_args = wp_parse_args( $assoc_args, $defaults );
 
-  jacobin_core_user_delete_init( $assoc_args['site'], $assoc_args['role'], $assoc_args['reassign'] );
+	jacobin_core_user_delete_init( $assoc_args['site'], $assoc_args['role'], $assoc_args['reassign'] );
 
 }
 
