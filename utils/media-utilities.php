@@ -527,6 +527,7 @@ function jacobin_core_delete_attachments_init( $site = null, $args = array() ) {
 		'post_type'      => 'attachment',
 		'posts_per_page' => -1,
 		'fields'         => 'ids',
+		'post_status'    => 'all',
 	);
 
 	$args = wp_parse_args( $args, $defaults );
