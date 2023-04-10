@@ -862,14 +862,16 @@ class Jacobin_Rest_API_Routes {
 			if ( false === ( $coauthor = $coauthors_plus->get_coauthor_by( 'user_login', $author_term->name ) ) ) {
 				continue;
 			}
+			$author = $coauthor;
 
-			$authors[ $author_term->name ] = $coauthor;
-
-			if ( ! $args['guest_authors_only'] || $authors[ $author_term->name ]->type === 'guest-author' ) {
-				$authors[ $author_term->name ]->post_count = $author_term->count;
+			if ( ! $args['guest_authors_only'] || $author->type === 'guest-author' ) {
+				$author->post_count = $author_term->count;
+				$author->ID = (int) $author->ID;
 			} else {
-				unset( $authors[ $author_term->name ] );
+				unset( $author );
 			}
+
+			$authors[] = array_change_key_case( (array) $author, CASE_LOWER );
 		}
 
 		/**
@@ -877,7 +879,7 @@ class Jacobin_Rest_API_Routes {
 		 */
 		// $linked_accounts = array_unique( array_column( $authors, 'linked_account' ) );
 		// foreach ( $linked_accounts as $linked_account ) {
-		// 	unset( $authors[ $linked_account ] );
+		// unset( $authors[ $linked_account ] );
 		// }
 
 		return $authors;
