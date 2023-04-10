@@ -376,6 +376,57 @@ class Jacobin_Rest_API_Routes {
 	}
 
 	/**
+	 * Get Guest Authors
+	 *
+	 * @since 0.5.23
+	 *
+	 * @uses coauthors_get_users()
+	 *
+	 * @param obj $request
+	 * @return \WP_REST_Response
+	 */
+	public function get_guest_authors( $request ) {
+		if ( ! function_exists( 'coauthors_get_users' ) ) {
+			$response = new \WP_REST_Response( array(), 200 );
+			return $response;
+		}
+		$args = array();
+
+		$defaults = array(
+			'number'  => get_option( 'posts_per_page', 25 ),
+			'orderby' => 'name',
+			'order'   => 'asc',
+		);
+
+		$page     = $request->get_param( 'page' );
+		$per_page = $request->get_param( 'per_page' );
+		$orderby  = $request->get_param( 'orderby' );
+		$order    = $request->get_param( 'order' );
+
+		if ( isset( $per_page ) ) {
+			$args['number'] = $per_page;
+		}
+
+		if ( isset( $page ) && 1 < $page ) {
+			$args['offset'] = ( $page - 1 ) * $per_page;
+		}
+
+		if ( isset( $orderby ) ) {
+			$args['orderby'] = $orderby;
+		}
+
+		if ( isset( $order ) ) {
+			$args['order'] = $order;
+		}
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$guest_authors = $this->jacobin_coauthors_get_users( $args );
+		$response      = new \WP_REST_Response( $guest_authors, 200 );
+		return $response;
+	}
+
+	/**
 	 * Get Guest Author Meta
 	 * Retrieves Guest Author by slug, id or term_id (associated `author` term id)
 	 *
@@ -707,6 +758,61 @@ class Jacobin_Rest_API_Routes {
 	  return $response;
 
 	}
+
+	/**
+	 * Get Coauthors
+	 * Replaces coauthors_get_users(), which doesn't allow for pagination
+	 *
+	 * @since 0.5.23
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public function jacobin_coauthors_get_users( $args = array() ) {
+		global $coauthors_plus;
+
+		if ( empty( $coauthors_plus ) && ! is_object( $coauthors_plus ) ) {
+			return array();
+		}
+		$defaults = array(
+			'number'             => (int) get_option( 'posts_per_page', 25 ),
+			'offset'             => 0,
+			'orderby'            => 'name',
+			'order'              => 'asc',
+			'hide_empty'         => true,
+			'guest_authors_only' => false,
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$author_terms = get_terms( $coauthors_plus->coauthor_taxonomy, $args );
+
+		$authors = array();
+		foreach ( $author_terms as $author_term ) {
+			if ( false === ( $coauthor = $coauthors_plus->get_coauthor_by( 'user_login', $author_term->name ) ) ) {
+				continue;
+			}
+
+			$authors[ $author_term->name ] = $coauthor;
+
+			if ( ! $args['guest_authors_only'] || $authors[ $author_term->name ]->type === 'guest-author' ) {
+				$authors[ $author_term->name ]->post_count = $author_term->count;
+			} else {
+				unset( $authors[ $author_term->name ] );
+			}
+		}
+
+		/**
+		 * This is throwing off `per_page`
+		 */
+		// $linked_accounts = array_unique( array_column( $authors, 'linked_account' ) );
+		// foreach ( $linked_accounts as $linked_account ) {
+		// 	unset( $authors[ $linked_account ] );
+		// }
+
+		return $authors;
+	}
+
 
 }
 new Jacobin_Rest_API_Routes();
