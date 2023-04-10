@@ -84,63 +84,70 @@ class Jacobin_Rest_API_Routes {
 			'permission_callback' => '__return_true',
 		) );
   
-		register_rest_route( $this->namespace, '/guest-author', array(
-			'methods'     => 'GET',
-			'callback'    => array( $this, 'get_guest_author' ),
-			'args' => array(
-				'slug' => array(
-					'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
-					'type'        => 'string',
-					'validate_callback' => function( $param, $request, $key ) {
-						return ( is_string( $param ) );
-					}
-				),
-				'term_id' => array(
-					'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
-					'type'        => 'number',
-						'validate_callback' => function( $param, $request, $key ) {
-							return ( is_numeric( $param ) );
-						}
-					),
-				'id' => array(
-					'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
-					'type'        => 'number',
-					'validate_callback' => function( $param, $request, $key ) {
-						return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
-					}
-				),
-			),
-			'permission_callback' => '__return_true',
-		) );
+		// register_rest_route( $this->namespace, '/guest-author', array(
+		// 	'methods'     => 'GET',
+		// 	'callback'    => array( $this, 'get_guest_author' ),
+		// 	'args' => array(
+		// 		'slug' => array(
+		// 			'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
+		// 			'type'        => 'string',
+		// 			'validate_callback' => function( $param, $request, $key ) {
+		// 				return ( is_string( $param ) );
+		// 			}
+		// 		),
+		// 		'term_id' => array(
+		// 			'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
+		// 			'type'        => 'number',
+		// 				'validate_callback' => function( $param, $request, $key ) {
+		// 					return ( is_numeric( $param ) );
+		// 				}
+		// 			),
+		// 		'id' => array(
+		// 			'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
+		// 			'type'        => 'number',
+		// 			'validate_callback' => function( $param, $request, $key ) {
+		// 				return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
+		// 			}
+		// 		),
+		// 	),
+		// 	'permission_callback' => '__return_true',
+		// ) );
   
-		register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
-			'methods'     => 'GET',
-			'callback'    => array( $this, 'get_guest_author' ),
-			'args' => array(
-				'term_id' => array(
-					'validate_callback' => function( $param, $request, $key ) {
-						return ( is_numeric( $param ) );
-					}
-				),
-			),
-			'permission_callback' => '__return_true',
-		) );
+		// register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
+		// 	'methods'     => 'GET',
+		// 	'callback'    => array( $this, 'get_guest_author' ),
+		// 	'args' => array(
+		// 		'term_id' => array(
+		// 			'validate_callback' => function( $param, $request, $key ) {
+		// 				return ( is_numeric( $param ) );
+		// 			}
+		// 		),
+		// 	),
+		// 	'permission_callback' => '__return_true',
+		// ) );
 
 		register_rest_route( $this->namespace, '/featured-content/(?P<slug>[a-zA-Z0-9-]+)', array(
-		register_rest_route( $this->namespace, '/guest-authors', array(
 			'methods'     => 'GET',
 			'callback'    => array( $this, 'get_featured_content' ),
-			'callback'    => array( $this, 'get_guest_authors' ),
 			'args' => array(
 					'slug' => array(
+						'validate_callback' => function( $param, $request, $key ) {
+							return ( is_string( $param ) );
+						}
+					),
+				),
+		) );
+
+		register_rest_route( $this->namespace, '/guest-authors', array(
+			'methods'     => 'GET',
+			'callback'    => array( $this, 'get_guest_authors' ),
+			'args' => array(
 				'per_page' => array(
 					'description' => esc_html__( 'The number of items to return', 'jacobin-core' ),
 					'type'        => 'number',
 						'validate_callback' => function( $param, $request, $key ) {
-							return ( is_string( $param ) );
 							return ( is_numeric( $param ) );
 						}
-					),
 				),
 			),
 			'permission_callback' => '__return_true',
