@@ -10,12 +10,14 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.5.22
+ * Version:         0.5.23
  *
  * @package         Core_Functionality
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Plugin Directory
@@ -25,31 +27,31 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 define( 'JACOBIN_CORE_DIR', dirname( __FILE__ ) );
 define( 'JACOBIN_CORE_DIR_URL', plugin_dir_url( __FILE__ ) );
 
-require_once( 'includes/helpers.php' );
-require_once( 'includes/customizations.php' );
+require_once 'includes/helpers.php';
+require_once 'includes/customizations.php';
 
 // Load plugin libraries
-require_once( 'includes/lib/class-jacobin-core-post-type.php' );
-require_once( 'includes/lib/class-jacobin-core-taxonomy.php' );
+require_once 'includes/lib/class-jacobin-core-post-type.php';
+require_once 'includes/lib/class-jacobin-core-taxonomy.php';
 
 // Load plugin class files
-require_once( 'includes/class-jacobin-core.php' );
-require_once( 'includes/class-jacobin-core-register-cpt.php' );
-require_once( 'includes/class-jacobin-core-custom-fields.php' );
-require_once( 'includes/class-jacobin-core-register-fields.php' );
-require_once( 'includes/class-jacobin-core-register-routes.php' );
-require_once( 'includes/class-jacobin-core-field-settings.php' );
-require_once( 'includes/class-jacobin-core-shortcodes.php' );
+require_once 'includes/class-jacobin-core.php';
+require_once 'includes/class-jacobin-core-register-cpt.php';
+require_once 'includes/class-jacobin-core-custom-fields.php';
+require_once 'includes/class-jacobin-core-register-fields.php';
+require_once 'includes/class-jacobin-core-register-routes.php';
+require_once 'includes/class-jacobin-core-field-settings.php';
+require_once 'includes/class-jacobin-core-shortcodes.php';
 
 // Load admin files
-require_once( 'admin/class-jacobin-core-admin.php' );
+require_once 'admin/class-jacobin-core-admin.php';
 
 // Load utility files
-require_once( 'utils/copy-content.php' );
-require_once( 'utils/media-utilities.php' );
-require_once( 'utils/user-utilities.php' );
-require_once( 'utils/revision-management.php' );
-require_once( 'integrations/wp-cli.php' );
+require_once 'utils/copy-content.php';
+require_once 'utils/media-utilities.php';
+require_once 'utils/user-utilities.php';
+require_once 'utils/revision-management.php';
+require_once 'integrations/wp-cli.php';
 
 
 
@@ -59,8 +61,8 @@ require_once( 'integrations/wp-cli.php' );
  * @since  0.1.0
  * @return object Jacobin_Core
  */
-function Jacobin_Core () {
-	$instance = Jacobin_Core::instance( __FILE__, '0.5.22' );
+function Jacobin_Core() {
+	$instance = Jacobin_Core::instance( __FILE__, '0.5.23' );
 
 	return $instance;
 }
@@ -74,21 +76,21 @@ Jacobin_Core();
  * @since  0.1.0
  */
 Jacobin_Core()->register_post_type(
-    'issue',
-    __( 'Issues', 'jacobin-core' ),
-    __( 'Issue', 'jacobin-core' )
+	'issue',
+	__( 'Issues', 'jacobin-core' ),
+	__( 'Issue', 'jacobin-core' )
 );
 
 Jacobin_Core()->register_post_type(
-    'timeline',
-    __( 'Timelines', 'jacobin-core' ),
-    __( 'Timeline', 'jacobin-core' )
+	'timeline',
+	__( 'Timelines', 'jacobin-core' ),
+	__( 'Timeline', 'jacobin-core' )
 );
 
 Jacobin_Core()->register_post_type(
-    'chart',
-    __( 'Charts', 'jacobin-core' ),
-    __( 'Chart', 'jacobin-core' )
+	'chart',
+	__( 'Charts', 'jacobin-core' ),
+	__( 'Chart', 'jacobin-core' )
 );
 
 /**
@@ -97,56 +99,56 @@ Jacobin_Core()->register_post_type(
  * @since  0.1.0
  */
 Jacobin_Core()->register_taxonomy(
-    'department',
-    __( 'Departments', 'jacobin-core' ),
-    __( 'Department', 'jacobin-core' ),
-    'post',
-		array(
-			'rest_base'		 => 'departments',
-		)
+	'department',
+	__( 'Departments', 'jacobin-core' ),
+	__( 'Department', 'jacobin-core' ),
+	'post',
+	array(
+		'rest_base' => 'departments',
+	)
 );
 
 Jacobin_Core()->register_taxonomy(
-    'format',
-    __( 'Formats', 'jacobin-core' ),
-    __( 'Format', 'jacobin-core' ),
-    'post',
-		array(
-			'rest_base'		 => 'formats',
-		)
+	'format',
+	__( 'Formats', 'jacobin-core' ),
+	__( 'Format', 'jacobin-core' ),
+	'post',
+	array(
+		'rest_base' => 'formats',
+	)
 );
 
 Jacobin_Core()->register_taxonomy(
-    'location',
-    __( 'Locations', 'jacobin-core' ),
-    __( 'Location', 'jacobin-core' ),
-    'post',
-		array(
-			'rest_base'		 => 'locations',
-		)
+	'location',
+	__( 'Locations', 'jacobin-core' ),
+	__( 'Location', 'jacobin-core' ),
+	'post',
+	array(
+		'rest_base' => 'locations',
+	)
 );
 
 Jacobin_Core()->register_taxonomy(
-    'series',
-    __( 'Series', 'jacobin-core' ),
-    __( 'Series', 'jacobin-core' ),
-    'post'
+	'series',
+	__( 'Series', 'jacobin-core' ),
+	__( 'Series', 'jacobin-core' ),
+	'post'
 );
 
 /**
  * Register Internal Status Taxonomy
  */
 Jacobin_Core()->register_taxonomy(
-    'status-internal',
-    __( 'Status', 'jacobin-core' ),
-    __( 'Status', 'jacobin-core' ),
-    array(
-			'post',
-			'issue'
-		),
-		array(
-			'show_in_rest' => false,
-			'rest_base'		 => 'statuses-internal',
-			'public'			 => false
-		)
+	'status-internal',
+	__( 'Status', 'jacobin-core' ),
+	__( 'Status', 'jacobin-core' ),
+	array(
+		'post',
+		'issue',
+	),
+	array(
+		'show_in_rest' => false,
+		'rest_base'    => 'statuses-internal',
+		'public'       => false,
+	)
 );
