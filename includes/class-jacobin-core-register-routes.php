@@ -832,6 +832,14 @@ class Jacobin_Rest_API_Routes {
 	/**
 	 * Get Coauthors
 	 * Replaces coauthors_get_users(), which doesn't allow for pagination
+	 * 
+	 * Usage:   /wp-json/jacobin/guest-authors/
+	 * 
+	 * params:
+	 * - per_page
+	 * - page
+	 * - order
+	 * - orderby
 	 *
 	 * @since 0.5.23
 	 *
