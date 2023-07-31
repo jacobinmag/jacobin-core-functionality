@@ -845,9 +845,9 @@ class Jacobin_Rest_API_Routes {
 	/**
 	 * Get Coauthors
 	 * Replaces coauthors_get_users(), which doesn't allow for pagination
-	 * 
+	 *
 	 * Usage:   /wp-json/jacobin/guest-authors/
-	 * 
+	 *
 	 * params:
 	 * - per_page
 	 * - page
@@ -887,7 +887,7 @@ class Jacobin_Rest_API_Routes {
 
 			if ( ! $args['guest_authors_only'] || $author->type === 'guest-author' ) {
 				$author->post_count = $author_term->count;
-				$author->ID = (int) $author->ID;
+				$author->ID         = (int) $author->ID;
 			} else {
 				unset( $author );
 			}
