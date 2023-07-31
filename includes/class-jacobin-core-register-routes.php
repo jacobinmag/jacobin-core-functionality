@@ -463,9 +463,10 @@ class Jacobin_Rest_API_Routes {
 		$args = array();
 
 		$defaults = array(
-			'number'  => get_option( 'posts_per_page', 25 ),
-			'orderby' => 'name',
-			'order'   => 'asc',
+			'number'     => get_option( 'posts_per_page', 25 ),
+			'orderby'    => 'name',
+			'order'      => 'asc',
+			'hide_empty' => false,
 		);
 
 		$page     = $request->get_param( 'page' );
