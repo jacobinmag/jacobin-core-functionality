@@ -857,7 +857,7 @@ class Jacobin_Rest_API_Routes {
 			'offset'             => 0,
 			'orderby'            => 'name',
 			'order'              => 'asc',
-			'hide_empty'         => true,
+			'hide_empty'         => false,
 			'guest_authors_only' => false,
 		);
 
