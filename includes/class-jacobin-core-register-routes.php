@@ -491,7 +491,7 @@ class Jacobin_Rest_API_Routes {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$guest_authors = $this->jacobin_coauthors_get_users( $args );
+		$guest_authors = $this->coauthors_get_users( $args );
 		$response      = new \WP_REST_Response( $guest_authors, 200 );
 		return $response;
 	}
@@ -846,7 +846,7 @@ class Jacobin_Rest_API_Routes {
 	 * @param array $args
 	 * @return array
 	 */
-	public function jacobin_coauthors_get_users( $args = array() ) {
+	public function coauthors_get_users( $args = array() ) {
 		global $coauthors_plus;
 
 		if ( empty( $coauthors_plus ) && ! is_object( $coauthors_plus ) ) {
