@@ -37,6 +37,8 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Transient name
+	 * 
+	 * @since 0.5.24
 	 *
 	 * @var string
 	 */
@@ -858,6 +860,8 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Get Author Count
+	 * 
+	 * @since 0.5.24
 	 *
 	 * @param  array $args
 	 * @return array
@@ -895,6 +899,8 @@ class Jacobin_Rest_API_Routes {
 	 * Delete Transient
 	 * 
 	 * @link https://developer.wordpress.org/reference/hooks/save_post/
+	 * 
+	 * @since 0.5.24
 	 *
 	 * @param  int $post_id
 	 * @param  object $post
