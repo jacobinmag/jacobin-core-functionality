@@ -36,12 +36,20 @@ class Jacobin_Rest_API_Routes {
 	public $date_format = 'Y-m-d\TH:i:s';
 
 	/**
+	 * Transient name
+	 *
+	 * @var string
+	 */
+	public $transient = 'coauthors_get_user_count';
+
+	/**
 	 * Initialize all the things
 	 *
 	 * @since 0.1.14
 	 */
 	function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'save_post', array( $this, 'get_user_count_delete_transient' ), 10, 3 );
 	}
 
 	/**
