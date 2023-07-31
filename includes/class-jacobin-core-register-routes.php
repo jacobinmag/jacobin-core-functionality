@@ -492,7 +492,11 @@ class Jacobin_Rest_API_Routes {
 		$args = wp_parse_args( $args, $defaults );
 
 		$guest_authors = $this->coauthors_get_users( $args );
+		$total         = count( $this->coauthors_get_user_count( $args ) );
+		$max_pages     = ceil( $total / $args['number'] );
 		$response      = new \WP_REST_Response( $guest_authors, 200 );
+		$response->header( 'X-WP-Total', $total );
+		$response->header( 'X-WP-TotalPages', $max_pages );
 		return $response;
 	}
 
@@ -882,17 +886,59 @@ class Jacobin_Rest_API_Routes {
 			$authors[] = array_change_key_case( (array) $author, CASE_LOWER );
 		}
 
-		/**
-		 * This is throwing off `per_page`
-		 */
-		// $linked_accounts = array_unique( array_column( $authors, 'linked_account' ) );
-		// foreach ( $linked_accounts as $linked_account ) {
-		// unset( $authors[ $linked_account ] );
-		// }
+		return $authors;
+	}
+
+	/**
+	 * Get Author Count
+	 *
+	 * @param  array $args
+	 * @return array
+	 */
+	public function coauthors_get_user_count( $args = array() ) {
+		global $coauthors_plus;
+
+		if ( empty( $coauthors_plus ) && ! is_object( $coauthors_plus ) ) {
+			return array();
+		}
+
+		if ( false === ( $authors = get_transient( $this->transient ) ) ) {
+
+			$args['number'] = 0;
+			$args['page']   = 1;
+			$args['offset'] = 0;
+			$args['fields'] = 'slugs';
+
+			$author_terms = get_terms( $coauthors_plus->coauthor_taxonomy, $args );
+
+			$authors = array();
+			foreach ( $author_terms as $author_term ) {
+				if ( $coauthors_plus->get_coauthor_by( 'user_nicename', $author_term ) ) {
+					$authors[] = $author_term;
+				}
+			}
+
+			set_transient( $this->transient, $authors, 0 );
+		}
 
 		return $authors;
 	}
 
+	/**
+	 * Delete Transient
+	 * 
+	 * @link https://developer.wordpress.org/reference/hooks/save_post/
+	 *
+	 * @param  int $post_id
+	 * @param  object $post
+	 * @param  bool $update
+	 * @return void
+	 */
+	public function get_user_count_delete_transient( $post_id, $post, $update ) {
+		if( 'guest-author' === $post->post_type ) {
+			delete_transient( $this->transient );
+		}
+	}
 
 }
 new Jacobin_Rest_API_Routes();
