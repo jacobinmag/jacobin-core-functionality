@@ -37,7 +37,7 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Transient name
-	 * 
+	 *
 	 * @since 0.5.24
 	 *
 	 * @var string
@@ -390,7 +390,7 @@ class Jacobin_Rest_API_Routes {
 			function( $post ) {
 				$post_id = $post->ID;
 
-				$post_data = new stdClass();
+				$post_data = new \stdClass();
 
 				$post_data->{'id'}                  = $post->ID;
 				$post_data->{'date'}                = date( $this->date_format, strtotime( $post->post_date ) );
@@ -843,6 +843,10 @@ class Jacobin_Rest_API_Routes {
 			if ( false === ( $coauthor = $coauthors_plus->get_coauthor_by( 'user_login', $author_term->name ) ) ) {
 				continue;
 			}
+
+			if ( isset( $coauthor->data ) && 'wpuser' === $coauthor->data->type ) {
+				$coauthor = $this->parse_wpuser( $coauthor->data );
+			}
 			$author = $coauthor;
 
 			if ( ! $args['guest_authors_only'] || $author->type === 'guest-author' ) {
@@ -860,7 +864,7 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Get Author Count
-	 * 
+	 *
 	 * @since 0.5.24
 	 *
 	 * @param  array $args
@@ -896,19 +900,48 @@ class Jacobin_Rest_API_Routes {
 	}
 
 	/**
-	 * Delete Transient
-	 * 
-	 * @link https://developer.wordpress.org/reference/hooks/save_post/
-	 * 
+	 * Parse WPUser
+	 *
 	 * @since 0.5.24
 	 *
-	 * @param  int $post_id
+	 * @param  object $data
+	 * @return object $user_data
+	 */
+	public function parse_wpuser( $data ) : object {
+		$user_id = (int) $data->ID;
+
+		$user_data = (object) array(
+			'ID'            => $user_id,
+			'display_name'  => $data->display_name,
+			'first_name'    => get_user_meta( $user_id, 'first_name', true ),
+			'last_name'     => get_user_meta( $user_id, 'last_name', true ),
+			'user_login'    => $data->user_login,
+			'user_email'    => $data->user_email,
+			'website'       => get_user_meta( $user_id, 'website', true ),
+			'description'   => get_user_meta( $user_id, 'description', true ),
+			'nickname'      => get_user_meta( $user_id, 'nickname', true ),
+			'user_nicename' => $data->user_nicename,
+			'type'          => $data->type,
+			'post_count'    => count_user_posts( $user_id ),
+		);
+
+		return $user_data;
+	}
+
+	/**
+	 * Delete Transient
+	 *
+	 * @link https://developer.wordpress.org/reference/hooks/save_post/
+	 *
+	 * @since 0.5.24
+	 *
+	 * @param  int    $post_id
 	 * @param  object $post
-	 * @param  bool $update
+	 * @param  bool   $update
 	 * @return void
 	 */
 	public function get_user_count_delete_transient( $post_id, $post, $update ) {
-		if( 'guest-author' === $post->post_type ) {
+		if ( 'guest-author' === $post->post_type ) {
 			delete_transient( $this->transient );
 		}
 	}
