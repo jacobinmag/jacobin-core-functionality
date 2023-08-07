@@ -36,12 +36,22 @@ class Jacobin_Rest_API_Routes {
 	public $date_format = 'Y-m-d\TH:i:s';
 
 	/**
+	 * Transient name
+	 * 
+	 * @since 0.5.24
+	 *
+	 * @var string
+	 */
+	public $transient = 'coauthors_get_user_count';
+
+	/**
 	 * Initialize all the things
 	 *
 	 * @since 0.1.14
 	 */
 	function __construct() {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'save_post', array( $this, 'get_user_count_delete_transient' ), 10, 3 );
 	}
 
 	/**
@@ -91,48 +101,6 @@ class Jacobin_Rest_API_Routes {
 				'permission_callback' => '__return_true',
 			)
 		);
-
-		// register_rest_route( $this->namespace, '/guest-author', array(
-		// 'methods'     => 'GET',
-		// 'callback'    => array( $this, 'get_guest_author' ),
-		// 'args' => array(
-		// 'slug' => array(
-		// 'description' => esc_html__( 'The author term slug parameter is used to retrieve a guest author', 'jacobin-core' ),
-		// 'type'        => 'string',
-		// 'validate_callback' => function( $param, $request, $key ) {
-		// return ( is_string( $param ) );
-		// }
-		// ),
-		// 'term_id' => array(
-		// 'description' => esc_html__( 'The author term ID parameter is used to retrieve a guest author', 'jacobin-core' ),
-		// 'type'        => 'number',
-		// 'validate_callback' => function( $param, $request, $key ) {
-		// return ( is_numeric( $param ) );
-		// }
-		// ),
-		// 'id' => array(
-		// 'description' => esc_html__( 'The guest author id parameter is used to retrieve a guest author', 'jacobin-core' ),
-		// 'type'        => 'number',
-		// 'validate_callback' => function( $param, $request, $key ) {
-		// return ( is_numeric( $param ) && 'guest-author' == get_post_type( $param ) );
-		// }
-		// ),
-		// ),
-		// 'permission_callback' => '__return_true',
-		// ) );
-
-		// register_rest_route( $this->namespace, '/guest-author/(?P<id>\d+)', array(
-		// 'methods'     => 'GET',
-		// 'callback'    => array( $this, 'get_guest_author' ),
-		// 'args' => array(
-		// 'term_id' => array(
-		// 'validate_callback' => function( $param, $request, $key ) {
-		// return ( is_numeric( $param ) );
-		// }
-		// ),
-		// ),
-		// 'permission_callback' => '__return_true',
-		// ) );
 
 		register_rest_route(
 			$this->namespace,
@@ -463,9 +431,10 @@ class Jacobin_Rest_API_Routes {
 		$args = array();
 
 		$defaults = array(
-			'number'  => get_option( 'posts_per_page', 25 ),
-			'orderby' => 'name',
-			'order'   => 'asc',
+			'number'     => get_option( 'posts_per_page', 25 ),
+			'orderby'    => 'name',
+			'order'      => 'asc',
+			'hide_empty' => false,
 		);
 
 		$page     = $request->get_param( 'page' );
@@ -491,8 +460,12 @@ class Jacobin_Rest_API_Routes {
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$guest_authors = $this->jacobin_coauthors_get_users( $args );
+		$guest_authors = $this->coauthors_get_users( $args );
+		$total         = count( $this->coauthors_get_user_count( $args ) );
+		$max_pages     = ceil( $total / $args['number'] );
 		$response      = new \WP_REST_Response( $guest_authors, 200 );
+		$response->header( 'X-WP-Total', $total );
+		$response->header( 'X-WP-TotalPages', $max_pages );
 		return $response;
 	}
 
@@ -832,9 +805,9 @@ class Jacobin_Rest_API_Routes {
 	/**
 	 * Get Coauthors
 	 * Replaces coauthors_get_users(), which doesn't allow for pagination
-	 * 
+	 *
 	 * Usage:   /wp-json/jacobin/guest-authors/
-	 * 
+	 *
 	 * params:
 	 * - per_page
 	 * - page
@@ -846,7 +819,7 @@ class Jacobin_Rest_API_Routes {
 	 * @param array $args
 	 * @return array
 	 */
-	public function jacobin_coauthors_get_users( $args = array() ) {
+	public function coauthors_get_users( $args = array() ) {
 		global $coauthors_plus;
 
 		if ( empty( $coauthors_plus ) && ! is_object( $coauthors_plus ) ) {
@@ -857,7 +830,7 @@ class Jacobin_Rest_API_Routes {
 			'offset'             => 0,
 			'orderby'            => 'name',
 			'order'              => 'asc',
-			'hide_empty'         => true,
+			'hide_empty'         => false,
 			'guest_authors_only' => false,
 		);
 
@@ -874,7 +847,7 @@ class Jacobin_Rest_API_Routes {
 
 			if ( ! $args['guest_authors_only'] || $author->type === 'guest-author' ) {
 				$author->post_count = $author_term->count;
-				$author->ID = (int) $author->ID;
+				$author->ID         = (int) $author->ID;
 			} else {
 				unset( $author );
 			}
@@ -882,17 +855,63 @@ class Jacobin_Rest_API_Routes {
 			$authors[] = array_change_key_case( (array) $author, CASE_LOWER );
 		}
 
-		/**
-		 * This is throwing off `per_page`
-		 */
-		// $linked_accounts = array_unique( array_column( $authors, 'linked_account' ) );
-		// foreach ( $linked_accounts as $linked_account ) {
-		// unset( $authors[ $linked_account ] );
-		// }
+		return $authors;
+	}
+
+	/**
+	 * Get Author Count
+	 * 
+	 * @since 0.5.24
+	 *
+	 * @param  array $args
+	 * @return array
+	 */
+	public function coauthors_get_user_count( $args = array() ) {
+		global $coauthors_plus;
+
+		if ( empty( $coauthors_plus ) && ! is_object( $coauthors_plus ) ) {
+			return array();
+		}
+
+		if ( false === ( $authors = get_transient( $this->transient ) ) ) {
+
+			$args['number'] = 0;
+			$args['page']   = 1;
+			$args['offset'] = 0;
+			$args['fields'] = 'slugs';
+
+			$author_terms = get_terms( $coauthors_plus->coauthor_taxonomy, $args );
+
+			$authors = array();
+			foreach ( $author_terms as $author_term ) {
+				if ( $coauthors_plus->get_coauthor_by( 'user_nicename', $author_term ) ) {
+					$authors[] = $author_term;
+				}
+			}
+
+			set_transient( $this->transient, $authors, 0 );
+		}
 
 		return $authors;
 	}
 
+	/**
+	 * Delete Transient
+	 * 
+	 * @link https://developer.wordpress.org/reference/hooks/save_post/
+	 * 
+	 * @since 0.5.24
+	 *
+	 * @param  int $post_id
+	 * @param  object $post
+	 * @param  bool $update
+	 * @return void
+	 */
+	public function get_user_count_delete_transient( $post_id, $post, $update ) {
+		if( 'guest-author' === $post->post_type ) {
+			delete_transient( $this->transient );
+		}
+	}
 
 }
 new Jacobin_Rest_API_Routes();
