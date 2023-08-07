@@ -37,7 +37,7 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Transient name
-	 * 
+	 *
 	 * @since 0.5.24
 	 *
 	 * @var string
@@ -390,7 +390,7 @@ class Jacobin_Rest_API_Routes {
 			function( $post ) {
 				$post_id = $post->ID;
 
-				$post_data = new stdClass();
+				$post_data = new \stdClass();
 
 				$post_data->{'id'}                  = $post->ID;
 				$post_data->{'date'}                = date( $this->date_format, strtotime( $post->post_date ) );
@@ -864,7 +864,7 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Get Author Count
-	 * 
+	 *
 	 * @since 0.5.24
 	 *
 	 * @param  array $args
