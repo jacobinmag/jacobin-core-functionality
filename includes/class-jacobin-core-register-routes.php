@@ -408,48 +408,75 @@ class Jacobin_Rest_API_Routes {
 	 * @return \WP_REST_Response
 	 */
 	public function get_guest_authors( $request ) {
-		if ( ! function_exists( 'coauthors_get_users' ) ) {
-			$response = new \WP_REST_Response( array(), 200 );
-			return $response;
-		}
-		$args = array();
-
-		$defaults = array(
-			'number'     => get_option( 'posts_per_page', 25 ),
-			'orderby'    => 'name',
-			'order'      => 'asc',
-			'hide_empty' => false,
-		);
-
-		$page     = $request->get_param( 'page' );
+		$paged    = $request->get_param( 'page' );
 		$per_page = $request->get_param( 'per_page' );
 		$orderby  = $request->get_param( 'orderby' );
 		$order    = $request->get_param( 'order' );
 
+		$args = array();
 		if ( isset( $per_page ) ) {
-			$args['number'] = $per_page;
+			$args['posts_per_page'] = $per_page;
 		}
-
-		if ( isset( $page ) && 1 < $page ) {
-			$args['offset'] = ( $page - 1 ) * $per_page;
+		if ( isset( $paged ) ) {
+			$args['paged'] = $paged;
 		}
-
 		if ( isset( $orderby ) ) {
-			$args['orderby'] = $orderby;
-		}
-
-		if ( isset( $order ) ) {
+			if ( 'last_name' === $orderby ) {
+				$sort_key           = 'cap-last_name';
+				$args['orderby']    = array(
+					'meta_key'   => $sort_key,
+					'meta_value' => 'meta_value',
+					'order'      => 'ASC',
+				);
+				$args['meta_query'] = array(
+					'relation' => 'OR',
+					array(
+						'key'     => $sort_key,
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => $sort_key,
+						'compare' => 'NOT EXISTS',
+					),
+				);
+				$args['orderby']    = 'meta_value';
+				$args['meta_key']   = $sort_key;
+				$args['order']      = 'ASC';
+			} else {
+				$args['orderby'] = $orderby;
+			}
+		} elseif ( isset( $order ) ) {
 			$args['order'] = $order;
 		}
 
+		$post_type = 'guest-author';
+		$defaults  = array(
+			'post_type'      => $post_type,
+			'posts_per_page' => get_option( 'posts_per_page', 25 ),
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+			'orderby'        => 'name',
+			'order'          => 'ASC',
+
+		);
 		$args = wp_parse_args( $args, $defaults );
 
-		$guest_authors = $this->coauthors_get_users( $args );
-		$total         = count( $this->coauthors_get_user_count( $args ) );
-		$max_pages     = ceil( $total / $args['number'] );
-		$response      = new \WP_REST_Response( $guest_authors, 200 );
-		$response->header( 'X-WP-Total', $total );
-		$response->header( 'X-WP-TotalPages', $max_pages );
+		$query = new \WP_Query( $args );
+
+		if ( $query->have_posts() ) {
+			$guest_authors = array_map(
+				function( $post_id ) {
+					return jacobin_get_coauthor_meta( $post_id );
+				},
+				$query->posts
+			);
+			$response      = new \WP_REST_Response( $guest_authors, 200 );
+		} else {
+			$response = new \WP_REST_Response( array(), 200 );
+		}
+		$response->header( 'X-WP-Total', $query->found_posts );
+		$response->header( 'X-WP-TotalPages', $query->max_num_pages );
+
 		return $response;
 	}
 
