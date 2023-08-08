@@ -104,22 +104,6 @@ class Jacobin_Rest_API_Routes {
 
 		register_rest_route(
 			$this->namespace,
-			'/featured-content/(?P<slug>[a-zA-Z0-9-]+)',
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_featured_content' ),
-				'args'     => array(
-					'slug' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return ( is_string( $param ) );
-						},
-					),
-				),
-			)
-		);
-
-		register_rest_route(
-			$this->namespace,
 			'/guest-authors',
 			array(
 				'methods'             => 'GET',
