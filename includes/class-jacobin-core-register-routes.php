@@ -67,10 +67,10 @@ class Jacobin_Rest_API_Routes {
 			$this->namespace,
 			'/featured-content',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_featured_content' ),
-				'args'     => array(
-					'slug'                => array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_featured_content' ),
+				'args'                => array(
+					'slug' => array(
 						'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
 						'type'        => 'string',
 						'enum'        => array(
@@ -80,8 +80,8 @@ class Jacobin_Rest_API_Routes {
 						),
 						'required'    => true,
 					),
-					'permission_callback' => '__return_true',
 				),
+				'permission_callback' => '__return_true',
 			)
 		);
 
