@@ -142,6 +142,7 @@ class Jacobin_Rest_API_Routes {
 						'type'              => 'string',
 						'default'           => 'name',
 						'enum'              => array(
+							'last_name',
 							'id',
 							'name',
 							'slug',
