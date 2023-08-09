@@ -210,6 +210,7 @@ function jacobin_get_coauthor_meta( $author_id ) {
         'display_name'  => get_post_meta( $user_id, 'cap-display_name', true ),
         'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
         'last_name'     => get_post_meta( $user_id, 'cap-last_name', true ),
+        'user_email'    => get_post_meta( $user_id, 'cap-user_email', true ),
         'nickname'      => get_post_meta( $user_id, 'cap-nickname', true ),
         'description'   => get_post_meta( $user_id, 'cap-description', true ),
         'website'       => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
