@@ -37,7 +37,7 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Transient name
-	 * 
+	 *
 	 * @since 0.5.24
 	 *
 	 * @var string
@@ -67,10 +67,10 @@ class Jacobin_Rest_API_Routes {
 			$this->namespace,
 			'/featured-content',
 			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_featured_content' ),
-				'args'     => array(
-					'slug'                => array(
+				'methods'             => 'GET',
+				'callback'            => array( $this, 'get_featured_content' ),
+				'args'                => array(
+					'slug' => array(
 						'description' => esc_html__( 'The slug parameter is used to retrieve a set of featured content items', 'jacobin-core' ),
 						'type'        => 'string',
 						'enum'        => array(
@@ -80,8 +80,8 @@ class Jacobin_Rest_API_Routes {
 						),
 						'required'    => true,
 					),
-					'permission_callback' => '__return_true',
 				),
+				'permission_callback' => '__return_true',
 			)
 		);
 
@@ -99,22 +99,6 @@ class Jacobin_Rest_API_Routes {
 					),
 				),
 				'permission_callback' => '__return_true',
-			)
-		);
-
-		register_rest_route(
-			$this->namespace,
-			'/featured-content/(?P<slug>[a-zA-Z0-9-]+)',
-			array(
-				'methods'  => 'GET',
-				'callback' => array( $this, 'get_featured_content' ),
-				'args'     => array(
-					'slug' => array(
-						'validate_callback' => function( $param, $request, $key ) {
-							return ( is_string( $param ) );
-						},
-					),
-				),
 			)
 		);
 
@@ -158,6 +142,7 @@ class Jacobin_Rest_API_Routes {
 						'type'              => 'string',
 						'default'           => 'name',
 						'enum'              => array(
+							'last_name',
 							'id',
 							'name',
 							'slug',
@@ -390,7 +375,7 @@ class Jacobin_Rest_API_Routes {
 			function( $post ) {
 				$post_id = $post->ID;
 
-				$post_data = new stdClass();
+				$post_data = new \stdClass();
 
 				$post_data->{'id'}                  = $post->ID;
 				$post_data->{'date'}                = date( $this->date_format, strtotime( $post->post_date ) );
@@ -424,48 +409,75 @@ class Jacobin_Rest_API_Routes {
 	 * @return \WP_REST_Response
 	 */
 	public function get_guest_authors( $request ) {
-		if ( ! function_exists( 'coauthors_get_users' ) ) {
-			$response = new \WP_REST_Response( array(), 200 );
-			return $response;
-		}
-		$args = array();
-
-		$defaults = array(
-			'number'     => get_option( 'posts_per_page', 25 ),
-			'orderby'    => 'name',
-			'order'      => 'asc',
-			'hide_empty' => false,
-		);
-
-		$page     = $request->get_param( 'page' );
+		$paged    = $request->get_param( 'page' );
 		$per_page = $request->get_param( 'per_page' );
 		$orderby  = $request->get_param( 'orderby' );
 		$order    = $request->get_param( 'order' );
 
+		$args = array();
 		if ( isset( $per_page ) ) {
-			$args['number'] = $per_page;
+			$args['posts_per_page'] = $per_page;
 		}
-
-		if ( isset( $page ) && 1 < $page ) {
-			$args['offset'] = ( $page - 1 ) * $per_page;
+		if ( isset( $paged ) ) {
+			$args['paged'] = $paged;
 		}
-
 		if ( isset( $orderby ) ) {
-			$args['orderby'] = $orderby;
-		}
-
-		if ( isset( $order ) ) {
+			if ( 'last_name' === $orderby ) {
+				$sort_key           = 'cap-last_name';
+				$args['orderby']    = array(
+					'meta_key'   => $sort_key,
+					'meta_value' => 'meta_value',
+					'order'      => 'ASC',
+				);
+				$args['meta_query'] = array(
+					'relation' => 'OR',
+					array(
+						'key'     => $sort_key,
+						'compare' => 'EXISTS',
+					),
+					array(
+						'key'     => $sort_key,
+						'compare' => 'NOT EXISTS',
+					),
+				);
+				$args['orderby']    = 'meta_value';
+				$args['meta_key']   = $sort_key;
+				$args['order']      = 'ASC';
+			} else {
+				$args['orderby'] = $orderby;
+			}
+		} elseif ( isset( $order ) ) {
 			$args['order'] = $order;
 		}
 
+		$post_type = 'guest-author';
+		$defaults  = array(
+			'post_type'      => $post_type,
+			'posts_per_page' => get_option( 'posts_per_page', 25 ),
+			'post_status'    => 'any',
+			'fields'         => 'ids',
+			'orderby'        => 'name',
+			'order'          => 'ASC',
+
+		);
 		$args = wp_parse_args( $args, $defaults );
 
-		$guest_authors = $this->coauthors_get_users( $args );
-		$total         = count( $this->coauthors_get_user_count( $args ) );
-		$max_pages     = ceil( $total / $args['number'] );
-		$response      = new \WP_REST_Response( $guest_authors, 200 );
-		$response->header( 'X-WP-Total', $total );
-		$response->header( 'X-WP-TotalPages', $max_pages );
+		$query = new \WP_Query( $args );
+
+		if ( $query->have_posts() ) {
+			$guest_authors = array_map(
+				function( $post_id ) {
+					return jacobin_get_coauthor_meta( $post_id );
+				},
+				$query->posts
+			);
+			$response      = new \WP_REST_Response( $guest_authors, 200 );
+		} else {
+			$response = new \WP_REST_Response( array(), 200 );
+		}
+		$response->header( 'X-WP-Total', $query->found_posts );
+		$response->header( 'X-WP-TotalPages', $query->max_num_pages );
+
 		return $response;
 	}
 
@@ -843,6 +855,10 @@ class Jacobin_Rest_API_Routes {
 			if ( false === ( $coauthor = $coauthors_plus->get_coauthor_by( 'user_login', $author_term->name ) ) ) {
 				continue;
 			}
+
+			if ( isset( $coauthor->data ) && 'wpuser' === $coauthor->data->type ) {
+				$coauthor = $this->parse_wpuser( $coauthor->data );
+			}
 			$author = $coauthor;
 
 			if ( ! $args['guest_authors_only'] || $author->type === 'guest-author' ) {
@@ -860,7 +876,7 @@ class Jacobin_Rest_API_Routes {
 
 	/**
 	 * Get Author Count
-	 * 
+	 *
 	 * @since 0.5.24
 	 *
 	 * @param  array $args
@@ -896,19 +912,48 @@ class Jacobin_Rest_API_Routes {
 	}
 
 	/**
-	 * Delete Transient
-	 * 
-	 * @link https://developer.wordpress.org/reference/hooks/save_post/
-	 * 
+	 * Parse WPUser
+	 *
 	 * @since 0.5.24
 	 *
-	 * @param  int $post_id
+	 * @param  object $data
+	 * @return object $user_data
+	 */
+	public function parse_wpuser( $data ) : object {
+		$user_id = (int) $data->ID;
+
+		$user_data = (object) array(
+			'ID'            => $user_id,
+			'display_name'  => $data->display_name,
+			'first_name'    => get_user_meta( $user_id, 'first_name', true ),
+			'last_name'     => get_user_meta( $user_id, 'last_name', true ),
+			'user_login'    => $data->user_login,
+			'user_email'    => $data->user_email,
+			'website'       => get_user_meta( $user_id, 'website', true ),
+			'description'   => get_user_meta( $user_id, 'description', true ),
+			'nickname'      => get_user_meta( $user_id, 'nickname', true ),
+			'user_nicename' => $data->user_nicename,
+			'type'          => $data->type,
+			'post_count'    => count_user_posts( $user_id ),
+		);
+
+		return $user_data;
+	}
+
+	/**
+	 * Delete Transient
+	 *
+	 * @link https://developer.wordpress.org/reference/hooks/save_post/
+	 *
+	 * @since 0.5.24
+	 *
+	 * @param  int    $post_id
 	 * @param  object $post
-	 * @param  bool $update
+	 * @param  bool   $update
 	 * @return void
 	 */
 	public function get_user_count_delete_transient( $post_id, $post, $update ) {
-		if( 'guest-author' === $post->post_type ) {
+		if ( 'guest-author' === $post->post_type ) {
 			delete_transient( $this->transient );
 		}
 	}
