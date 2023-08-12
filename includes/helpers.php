@@ -205,7 +205,7 @@ function jacobin_get_coauthor_meta( $author_id ) {
 
     $meta = array(
         'id'            => $user_id,
-        'slug'          => get_post_meta( $user_id, 'cap-user_login', true ),
+        'slug'          => get_post_field( 'post_name', $user_id ),
         'name'          => get_post_meta( $user_id, 'cap-display_name', true ),
         'display_name'  => get_post_meta( $user_id, 'cap-display_name', true ),
         'first_name'    => get_post_meta( $user_id, 'cap-first_name', true ),
