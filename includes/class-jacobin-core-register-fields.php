@@ -479,7 +479,7 @@ class Jacobin_Rest_API_Fields {
 
 		if ( ! empty( $author_term ) ) {
 			$term_id = array_pop( $author_term );
-			$response->add_link( 'author_posts', rest_url( '/wp/v2/posts?authors=' ) . $term_id );
+			$response->add_link( 'author_posts', add_query_arg( 'authors', $term_id, get_rest_url( null, 'wp/v2/posts' ) ) );
 		}
 
 		return $response;
