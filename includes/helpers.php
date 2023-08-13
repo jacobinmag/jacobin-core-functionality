@@ -202,8 +202,10 @@ function jacobin_get_coauthor_meta( $author_id ) {
 	$user_id = (int) $author_id;
 
 	$author_term = wp_get_post_terms( $user_id, 'author' );
-	$post_name = get_post_field( 'post_name', $user_id );
+	$post_name   = get_post_field( 'post_name', $user_id );
 	$author_slug = preg_replace( '#^cap\-#', '', $post_name );
+	$term_id     = ( ! empty( $author_term ) && ! is_wp_error( $author_term ) ) ? $author_term[0]->term_id : false;
+	$term_slug   = ( ! empty( $author_term ) && ! is_wp_error( $author_term ) ) ? $author_term[0]->slug : false;
 
 	$meta = array(
 		'id'           => $user_id,
@@ -216,7 +218,15 @@ function jacobin_get_coauthor_meta( $author_id ) {
 		'nickname'     => get_post_meta( $user_id, 'cap-nickname', true ),
 		'description'  => get_post_meta( $user_id, 'cap-description', true ),
 		'website'      => esc_url( get_post_meta( $user_id, 'cap-website', true ) ),
-		'term_id'      => ( ! empty( $author_term ) && ! is_wp_error( $author_term ) ) ? $author_term[0]->term_id : false,
+		'term_id'      => $term_id,
+		'term_slug'    => $term_slug,
+		'_links'       => array(
+			'author_posts' => array(
+				array(
+					'href' => add_query_arg( 'authors', $term_id, get_rest_url( null, 'wp/v2/posts' ) ),
+				),
+			),
+		),
 	);
 
 	if ( empty( $meta ) ) {
