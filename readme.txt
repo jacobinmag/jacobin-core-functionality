@@ -25,6 +25,9 @@ This section describes how to install the plugin and get it working.
 
 == Changelog ==
 
+### 0.5.25 December 28, 2023
+* bugfix - Footnotes field not saving for non-superuser users
+
 ### 0.5.4 Febrary 3, 2020
 * Added search endpoint for new Relevanssi search (usage: /wp-json/relevanssi/v1/search?s=query)
 
