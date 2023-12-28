@@ -1329,6 +1329,7 @@
             'key' => 'field_postfootnotes',
             'label' => __( 'Footnotes', 'jacobin-core' ),
             'name' => 'footnotes',
+            'aria-label' => '',
             'type' => 'wysiwyg',
             'instructions' => '',
             'required' => 0,
@@ -1769,6 +1770,7 @@
        	'hide_on_screen' => '',
        	'active' => 1,
        	'description' => '',
+         'show_in_rest' => 1,
        ));
 
        /**
