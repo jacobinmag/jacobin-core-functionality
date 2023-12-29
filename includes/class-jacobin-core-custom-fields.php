@@ -1328,7 +1328,7 @@
           array (
             'key' => 'field_postfootnotes',
             'label' => __( 'Footnotes', 'jacobin-core' ),
-            'name' => 'footnotes',
+            'name' => 'old_footnotes',
             'aria-label' => '',
             'type' => 'wysiwyg',
             'instructions' => '',
@@ -1348,7 +1348,7 @@
           array (
             'key' => 'field_different_footnote_key',
             'label' => __( 'Footnotes 1', 'jacobin-core' ),
-            'name' => 'different_footnote',
+            'name' => 'footnotes',
             'aria-label' => '',
             'type' => 'wysiwyg',
             'instructions' => '',
