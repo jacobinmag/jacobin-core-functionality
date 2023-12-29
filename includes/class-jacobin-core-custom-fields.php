@@ -1770,7 +1770,7 @@
        	'hide_on_screen' => '',
        	'active' => 1,
        	'description' => '',
-         'show_in_rest' => 1,
+        'show_in_rest' => 1,
        ));
 
        /**
@@ -1833,7 +1833,7 @@
        	'hide_on_screen' => '',
        	'active' => 1,
        	'description' => '',
-       	'local' => 'php',
+       	'show_in_rest' => 1,
        ));
 
 
@@ -1957,7 +1957,7 @@
        	'hide_on_screen' => '',
        	'active' => 1,
        	'description' => '',
-       	'local' => 'php',
+       	'show_in_rest' => 1,
        ));
 
        /**
@@ -2011,7 +2011,7 @@
        	),
        	'active' => 1,
        	'description' => '',
-       	'local' => 'php',
+       	'show_in_rest' => 1,
        ));
 
        /**
@@ -2096,6 +2096,7 @@
         	'hide_on_screen' => '',
         	'active' => 1,
         	'description' => '',
+          'show_in_rest' => 1,
         ));
 
        acf_add_local_field_group( array(
@@ -2222,6 +2223,7 @@
        	'hide_on_screen' => '',
        	'active' => 1,
        	'description' => '',
+        'show_in_rest' => 1,
        ));
 
        /**
@@ -2337,7 +2339,7 @@
        	),
        	'active' => 1,
        	'description' => '',
-       	'local' => 'php',
+       	'show_in_rest' => 1,
        ));
 
      }
@@ -2558,6 +2560,7 @@
         	'hide_on_screen' => '',
         	'active' => 1,
         	'description' => '',
+          'show_in_rest' => 1,
         ));
 
      }
