@@ -52,6 +52,7 @@ require_once 'utils/media-utilities.php';
 require_once 'utils/user-utilities.php';
 require_once 'utils/revision-management.php';
 require_once 'integrations/wp-cli.php';
+require_once 'integrations/class-copy-post-meta.php';
 
 
 
