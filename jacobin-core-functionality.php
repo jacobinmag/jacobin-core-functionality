@@ -10,7 +10,7 @@
  * Text Domain:     jacobin-core
  * Domain Path:     /languages
  *
- * Version:         0.5.24
+ * Version:         0.5.25
  *
  * @package         Core_Functionality
  */
@@ -63,7 +63,7 @@ require_once 'integrations/class-copy-post-meta.php';
  * @return object Jacobin_Core
  */
 function Jacobin_Core() {
-	$instance = Jacobin_Core::instance( __FILE__, '0.5.24' );
+	$instance = Jacobin_Core::instance( __FILE__, '0.5.25' );
 
 	return $instance;
 }
