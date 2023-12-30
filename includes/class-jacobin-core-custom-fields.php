@@ -1328,7 +1328,7 @@
           array (
       			'key' => 'field_footnotes',
       			'label' => __( 'Footnotes', 'jacobin-core' ),
-      			'name' => 'footnotes',
+      			'name' => 'endnotes',
       			'type' => 'wysiwyg',
       			'instructions' => '',
       			'required' => 0,

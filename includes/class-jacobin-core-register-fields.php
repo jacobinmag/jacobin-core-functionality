@@ -110,7 +110,7 @@ class Jacobin_Rest_API_Fields {
 				array( 'post', 'revision' ),
 				'footnotes',
 				array(
-					'get_callback'    => array( $this, 'get_field' ),
+					'get_callback'    => array( $this, 'get_footnotes' ),
 					'update_callback' => null,
 					'schema'          => null,
 				)
@@ -563,6 +563,20 @@ class Jacobin_Rest_API_Fields {
 			}
 		}
 		return get_post_meta( $object['id'], $field_name, true );
+	}
+
+	/**
+	 * Get footnotes
+	 * Field name is `endnotes` by property in REST response is `footnotes`
+	 *
+	 * @since 0.5.25
+	 *
+	 * @param object $object
+	 * @param string $request
+	 * @return string meta
+	 */
+	public function get_footnotes( $object, $request ) {
+		return get_post_meta( $object['id'], 'endnotes', true );
 	}
 
 	/**
