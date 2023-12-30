@@ -52,21 +52,26 @@ class Copy_Meta {
 		foreach ( $sites as $site ) {
 			\switch_to_blog( $site->blog_id );
 
-			$posts = \get_posts(
-				array(
-					'post_type'      => 'post',
-					'posts_per_page' => -1,
-				)
+			$posts_chunked = array_chunk(
+				\get_posts(
+					array(
+						'post_type'      => 'post',
+						'posts_per_page' => 200,
+					)
+				),
+				200
 			);
 
-			foreach ( $posts as $post ) {
-				$old_value = \get_post_meta( $post->ID, $old_field, true );
+			foreach ( $posts_chunked as $posts ) {
+				foreach ( $posts as $post ) {
+					$old_value = \get_post_meta( $post->ID, $old_field, true );
 
-				if ( $dry_run ) {
-					\WP_CLI::line( "Dry run: Site {$site->blog_id}, Post {$post->ID} - Old Value: {$old_value}" );
-				} else {
-					\update_post_meta( $post->ID, $new_field, $old_value );
-					\WP_CLI::line( "Site {$site->blog_id}, Post {$post->ID} - Copied '{$old_field}' to '{$new_field}'" );
+					if ( $dry_run ) {
+						\WP_CLI::line( "Dry run: Site {$site->blog_id}, Post {$post->ID} - Old Value: {$old_value}" );
+					} else {
+						\update_post_meta( $post->ID, $new_field, $old_value );
+						\WP_CLI::line( "Site {$site->blog_id}, Post {$post->ID} - Copied '{$old_field}' to '{$new_field}'" );
+					}
 				}
 			}
 
