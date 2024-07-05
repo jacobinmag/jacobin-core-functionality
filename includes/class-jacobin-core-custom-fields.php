@@ -40,6 +40,8 @@
 
          add_filter( 'coauthors_guest_author_fields', array( $this, 'add_guest_author_fields' ), 10, 2 );
 
+		add_filter( 'acf/rest/format_value_for_rest/name=featured_audio', array( $this, 'modify_file_response' ), 10, 5 );
+
          $this->text_filters();
      }
 
@@ -2642,6 +2644,25 @@
        add_filter( 'meta_content', 'wptexturize' );
        add_filter( 'meta_content', 'convert_chars' );
      }
+
+	 /**
+	  * Modify response
+	  *
+	  * @since 0.5.26
+	  *
+	  * @see https://www.advancedcustomfields.com/resources/wp-rest-api-integration/
+	  *
+      * @param mixed      $value_formatted The formatted value.
+      * @param string|int $post_id The post ID of the current object.
+      * @param array      $field The field array.
+      * @param mixed      $value The raw/unformatted value.
+      * @param string     $format The format applied to the field value.
+	  * @return mixed
+	  */
+	 public function modify_file_response( $value_formatted, $post_id, $field, $value, $format ) {
+		$value_formatted['media_details'] = wp_get_attachment_metadata( $value['ID'] );
+		return $value_formatted;
+	 }
  }
 
  new Jacobin_Core_Custom_Fields();
