@@ -153,6 +153,15 @@ class Jacobin_Rest_API_Fields {
 			);
 			register_rest_field(
 				array( 'post', 'revision' ),
+				'featured_audio',
+				array(
+					'get_callback'    => array( $this, 'get_featured_audio' ),
+					'update_callback' => null,
+					'schema'          => null,
+				)
+			);
+			register_rest_field(
+				array( 'post', 'revision' ),
 				'related_articles',
 				array(
 					'get_callback'    => array( $this, 'get_related_articles' ),
@@ -624,6 +633,28 @@ class Jacobin_Rest_API_Fields {
 	public function get_featured_image_secondary( $object, $field_name, $request ) {
 		$image_id = get_post_meta( $object['id'], $field_name, true );
 		return ( ! empty( $image_id ) ) ? jacobin_get_image_meta( $image_id ) : false;
+	}
+
+	/**
+	 * Get featured audio
+	 * 
+	 * @since 0.5.26
+	 *
+	 * @param  object $object
+	 * @param  string $field_name
+	 * @param array  $request
+	 * @return mixed object || false
+	 */
+	public function get_featured_audio( $object, $field_name, $request ) {
+		$file_id = get_post_meta( $object['id'], $field_name, true );
+
+		if( ! empty( $file_id ) ) {
+			$media = get_post( (int) $file_id );
+			$media->media_details = wp_get_attachment_metadata( (int) $file_id );
+			return $media;
+		}
+
+		return false;
 	}
 
 	/**

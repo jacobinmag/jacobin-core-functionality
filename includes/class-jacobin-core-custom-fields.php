@@ -40,6 +40,8 @@
 
          add_filter( 'coauthors_guest_author_fields', array( $this, 'add_guest_author_fields' ), 10, 2 );
 
+		add_filter( 'acf/rest/format_value_for_rest/name=featured_audio', array( $this, 'modify_file_response' ), 10, 5 );
+
          $this->text_filters();
      }
 
@@ -1834,6 +1836,58 @@
        	'local' => 'php',
        ));
 
+	   /**
+		* Post Featured Audio
+		* 
+		* @since 0.5.26
+		*/
+	   $featured_audio = array(
+			array(
+				'key' => 'field_featured_audio',
+				'label' => 'Featured Audio',
+				'name' => 'featured_audio',
+				'aria-label' => '',
+				'type' => 'file',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'relevanssi_exclude' => 0,
+				'return_format' => 'array',
+				'library' => 'all',
+				'min_size' => '',
+				'max_size' => '',
+				'mime_types' => 'mp3,m4a,aac,aiff,flac',
+			),
+		);
+      
+		acf_add_local_field_group( array(
+			'key' => 'group_featured_audio',
+			'title' => 'Featured audio',
+			'fields' => $featured_audio,
+			'location' => array(
+				array(
+					array(
+						'param' => 'post_type',
+						'operator' => '==',
+						'value' => 'post',
+					),
+				),
+			),
+			'menu_order' => 0,
+			'position' => 'side',
+			'style' => 'default',
+			'label_placement' => 'top',
+			'instruction_placement' => 'label',
+			'hide_on_screen' => '',
+			'active' => true,
+			'description' => '',
+			'show_in_rest' => 1,
+		) );
 
       acf_add_local_field_group( array(
       	'key' => 'group_internal',
@@ -2590,6 +2644,25 @@
        add_filter( 'meta_content', 'wptexturize' );
        add_filter( 'meta_content', 'convert_chars' );
      }
+
+	 /**
+	  * Modify response
+	  *
+	  * @since 0.5.26
+	  *
+	  * @see https://www.advancedcustomfields.com/resources/wp-rest-api-integration/
+	  *
+      * @param mixed      $value_formatted The formatted value.
+      * @param string|int $post_id The post ID of the current object.
+      * @param array      $field The field array.
+      * @param mixed      $value The raw/unformatted value.
+      * @param string     $format The format applied to the field value.
+	  * @return mixed
+	  */
+	 public function modify_file_response( $value_formatted, $post_id, $field, $value, $format ) {
+		$value_formatted['media_details'] = wp_get_attachment_metadata( $value['ID'] );
+		return $value_formatted;
+	 }
  }
 
  new Jacobin_Core_Custom_Fields();
