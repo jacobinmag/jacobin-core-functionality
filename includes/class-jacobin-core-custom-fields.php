@@ -1834,6 +1834,58 @@
        	'local' => 'php',
        ));
 
+	   /**
+		* Post Featured Audio
+		* 
+		* @since 0.5.26
+		*/
+	   $featured_audio = array(
+			array(
+				'key' => 'field_featured_audio',
+				'label' => 'Featured Audio',
+				'name' => 'featured_audio',
+				'aria-label' => '',
+				'type' => 'file',
+				'instructions' => '',
+				'required' => 0,
+				'conditional_logic' => 0,
+				'wrapper' => array(
+					'width' => '',
+					'class' => '',
+					'id' => '',
+				),
+				'relevanssi_exclude' => 0,
+				'return_format' => 'array',
+				'library' => 'all',
+				'min_size' => '',
+				'max_size' => '',
+				'mime_types' => 'mp3,m4a,aac,aiff,flac',
+			),
+		);
+      
+		acf_add_local_field_group( array(
+			'key' => 'group_featured_audio',
+			'title' => 'Featured audio',
+			'fields' => $featured_audio,
+			'location' => array(
+				array(
+					array(
+						'param' => 'post_type',
+						'operator' => '==',
+						'value' => 'post',
+					),
+				),
+			),
+			'menu_order' => 0,
+			'position' => 'side',
+			'style' => 'default',
+			'label_placement' => 'top',
+			'instruction_placement' => 'label',
+			'hide_on_screen' => '',
+			'active' => true,
+			'description' => '',
+			'show_in_rest' => 1,
+		) );
 
       acf_add_local_field_group( array(
       	'key' => 'group_internal',
