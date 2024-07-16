@@ -40,7 +40,7 @@
 
          add_filter( 'coauthors_guest_author_fields', array( $this, 'add_guest_author_fields' ), 10, 2 );
 
-		add_filter( 'acf/rest/format_value_for_rest/name=featured_audio', array( $this, 'modify_file_response' ), 10, 5 );
+        add_filter( 'acf/rest/format_value_for_rest/type=file', array( $this, 'modify_file_response' ), 10, 5 );
 
          $this->text_filters();
      }
