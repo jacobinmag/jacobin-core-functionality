@@ -650,6 +650,8 @@ class Jacobin_Rest_API_Fields {
 
 		if( ! empty( $file_id ) ) {
 			$media = get_post( (int) $file_id );
+			$media->url = wp_get_attachment_url( (int) $file_id );
+			$media->link = get_permalink( (int) $file_id );
 			$media->media_details = wp_get_attachment_metadata( (int) $file_id );
 			return $media;
 		}
